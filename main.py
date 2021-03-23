@@ -103,7 +103,7 @@ if __name__ == '__main__':
     parser.add_argument('--time', type=str, default='data/gmaps_time.csv', help='Time matrix CSV file')
     parser.add_argument('--seed', type=int, default=0, help='Seed (default = 0)')
     parser.add_argument('--iterations', type=int, default=10000, help='Number of iterations (default = 10000)')
-    parser.add_argument('--uct', type=float, default=3, help='UCT weight (default = 3)')
+    parser.add_argument('--uct', type=float, default=1, help='UCT weight (default = 1)')
     parser.add_argument('--exploration', type=float, default=0.1, help='Exploration weight (default = 0.1)')
     args = parser.parse_args()
 
