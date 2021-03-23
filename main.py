@@ -122,7 +122,8 @@ if __name__ == '__main__':
         uct_weight=args.uct
     )
     tree.run()
-    print('MCTS')
-    for item in sorted(tree.A.items(), key=lambda item: item[1]):
-        if item[0].is_terminal():
-            print(item[0], item[1])
+    terminal = sorted(filter(lambda item: item[0].is_terminal(), tree.A.items()), key=lambda item: item[1])
+    #print('MCTS')
+    for item in terminal:
+        print(item[0], item[1])
+    print(terminal[-1][1])
