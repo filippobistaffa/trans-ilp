@@ -126,4 +126,4 @@ if __name__ == '__main__':
     #print('MCTS')
     for item in terminal:
         print(item[0], item[1])
-    print(terminal[-1][1])
+    print(-terminal[-1][1])
