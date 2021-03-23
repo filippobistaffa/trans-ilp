@@ -6,7 +6,7 @@ DATA_DIR="/home/filippo/iiia/mcts-rs/data"
 # Fixed parameters
 DISTANCE="$DATA_DIR/gmaps_distance.csv"
 TIME="$DATA_DIR/gmaps_time.csv"
-ITERATIONS=100
+ITERATIONS=1000
 
 CANDIDATEID=$1
 INSTANCEID=$2
@@ -15,8 +15,6 @@ INSTANCE=$4
 
 shift 4 || exit 1
 CAND_PARAMS=$*
-#echo $CAND_PARAMS
-#echo $EXECUTABLE $INSTANCE --distance $DISTANCE --time $TIME --seed $SEED --iterations $ITERATIONS ${CAND_PARAMS}
 
 STDOUT="c${CANDIDATEID}-${INSTANCEID}.out"
 STDERR="c${CANDIDATENUM}${INSTANCEID}.err"
