@@ -4,7 +4,6 @@ import numpy as np
 import random
 
 max_size = 5
-partial = False
 
 class Coalition(Node):
     def __init__(self, idxs, terminal):
@@ -105,8 +104,10 @@ if __name__ == '__main__':
     parser.add_argument('--iterations', type=int, default=10000, help='Number of iterations (default = 10000)')
     parser.add_argument('--uct', type=float, default=1, help='UCT weight (default = 1)')
     parser.add_argument('--exploration', type=float, default=0.1, help='Exploration weight (default = 0.1)')
+    parser.add_argument('--partial', help='Allow partial coalitions', action="store_true")
     args = parser.parse_args()
 
+    partial=args.partial
     random.seed(args.seed)
     reqs, steps, deltas = read_pool(args.pool)
     distance, time = read_data(args.distance, args.time)
