@@ -105,6 +105,7 @@ if __name__ == '__main__':
     parser.add_argument('--uct', type=float, default=65, help='UCT weight (default = 65)')
     parser.add_argument('--exploration', type=float, default=0.1, help='Exploration weight (default = 0.1)')
     parser.add_argument('--partial', help='Allow partial coalitions', action="store_true")
+    parser.add_argument('--irace', help='Print value for IRACE optimisation', action="store_true")
     args = parser.parse_args()
 
     partial=args.partial
@@ -114,9 +115,11 @@ if __name__ == '__main__':
     all_idxs = list(range(len(reqs)))
     root = Coalition(idxs=[], terminal=False)
     rewards = dict()
+
     #dfs(root, rewards)
     #print('DFS')
     #print(*sorted(rewards.items(), key=lambda item: item[1]), sep='\n')
+
     tree = MCTS(
         root,
         exploration_rate=args.exploration,
@@ -125,11 +128,12 @@ if __name__ == '__main__':
     tree.run()
     terminal = sorted(filter(lambda item: item[0].is_terminal(), tree.A.items()), key=lambda item: item[1])
     #print('MCTS')
+
     for item in terminal:
         print(item[0], item[1])
 
-    #IRACE
-    if len(terminal) > 0:
-        print(-terminal[-1][1])
-    else:
-        print(10000) # high cost as penalty
+    if args.irace:
+        if len(terminal) > 0:
+            print(-terminal[-1][1])
+        else:
+            print(10000) # high cost as penalty

@@ -30,8 +30,8 @@ error() {
 #fi
 
 # Call EXECUTABLE
-echo $EXECUTABLE $INSTANCE --distance $DISTANCE --time $TIME --seed $SEED --iterations $ITERATIONS ${CAND_PARAMS} 1> $STDOUT
-$EXECUTABLE $INSTANCE --distance $DISTANCE --time $TIME --seed $SEED --iterations $ITERATIONS ${CAND_PARAMS} 1>> $STDOUT 2>> $STDERR
+echo $EXECUTABLE $INSTANCE --distance $DISTANCE --time $TIME --seed $SEED --iterations $ITERATIONS ${CAND_PARAMS} --irace 1> $STDOUT
+$EXECUTABLE $INSTANCE --distance $DISTANCE --time $TIME --seed $SEED --iterations $ITERATIONS ${CAND_PARAMS} --irace 1>> $STDOUT 2>> $STDERR
 
 if [[ ! -s "${STDOUT}" ]]
 then
