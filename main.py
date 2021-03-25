@@ -130,7 +130,7 @@ if __name__ == '__main__':
     #print('MCTS')
 
     for item in terminal:
-        print(item[0], item[1])
+        print('{},{}'.format(item[1],','.join(str(idx) for idx in item[0].idxs)))
 
     if args.irace:
         if len(terminal) > 0:
