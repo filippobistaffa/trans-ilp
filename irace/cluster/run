@@ -1,0 +1,10 @@
+#!/bin/bash
+
+module load gcc/6.4.0 R/3.6.0
+
+mkdir -p exec
+mkdir -p log
+rm -rf exec/* 2> /dev/null
+rm -rf log/* 2> /dev/null
+
+irace --batchmode slurm --target-runner target-runner-slurm --target-evaluator target-evaluator

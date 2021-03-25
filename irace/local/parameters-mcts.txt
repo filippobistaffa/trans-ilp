@@ -1,0 +1,3 @@
+# name		switch			type		values
+uct_weight	"--uct "		r		(0.00, 100.00)
+exploration	"--exploration "	r		(0.00, 1.00)
