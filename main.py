@@ -122,6 +122,7 @@ if __name__ == '__main__':
 
     tree = MCTS(
         root,
+        iterations=args.iterations,
         exploration_rate=args.exploration,
         uct_weight=args.uct
     )
