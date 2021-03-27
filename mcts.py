@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from collections import defaultdict
-import math
-import time
+from time import time
 import random
+import math
 
 
 class MCTS:
@@ -17,13 +17,16 @@ class MCTS:
         self.exploration_rate = exploration_rate
         self.uct_weight = uct_weight
         self.iterations = iterations
+        self.budget = budget
 
         # simulation statistics
         self.simulations = 0
         self.deadends = 0
 
     def run(self):
-        for _ in range(self.iterations):
+        iterations = 0
+        start_time = time()
+        while True:
             path = self.select(self.root)
             leaf = path[-1]
             #print('Selected path:', path)
@@ -33,6 +36,13 @@ class MCTS:
             if reward is not None:
                 #print('Reward from simulation:', reward)
                 self.backpropagate(path, reward)
+            if self.iterations is not None:
+                if iterations >= self.iterations:
+                    break
+            if self.budget is not None:
+                if time() - start_time > self.budget:
+                    break
+            iterations += 1
 
     def select(self, node):
         path = []
