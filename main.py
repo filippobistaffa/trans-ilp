@@ -96,16 +96,20 @@ def read_pool(pool_csv):
 import argparse as ap
 
 if __name__ == '__main__':
-    parser = ap.ArgumentParser()
+    parser = ap.ArgumentParser(
+        formatter_class=lambda prog: ap.HelpFormatter(prog, max_help_position=29)
+    )
     parser.add_argument('pool', metavar='POOL', type=str, help='Pool CSV file')
     parser.add_argument('--distance', type=str, default='data/gmaps_distance.csv', help='Distance matrix CSV file')
     parser.add_argument('--time', type=str, default='data/gmaps_time.csv', help='Time matrix CSV file')
     parser.add_argument('--seed', type=int, default=0, help='Seed (default = 0)')
-    parser.add_argument('--iterations', type=int, default=10000, help='Number of iterations (default = 10000)')
     parser.add_argument('--uct', type=float, default=65, help='UCT weight (default = 65)')
     parser.add_argument('--exploration', type=float, default=0.1, help='Exploration weight (default = 0.1)')
     parser.add_argument('--partial', help='Allow partial coalitions', action="store_true")
     parser.add_argument('--irace', help='Print value for IRACE optimisation', action="store_true")
+    required = parser.add_mutually_exclusive_group(required=True)
+    required.add_argument('--iterations', type=int, help='Number of iterations')
+    required.add_argument('--budget', type=int, help='Time budget in seconds')
     args = parser.parse_args()
 
     partial=args.partial
@@ -114,14 +118,10 @@ if __name__ == '__main__':
     distance, time = read_data(args.distance, args.time)
     all_idxs = list(range(len(reqs)))
     root = Coalition(idxs=[], terminal=False)
-    rewards = dict()
-
-    #dfs(root, rewards)
-    #print('DFS')
-    #print(*sorted(rewards.items(), key=lambda item: item[1]), sep='\n')
 
     tree = MCTS(
         root,
+        budget=args.budget,
         iterations=args.iterations,
         exploration_rate=args.exploration,
         uct_weight=args.uct

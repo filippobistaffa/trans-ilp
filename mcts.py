@@ -6,7 +6,7 @@ import random
 
 
 class MCTS:
-    def __init__(self, root, iterations=10000, exploration_rate=0.1, uct_weight=1):
+    def __init__(self, root, budget, iterations, exploration_rate=0.1, uct_weight=1):
         self.Q = defaultdict(float) # total reward of each node
         self.A = defaultdict(float) # average reward for each node
         self.N = defaultdict(int)   # total visit count for each node
@@ -33,8 +33,6 @@ class MCTS:
             if reward is not None:
                 #print('Reward from simulation:', reward)
                 self.backpropagate(path, reward)
-            #print(self.simulations, self.deadends)
-            #time.sleep(0.05)
 
     def select(self, node):
         path = []
@@ -83,14 +81,12 @@ class MCTS:
                 reward = node.reward()
                 return reward
             node = node.find_random_child()
-            #node = node.find_myopic_child()
 
     def backpropagate(self, path, reward):
         for node in reversed(path):
             self.N[node] += 1
             self.Q[node] += reward
             self.A[node] = self.Q[node] / self.N[node]       
-        #print(*sorted(self.A.items(), key=lambda item: item[1]), sep='\n')
 
 
 class Node(ABC):
