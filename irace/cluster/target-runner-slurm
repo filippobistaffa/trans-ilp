@@ -31,6 +31,7 @@ IRACE_LOG="/home/filippo.bistaffa/mcts-rs/irace/cluster/log"
 DISTANCE="$DATA_DIR/gmaps_distance.csv"
 TIME="$DATA_DIR/gmaps_time.csv"
 ITERATIONS=1000
+FIXED_PARAMS="--distance $DISTANCE --time $TIME --seed $SEED --iterations $ITERATIONS --irace"
 
 CANDIDATE=$1
 INSTANCEID=$2
@@ -58,8 +59,8 @@ sbatch 1> $tmpfile <<EOF
 #SBATCH --cpus-per-task=1
 module load python-3.8.6-gcc-4.8.5-xl42tkm
 module load py-numpy-1.19.4-gcc-10.2.0-pmcqalx
-echo $EXECUTABLE $INSTANCE --distance $DISTANCE --time $TIME --seed $SEED --iterations $ITERATIONS ${CAND_PARAMS} --irace --partial 1> $STDOUT
-srun $EXECUTABLE $INSTANCE --distance $DISTANCE --time $TIME --seed $SEED --iterations $ITERATIONS ${CAND_PARAMS} --irace --partial 1>> $STDOUT 2>> $STDERR
+echo $EXECUTABLE $INSTANCE ${FIXED_PARAMS} ${CAND_PARAMS} 1> $STDOUT
+srun $EXECUTABLE $INSTANCE ${FIXED_PARAMS} ${CAND_PARAMS} 1>> $STDOUT 2>> $STDERR
 RET=\$?
 exit \$RET
 EOF
