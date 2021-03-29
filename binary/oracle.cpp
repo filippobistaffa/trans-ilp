@@ -62,24 +62,12 @@ struct Task_type {
     map<string,Competence> required_competences;
 };
 
-struct Team {
-    set<int> agents;
-    double syn_val;
-};
-
-struct Solution {
-    vector<Team> teams;
-    double value;
-};
-
 // Data structures for the problem data
 vector<string> competences;
 vector<Agent> agents;
 Task_type task;
 int n_of_agents;
 int n_of_competences;
-int wanted_team_size;
-vector<int> team_size;
 
 // Parameter values. The value of alpha is set to beta/3.0 below. This is the always-used setting. If this changes some day, the code must be changed.
 double alpha = 0.19;
@@ -91,17 +79,6 @@ double lambda = 0.8;
 // variables for reading the input information from files
 string all_students_file;
 string task_file;
-int n_of_subsets;
-
-inline int stoi(string &s) {
-
-  return atoi(s.c_str());
-}
-
-inline double stof(string &s) {
-
-  return atof(s.c_str());
-}
 
 double compute_synergistic_value(set<int>& team) {
 
