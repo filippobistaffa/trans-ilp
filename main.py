@@ -3,8 +3,6 @@ from mcts import MCTS, Node
 import numpy as np
 import random
 
-max_size = 5
-
 class Coalition(Node):
     def __init__(self, idxs, terminal):
         self.idxs = idxs
@@ -29,20 +27,6 @@ class Coalition(Node):
             return None
         else:
             return self.add_idx(random.choice(remaining))
-
-    def find_myopic_child(self):
-        if self.terminal:
-            return []
-        remaining = [i for i in all_idxs if not self.idxs or i > max(self.idxs)]
-        if partial:
-            if len(self.idxs) > 0:
-                remaining.append(-1)
-        if not remaining:
-            return None
-        children = [self.add_idx(idx) for idx in remaining]
-        def gain(node):
-            return node.reward() #- self.reward()
-        return max(children, key=gain)
 
     def reward(self):
         if len(self.idxs) > 0:
@@ -100,6 +84,7 @@ if __name__ == '__main__':
         formatter_class=lambda prog: ap.HelpFormatter(prog, max_help_position=29)
     )
     parser.add_argument('pool', metavar='POOL', type=str, help='Pool CSV file')
+    parser.add_argument('--max_size', type=int, default=5, help='Maximum coalition size (default = 5)')
     parser.add_argument('--distance', type=str, default='data/gmaps_distance.csv', help='Distance matrix CSV file')
     parser.add_argument('--time', type=str, default='data/gmaps_time.csv', help='Time matrix CSV file')
     parser.add_argument('--seed', type=int, default=0, help='Seed (default = 0)')
@@ -112,27 +97,34 @@ if __name__ == '__main__':
     required.add_argument('--budget', type=int, help='Time budget in seconds')
     args = parser.parse_args()
 
-    partial=not args.complete
+    # set global variables
+    max_size = args.max_size
+    partial = not args.complete
     random.seed(args.seed)
+
+    # read input data
     reqs, steps, deltas = read_pool(args.pool)
     distance, time = read_data(args.distance, args.time)
     all_idxs = list(range(len(reqs)))
-    root = Coalition(idxs=[], terminal=False)
 
+    # initialise MCTS tree
     tree = MCTS(
-        root,
+        Coalition(idxs=[], terminal=False),
         budget=args.budget,
         iterations=args.iterations,
         exploration_rate=args.exploration,
         uct_weight=args.uct
     )
-    tree.run()
-    terminal = sorted(filter(lambda item: item[0].is_terminal(), tree.A.items()), key=lambda item: item[1])
-    #print('MCTS')
 
+    # execute MCTS algorithm
+    tree.run()
+
+    # print terminal nodes' values    
+    terminal = sorted(filter(lambda item: item[0].is_terminal(), tree.A.items()), key=lambda item: item[1])
     for item in terminal:
         print('{},{}'.format(item[1],','.join(str(idx) for idx in item[0].idxs)))
 
+    # print value for IRACE if necessary
     if args.irace:
         if len(terminal) > 0:
             print(-terminal[-1][1])
