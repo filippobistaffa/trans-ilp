@@ -24,11 +24,8 @@ CCFLAGS = $(CCOPT) -DCPLEX -I$(CPLEXINCDIR) -I$(CONCERTINCDIR) -I$(CPOPTIMIZERIN
 
 all: ${TARGET}
 
-oracle: oracle.o
-	$(CCC) $(CCFLAGS) oracle.o -o oracle $(CCLNFLAGS)
-
-oracle.o: oracle.cpp
-	$(CCC) -c $(CCFLAGS) oracle.cpp -o oracle.o 
+oracle: oracle.cpp
+	$(CCC) $(CCFLAGS) oracle.cpp -o oracle $(CCLNFLAGS)
 
 clean:
-	@rm -f *~ *.o ${TARGET} core
+	@rm oracle
