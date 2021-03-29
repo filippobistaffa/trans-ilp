@@ -23,9 +23,9 @@ tmpfile=$(mktemp)
 
 #!/bin/bash
 
-EXECUTABLE="python3 /home/filippo.bistaffa/mcts-rs/main.py"
-DATA_DIR="/home/filippo.bistaffa/mcts-rs/data"
-IRACE_LOG="/home/filippo.bistaffa/mcts-rs/irace/cluster/log"
+EXECUTABLE="python3 /home/filippo.bistaffa/mcts-ilp/main.py"
+DATA_DIR="/home/filippo.bistaffa/mcts-ilp/data"
+IRACE_LOG="/home/filippo.bistaffa/mcts-ilp/irace/cluster/log"
 
 # Fixed parameters
 DISTANCE="$DATA_DIR/gmaps_distance.csv"

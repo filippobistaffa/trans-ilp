@@ -1,7 +1,7 @@
 #!/bin/bash
 
-EXECUTABLE="python3 /home/filippo/iiia/mcts-rs/main.py"
-DATA_DIR="/home/filippo/iiia/mcts-rs/data"
+EXECUTABLE="python3 /home/filippo/iiia/mcts-ilp/main.py"
+DATA_DIR="/home/filippo/iiia/mcts-ilp/data"
 
 # Fixed parameters
 DISTANCE="$DATA_DIR/gmaps_distance.csv"

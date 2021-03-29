@@ -11,19 +11,19 @@ maxExperiments = 3000
 
 ## Directory where training instances are located, either absolute or relative
 ## to current directory.
-trainInstancesDir = "/home/filippo.bistaffa/mcts-rs/data/pools_20161201"
+trainInstancesDir = "/home/filippo.bistaffa/mcts-ilp/data/pools_20161201"
 
 ## File with a list of instances and (optionally) parameters.
 ## If empty or NULL, do not use a file.
-trainInstancesFile = "/home/filippo.bistaffa/mcts-rs/irace/cluster/training.txt"
+trainInstancesFile = "/home/filippo.bistaffa/mcts-ilp/irace/cluster/training.txt"
 
 ## Directory where testing instances are located, either absolute or relative
 ## to current directory.
-trainInstancesDir = "/home/filippo.bistaffa/mcts-rs/data/pools_20161201"
+trainInstancesDir = "/home/filippo.bistaffa/mcts-ilp/data/pools_20161201"
 
 ## File containing a list of test instances and optionally additional
 ## parameters for them.  If empty or NULL, do not use a file.
-testInstancesFile = "/home/filippo.bistaffa/mcts-rs/irace/cluster/test.txt"
+testInstancesFile = "/home/filippo.bistaffa/mcts-ilp/irace/cluster/test.txt"
 
 ## File that contains the description of the parameters.
 parameterFile = "./parameters-mcts.txt"
