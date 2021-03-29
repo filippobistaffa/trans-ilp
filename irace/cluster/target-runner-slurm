@@ -23,14 +23,15 @@ tmpfile=$(mktemp)
 
 #!/bin/bash
 
-EXECUTABLE="python3 /home/csic/mus/fib/mcts-rs/main.py"
-DATA_DIR="/home/csic/mus/fib/mcts-rs/data"
-IRACE_LOG="/home/csic/mus/fib/mcts-rs/irace/cluster/log"
+EXECUTABLE="python3 /home/filippo.bistaffa/mcts-ilp/main.py"
+DATA_DIR="/home/filippo.bistaffa/mcts-ilp/data"
+IRACE_LOG="/home/filippo.bistaffa/mcts-ilp/irace/cluster/log"
 
 # Fixed parameters
 DISTANCE="$DATA_DIR/gmaps_distance.csv"
 TIME="$DATA_DIR/gmaps_time.csv"
 ITERATIONS=1000
+FIXED_PARAMS="--distance $DISTANCE --time $TIME --seed $SEED --iterations $ITERATIONS --irace"
 
 CANDIDATE=$1
 INSTANCEID=$2
@@ -53,15 +54,13 @@ error() {
 sbatch 1> $tmpfile <<EOF
 #!/bin/bash
 #SBATCH --job-name=irace-$PPID-$CANDIDATE-${INSTANCEID}
-#SBATCH --mem=4gb
 #SBATCH --time=5:00
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=4
-#SBATCH --partition=shared
-#SBATCH --qos=shared
-module load python/3.8.1
-echo $EXECUTABLE $INSTANCE --distance $DISTANCE --time $TIME --seed $SEED --iterations $ITERATIONS ${CAND_PARAMS} --irace 1> $STDOUT
-srun $EXECUTABLE $INSTANCE --distance $DISTANCE --time $TIME --seed $SEED --iterations $ITERATIONS ${CAND_PARAMS} --irace 1>> $STDOUT 2>> $STDERR
+#SBATCH --cpus-per-task=1
+module load python-3.8.6-gcc-4.8.5-xl42tkm
+module load py-numpy-1.19.4-gcc-10.2.0-pmcqalx
+echo $EXECUTABLE $INSTANCE ${FIXED_PARAMS} ${CAND_PARAMS} 1> $STDOUT
+srun $EXECUTABLE $INSTANCE ${FIXED_PARAMS} ${CAND_PARAMS} 1>> $STDOUT 2>> $STDERR
 RET=\$?
 exit \$RET
 EOF

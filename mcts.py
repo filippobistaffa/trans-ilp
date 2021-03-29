@@ -6,7 +6,7 @@ import math
 
 
 class MCTS:
-    def __init__(self, root, budget, iterations, exploration_rate=0.1, uct_weight=1):
+    def __init__(self, root, budget, iterations, exploration_rate, uct_weight):
         self.Q = defaultdict(float) # total reward of each node
         self.A = defaultdict(float) # average reward for each node
         self.N = defaultdict(int)   # total visit count for each node

@@ -14,7 +14,7 @@ targetRunner = "./target-runner.sh"
 
 ## Directory where training instances are located, either absolute or relative
 ## to current directory.
-trainInstancesDir = "/home/filippo/iiia/mcts-rs/data/pools_20161201"
+trainInstancesDir = "/home/filippo/iiia/mcts-ilp/data/pools_20161201"
 
 ## File with a list of instances and (optionally) parameters.
 ## If empty or NULL, do not use a file.
@@ -38,7 +38,7 @@ configurationsFile = "default.txt"
 
 ## Directory where testing instances are located, either absolute or relative
 ## to current directory.
-testInstancesDir = "/home/filippo/iiia/mcts-rs/data/pools_20161201"
+testInstancesDir = "/home/filippo/iiia/mcts-ilp/data/pools_20161201"
 
 ## File containing a list of test instances and optionally additional
 ## parameters for them.  If empty or NULL, do not use a file.
