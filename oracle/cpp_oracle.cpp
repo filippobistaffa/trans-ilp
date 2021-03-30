@@ -124,7 +124,6 @@ pair<vector<string>,Task_type> cpp_read_task_competences(const char *filename) {
     indata.close();
     for (int i = 0; i < n_of_competences; ++i) (task.required_competences)[competences[i]].importance /= imp_sum;
 
-    // write results to output parameter
     return make_pair(competences, task);
 }
 
