@@ -30,7 +30,10 @@ setup(
                 CPOPTIMIZERDIR + '/include',
             ],
             libraries = [
+                'ilocplex',
+                'concert',
                 'cplex',
+                'cp',
                 'dl',
                 'm',
             ],

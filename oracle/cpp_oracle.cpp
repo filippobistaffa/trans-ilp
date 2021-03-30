@@ -17,6 +17,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <utility>
 #include <vector>
 #include <string>
 #include <stdio.h>
@@ -30,7 +31,6 @@
 #include <cstdlib>
 #include <cstring>
 #include <sstream>
-#include <vector>
 #include <set>
 #include <list>
 #include <map>
@@ -40,7 +40,7 @@
 
 ILOSTLBEGIN
 
-void cpp_read_agents(const char *filename, struct Data data) {
+vector<struct Agent> cpp_read_agents(const char *filename) {
 
     vector<struct Agent> agents;
 
@@ -93,11 +93,10 @@ void cpp_read_agents(const char *filename, struct Data data) {
     }
     indata.close();
 
-    // write results to output parameter
-    data.agents = agents;
+    return agents;
 }
 
-void cpp_read_task_competences(const char *filename, struct Data data) {
+pair<vector<string>,Task_type> cpp_read_task_competences(const char *filename) {
 
     vector<string> competences;
     unsigned int n_of_competences;
@@ -126,8 +125,7 @@ void cpp_read_task_competences(const char *filename, struct Data data) {
     for (int i = 0; i < n_of_competences; ++i) (task.required_competences)[competences[i]].importance /= imp_sum;
 
     // write results to output parameter
-    data.competences = competences;
-    data.task = task;
+    return make_pair(competences, task);
 }
 
 // Parameter values. The value of alpha is set to beta/3.0 below. This is the always-used setting. If this changes some day, the code must be changed.
@@ -145,6 +143,8 @@ float cpp_oracle(const unsigned int actual_team_size, const unsigned int *_team,
     const vector<string> competences = data.competences;
     const unsigned int n_of_competences = competences.size();
     const Task_type task = data.task;
+    //cout << "Read " << agents.size() << " students" << '\n';
+    //cout << "Read " << n_of_competences << " competences" << '\n';
 
     // actual code
     vector< vector<int> > assignment;

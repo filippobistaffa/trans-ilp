@@ -3,15 +3,16 @@
 
 using namespace std;
 
+#include <utility>
 #include <vector>
 #include <string>
 #include <map>
 
 #include "oracle.h"
 
-void cpp_read_agents(const char *filename, struct Data data);
+vector<struct Agent> cpp_read_agents(const char *filename);
 
-void cpp_read_task_competences(const char *filename, struct Data data);
+pair<vector<string>, struct Task_type> cpp_read_task_competences(const char *filename);
 
 float cpp_oracle(const unsigned int actual_team_size, const unsigned int *team, const struct Data data);
 

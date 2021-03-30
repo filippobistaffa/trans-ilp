@@ -6,6 +6,7 @@ cimport numpy as np
 # C++ includes
 from libcpp.string cimport string as cpp_string
 from libcpp.vector cimport vector as cpp_vector
+from libcpp.pair cimport pair as cpp_pair
 from libcpp.map cimport map as cpp_map
 
 # data types
@@ -35,10 +36,10 @@ cdef public struct Data:
 
 # import C++ functions
 cdef extern from "cpp_oracle.hpp":
-    void cpp_read_agents(const char *filename, Data data)
+    cpp_vector[Agent] cpp_read_agents(const char *filename)
 
 cdef extern from "cpp_oracle.hpp":
-    void cpp_read_task_competences(const char *filename, Data data)
+    cpp_pair[cpp_vector[cpp_string],Task_type] cpp_read_task_competences(const char *filename)
 
 cdef extern from "cpp_oracle.hpp":
     float cpp_oracle(const unsigned int actual_team_size, const unsigned int *team, Data data)
@@ -48,8 +49,10 @@ cdef class OracleData:
     cdef Data data
 
     def __cinit__(self, agents_file, task_file):
-        cpp_read_agents(agents_file, self.data)
-        cpp_read_task_competences(task_file, self.data)
+        self.data.agents = cpp_read_agents(agents_file.encode())
+        pair = cpp_read_task_competences(task_file.encode())
+        self.data.competences = pair.first
+        self.data.task = pair.second
 
     def get_data(self):
         return self.data
