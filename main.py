@@ -1,4 +1,5 @@
 from oracle.oracle import oracle
+from oracle.oracle import OracleData
 from mcts import MCTS, Node
 import numpy as np
 import random
@@ -30,7 +31,7 @@ class Coalition(Node):
 
     def reward(self):
         if len(self.idxs) > 0:
-            return oracle(np.array(self.idxs, dtype=np.uint32), reqs, steps, deltas, distance, time)
+            return oracle(np.array(self.idxs, dtype=np.uint32), data)
         else:
             return 0
 
@@ -42,12 +43,7 @@ class Coalition(Node):
             return Coalition(idxs=self.idxs, terminal=True)
         idxs = self.idxs.copy()
         idxs.append(idx)
-        min_tpd = min(steps[idxs] + deltas[idxs])
-        max_t = max(steps[idxs])
-        if min_tpd >= max_t:
-            return Coalition(idxs=idxs, terminal=len(idxs) == max_size)
-        else:
-            return None
+        return Coalition(idxs=idxs, terminal=len(idxs) == max_size)
 
     def __repr__(self):
         return str(self.idxs)
@@ -63,20 +59,6 @@ def dfs(coal, rewards):
             dfs(child, rewards)
 
 
-def read_data(distance_matrix_csv, time_matrix_csv):
-    distance = np.genfromtxt(distance_matrix_csv, delimiter=',', dtype=np.float32).ravel()
-    time = np.genfromtxt(time_matrix_csv, delimiter=',', dtype=np.float32).ravel()
-    return distance, time
-
-
-def read_pool(pool_csv):
-    pool = np.genfromtxt(pool_csv, delimiter=',', dtype=np.uint32)
-    steps = pool[:,0].copy(order='C')
-    reqs = pool[:,1].copy(order='C')
-    deltas = pool[:,2].copy(order='C')
-    return reqs, steps, deltas
-
-
 import argparse as ap
 
 if __name__ == '__main__':
@@ -85,8 +67,7 @@ if __name__ == '__main__':
     )
     parser.add_argument('pool', metavar='POOL', type=str, help='Pool file')
     parser.add_argument('--max_size', type=int, default=5, help='Maximum coalition size (default = 5)')
-    parser.add_argument('--distance', type=str, default='data/gmaps_distance.csv', help='Distance matrix CSV file')
-    parser.add_argument('--time', type=str, default='data/gmaps_time.csv', help='Time matrix CSV file')
+    parser.add_argument('--task', type=str, default='data/task_english', help='Task input file')
     parser.add_argument('--seed', type=int, default=0, help='Seed (default = 0)')
     parser.add_argument('--uct', type=float, default=65, help='UCT weight (default = 65)')
     parser.add_argument('--exploration', type=float, default=0.1, help='Exploration weight (default = 0.1)')
@@ -103,9 +84,8 @@ if __name__ == '__main__':
     random.seed(args.seed)
 
     # read input data
-    reqs, steps, deltas = read_pool(args.pool)
-    distance, time = read_data(args.distance, args.time)
-    all_idxs = list(range(len(reqs)))
+    data = OracleData(args.pool, args.task)
+    all_idxs = list(range(data.pool_size()))
 
     # initialise MCTS tree
     tree = MCTS(

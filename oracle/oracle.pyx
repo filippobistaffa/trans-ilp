@@ -57,6 +57,9 @@ cdef class OracleData:
     def get_data(self):
         return self.data
 
+    def pool_size(self):
+        return self.data.agents.size()
+
 @cython.boundscheck(False)
 @cython.wraparound(False)
 
