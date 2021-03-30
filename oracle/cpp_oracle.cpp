@@ -17,8 +17,6 @@
  *                                                                         *
  ***************************************************************************/
 
-using namespace std;
-
 #include <vector>
 #include <string>
 #include <stdio.h>
@@ -42,28 +40,6 @@ using namespace std;
 
 ILOSTLBEGIN
 
-// Data Structures
-
-struct Personality_profile {
-    double sn, tf, ei, pj;
-};
-
-struct Agent {
-    int id;
-    int gender;
-    Personality_profile profile;
-    map<string,double> competence_level;
-};
-
-struct Competence {
-    double level;
-    double importance;
-};
-
-struct Task_type {
-    map<string,Competence> required_competences;
-};
-
 void cpp_read_agents(const char *filename) {
 
 }
@@ -79,16 +55,15 @@ constexpr double synteam_gamma = 0.24;
 constexpr double v = 0.5;
 constexpr double lambda = 0.8;
 
-float cpp_oracle(const unsigned int actual_team_size, const unsigned int *_team,
-                 const unsigned int n_of_agents, const void *_agents,
-                 const unsigned int n_of_competences, const void *_competences,
-                 const void *_task) {
+float cpp_oracle(const unsigned int actual_team_size, const unsigned int *_team, const Data data) {
 
     // convert input parameters
     set<int> team(_team, _team + actual_team_size);
-    Agent *agents = (Agent *)_agents;
-    string *competences = (string *)competences;
-    Task_type *task = (Task_type *)task;
+    const vector<Agent> agents = data.agents;
+    const vector<string> competences = data.competences;
+    const unsigned int n_of_competences = competences.size();
+    const Task_type task = data.task;
+
     // actual code
     vector< vector<int> > assignment;
     vector< vector<double> > cost_matrix(actual_team_size, vector<double>(n_of_competences, 0.0));
@@ -98,12 +73,12 @@ float cpp_oracle(const unsigned int actual_team_size, const unsigned int *_team,
         if (agents[*sit].gender == 1) ++n_of_women;
         for (int j = 0; j < n_of_competences; ++j) {
             double tcost;
-            double diff = (agents[*sit].competence_level)[competences[j]] - ((task->required_competences)[competences[j]]).level;
+            double diff = (agents[*sit].competence_level)[competences[j]] - ((task.required_competences)[competences[j]]).level;
             if (diff < 0.0) {
                 diff *= -1.0;
-                tcost = diff*v*((task->required_competences)[competences[j]]).importance;
+                tcost = diff*v*((task.required_competences)[competences[j]]).importance;
             }
-            else tcost = diff*(1.0-v)*((task->required_competences)[competences[j]]).importance;
+            else tcost = diff*(1.0-v)*((task.required_competences)[competences[j]]).importance;
             cost_matrix[ind][j] = tcost;
         }
         ++ind;
@@ -176,7 +151,7 @@ float cpp_oracle(const unsigned int actual_team_size, const unsigned int *_team,
         int i = 0;
         for (set<int>::iterator sit = team.begin(); sit != team.end(); ++sit) {
             if (assignment[i][j] == 1) {
-                double diff = (agents[*sit].competence_level)[competences[j]] - ((task->required_competences)[competences[j]]).level;
+                double diff = (agents[*sit].competence_level)[competences[j]] - ((task.required_competences)[competences[j]]).level;
                 if (diff < 0.0) {
                     ++ucnt;
                     usum += -1.0*diff;
@@ -188,8 +163,8 @@ float cpp_oracle(const unsigned int actual_team_size, const unsigned int *_team,
             }
             ++i;
         }
-        u += ((task->required_competences)[competences[j]]).importance * (usum/double(ucnt + 1));
-        o += ((task->required_competences)[competences[j]]).importance * (osum/double(ocnt + 1));
+        u += ((task.required_competences)[competences[j]]).importance * (usum/double(ucnt + 1));
+        o += ((task.required_competences)[competences[j]]).importance * (osum/double(ocnt + 1));
     }
     uprof = 1.0 - (v*u + (1.0 - v)*o);
 
