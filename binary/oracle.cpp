@@ -70,11 +70,11 @@ int n_of_agents;
 int n_of_competences;
 
 // Parameter values. The value of alpha is set to beta/3.0 below. This is the always-used setting. If this changes some day, the code must be changed.
-double alpha = 0.19;
-double my_beta;
-double synteam_gamma = 0.24;
-double v = 0.5;
-double lambda = 0.8;
+constexpr double alpha = 0.19;
+constexpr double my_beta = alpha * 3.0;
+constexpr double synteam_gamma = 0.24;
+constexpr double v = 0.5;
+constexpr double lambda = 0.8;
 
 // variables for reading the input information from files
 string all_students_file;
@@ -305,9 +305,6 @@ int main( int argc, char **argv ) {
     for (int i = 0; i < n_of_competences; ++i) (task.required_competences)[competences[i]].importance /= imp_sum;
 
     //cout << "Read " << n_of_competences << " competences" << '\n';
-
-    // fixed setting for beta (CAUTION!!!)
-    my_beta = alpha*3.0;
 
     set<int> team;
     for (int i = 3; i < argc; ++i) {
