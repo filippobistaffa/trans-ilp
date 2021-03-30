@@ -83,7 +83,7 @@ if __name__ == '__main__':
     parser = ap.ArgumentParser(
         formatter_class=lambda prog: ap.HelpFormatter(prog, max_help_position=29)
     )
-    parser.add_argument('pool', metavar='POOL', type=str, help='Pool CSV file')
+    parser.add_argument('pool', metavar='POOL', type=str, help='Pool file')
     parser.add_argument('--max_size', type=int, default=5, help='Maximum coalition size (default = 5)')
     parser.add_argument('--distance', type=str, default='data/gmaps_distance.csv', help='Distance matrix CSV file')
     parser.add_argument('--time', type=str, default='data/gmaps_time.csv', help='Time matrix CSV file')
