@@ -40,8 +40,60 @@
 
 ILOSTLBEGIN
 
-void cpp_read_agents(const char *filename) {
+vector<struct Agent> cpp_read_agents(const char *filename) {
 
+    vector<struct Agent> agents;
+
+    // read the complete set of students from the corresponding input file
+    ifstream indata;
+    indata.open(filename);
+    if(!indata) { // file couldn't be opened
+        cout << "Error: file containing all students could not be opened" << endl;
+    }
+
+    char c;
+    while (indata >> c) {
+        Agent ag;
+        indata >> ag.id;
+        indata >> c;
+        indata >> c;
+        indata >> c;
+        while (c != '"') indata >> c;
+        indata >> c;
+        indata >> ag.gender;
+        indata >> c;
+        indata >> (ag.profile).sn;
+        indata >> c;
+        indata >> (ag.profile).tf;
+        indata >> c;
+        indata >> (ag.profile).ei;
+        indata >> c;
+        indata >> (ag.profile).pj;
+        indata >> c;
+        indata >> c;
+        while (c != ']') {
+            indata >> c;
+            indata >> c;
+            indata >> c;
+            string comp;
+            while (c != '"') {
+                comp.push_back(c);
+                indata >> c;
+            }
+            indata >> c;
+            double level;
+            indata >> level;
+            (ag.competence_level)[comp] = level;
+            indata >> c;
+            indata >> c;
+        }
+        indata >> c;
+        indata >> c;
+        agents.push_back(ag);
+    }
+    indata.close();
+
+    return agents;
 }
 
 void cpp_read_task(const char *filename) {
@@ -55,7 +107,7 @@ constexpr double synteam_gamma = 0.24;
 constexpr double v = 0.5;
 constexpr double lambda = 0.8;
 
-float cpp_oracle(const unsigned int actual_team_size, const unsigned int *_team, const Data data) {
+float cpp_oracle(const unsigned int actual_team_size, const unsigned int *_team, const struct Data data) {
 
     // convert input parameters
     set<int> team(_team, _team + actual_team_size);
