@@ -35,7 +35,10 @@ cdef public struct Data:
 
 # import C++ functions
 cdef extern from "cpp_oracle.hpp":
-    cpp_vector[Agent] cpp_read_agents(const char *filename)
+    void cpp_read_agents(const char *filename, Data data)
+
+cdef extern from "cpp_oracle.hpp":
+    void cpp_read_task_competences(const char *filename, Data data)
 
 cdef extern from "cpp_oracle.hpp":
     float cpp_oracle(const unsigned int actual_team_size, const unsigned int *team, Data data)
@@ -44,8 +47,9 @@ cdef extern from "cpp_oracle.hpp":
 cdef class OracleData:
     cdef Data data
 
-    def __cinit__(self, agents, task):
-        self.data.agents = cpp_read_agents(agents)
+    def __cinit__(self, agents_file, task_file):
+        cpp_read_agents(agents_file, self.data)
+        cpp_read_task_competences(task_file, self.data)
 
     def get_data(self):
         return self.data

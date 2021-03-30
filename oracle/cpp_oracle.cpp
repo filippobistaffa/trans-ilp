@@ -40,7 +40,7 @@
 
 ILOSTLBEGIN
 
-vector<struct Agent> cpp_read_agents(const char *filename) {
+void cpp_read_agents(const char *filename, struct Data data) {
 
     vector<struct Agent> agents;
 
@@ -93,11 +93,41 @@ vector<struct Agent> cpp_read_agents(const char *filename) {
     }
     indata.close();
 
-    return agents;
+    // write results to output parameter
+    data.agents = agents;
 }
 
-void cpp_read_task(const char *filename) {
+void cpp_read_task_competences(const char *filename, struct Data data) {
 
+    vector<string> competences;
+    unsigned int n_of_competences;
+    Task_type task;
+
+    // read the task information from the corresponding input file
+    ifstream indata;
+    indata.open(filename);
+    if(!indata) { // file couldn't be opened
+        cout << "Error: file containing the task information could not be opened" << endl;
+    }
+
+    indata >> n_of_competences;
+    double imp_sum = 0.0;
+    for (int i = 0; i < n_of_competences; ++i) {
+        Competence c;
+        string comp_name;
+        indata >> comp_name;
+        indata >> c.level;
+        indata >> c.importance;
+        (task.required_competences)[comp_name] = c;
+        imp_sum += c.importance;
+        competences.push_back(comp_name);
+    }
+    indata.close();
+    for (int i = 0; i < n_of_competences; ++i) (task.required_competences)[competences[i]].importance /= imp_sum;
+
+    // write results to output parameter
+    data.competences = competences;
+    data.task = task;
 }
 
 // Parameter values. The value of alpha is set to beta/3.0 below. This is the always-used setting. If this changes some day, the code must be changed.
