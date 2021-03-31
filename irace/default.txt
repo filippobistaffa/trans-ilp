@@ -11,5 +11,5 @@
 ## parameter conditions (NA should be used for those parameters that
 ## are not enabled for a given configuration) and, if given, the
 ## constraints that describe forbidden configurations.
-uct_weight	exploration
-50.00		0.1
+uct_weight	exploration budget
+50.00		0.1         40
