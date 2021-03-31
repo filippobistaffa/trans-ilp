@@ -149,7 +149,7 @@ int main(int argc, char *argv[]) {
 	std::cout << GREEN("Solution:") << '\n';
 	print_solution(vars[0], xa, cplex);
 	#endif
-	std::cout << GREEN("Total reward") << " = " << cplex.getObjValue() << '\n';
+	std::cout << cplex.getObjValue() << '\n';
 
 	return EXIT_SUCCESS;
 }
