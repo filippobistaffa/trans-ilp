@@ -28,10 +28,9 @@ DATA_DIR="data"
 IRACE_LOG="irace/cluster/log"
 
 # Fixed parameters
-DISTANCE="$DATA_DIR/gmaps_distance.csv"
-TIME="$DATA_DIR/gmaps_time.csv"
+TASK="$DATA_DIR/task_english"
 ITERATIONS=1000
-FIXED_PARAMS="--distance $DISTANCE --time $TIME --iterations $ITERATIONS --irace"
+FIXED_PARAMS="--task $TASK --iterations $ITERATIONS --irace"
 
 CANDIDATE=$1
 INSTANCEID=$2
