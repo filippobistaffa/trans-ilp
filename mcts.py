@@ -2,6 +2,7 @@ from oracle.oracle import oracle
 from tree import MCTS, Node
 import numpy as np
 import random
+import os
 
 class Coalition(Node):
     def __init__(self, idxs, terminal):
@@ -85,8 +86,8 @@ if __name__ == '__main__':
     )
     parser.add_argument('pool', metavar='POOL', type=str, help='Pool file')
     parser.add_argument('--max_size', type=int, default=5, help='Maximum coalition size (default = 5)')
-    parser.add_argument('--distance', type=str, default='data/gmaps_distance.csv', help='Distance matrix CSV file')
-    parser.add_argument('--time', type=str, default='data/gmaps_time.csv', help='Time matrix CSV file')
+    parser.add_argument('--distance', type=str, default=os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'gmaps_distance.csv'), help='Distance matrix CSV file')
+    parser.add_argument('--time', type=str, default=os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'gmaps_time.csv'), help='Time matrix CSV file')
     parser.add_argument('--seed', type=int, default=0, help='Seed (default = 0)')
     parser.add_argument('--uct', type=float, default=50, help='UCT weight (default = 50)')
     parser.add_argument('--exploration', type=float, default=0.1, help='Exploration weight (default = 0.1)')
