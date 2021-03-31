@@ -1,117 +1,112 @@
-from abc import ABC, abstractmethod
-from collections import defaultdict
-from time import time
+from oracle.oracle import oracle
+from oracle.oracle import OracleData
+from tree import MCTS, Node
+import numpy as np
 import random
-import math
 
+class Coalition(Node):
+    def __init__(self, idxs, terminal):
+        self.idxs = idxs
+        self.terminal = terminal
 
-class MCTS:
-    def __init__(self, root, budget, iterations, exploration_rate, uct_weight):
-        self.Q = defaultdict(float) # total reward of each node
-        self.A = defaultdict(float) # average reward for each node
-        self.N = defaultdict(int)   # total visit count for each node
-        self.children = dict()      # children of each expanded node
-        self.root = root
-
-        # search parameters
-        self.exploration_rate = exploration_rate
-        self.uct_weight = uct_weight
-        self.iterations = iterations
-        self.budget = budget
-
-        # simulation statistics
-        self.simulations = 0
-        self.deadends = 0
-
-    def run(self):
-        iterations = 0
-        start_time = time()
-        while True:
-            path = self.select(self.root)
-            leaf = path[-1]
-            #print('Selected path:', path)
-            #print('Leaf:', leaf)
-            self.expand(leaf)
-            reward = self.simulate(leaf)
-            if reward is not None:
-                #print('Reward from simulation:', reward)
-                self.backpropagate(path, reward)
-            if self.iterations is not None:
-                if iterations >= self.iterations:
-                    break
-            if self.budget is not None:
-                if time() - start_time > self.budget:
-                    break
-            iterations += 1
-
-    def select(self, node):
-        path = []
-        while True:
-            path.append(node)
-            if node not in self.children or not self.children[node]:
-                # node is either unexplored or terminal
-                return path
-            unexplored = self.children[node] - self.children.keys()
-            if unexplored and random.random() < self.exploration_rate:
-                #print('Visiting a new node')
-                n = unexplored.pop()
-                path.append(n)
-                return path
-            else:
-                node = self.uct_select(node)  # descend a layer deeper
-                #print('UCT select:', node)                
-
-    def uct_select(self, node):
-        def uct(n):
-            if self.N[n] == 0:
-                return float('-inf')
-            else:
-                log_N_vertex = math.log(self.N[node])
-                return self.Q[n] / self.N[n] + self.uct_weight * math.sqrt(
-                    log_N_vertex / self.N[n]
-                )
-        #print('Children', self.children[node])
-        return max(self.children[node], key=uct)
-
-    def expand(self, node):
-        if node in self.children: # already expanded
-            return
-        self.children[node] = node.find_children()
-
-    def simulate(self, node):
-        self.simulations += 1
-        while True:
-            if node is None:
-                #print('Deadend')
-                self.deadends += 1
-                return None
-            #else:
-                #print('Simulating from', node)
-            if node.is_terminal():
-                reward = node.reward()
-                return reward
-            node = node.find_random_child()
-
-    def backpropagate(self, path, reward):
-        for node in reversed(path):
-            self.N[node] += 1
-            self.Q[node] += reward
-            self.A[node] = self.Q[node] / self.N[node]       
-
-
-class Node(ABC):
-    @abstractmethod
     def find_children(self):
-        return []
+        if self.terminal:
+            return []
+        remaining = [i for i in all_idxs if not self.idxs or i > max(self.idxs)]
+        if partial:
+            if len(self.idxs) > 0:
+                remaining.append(-1)
+        children = [self.add_idx(idx) for idx in remaining]
+        return [child for child in children if child is not None]
 
-    @abstractmethod
     def find_random_child(self):
-        return None
+        remaining = [i for i in all_idxs if not self.idxs or i > max(self.idxs)]
+        if partial:
+            if len(self.idxs) > 0:
+                remaining.append(-1)
+        if not remaining:
+            return None
+        else:
+            return self.add_idx(random.choice(remaining))
 
-    @abstractmethod
-    def is_terminal(self):
-        return True
-
-    @abstractmethod
     def reward(self):
-        return 0
+        if len(self.idxs) > 0:
+            return oracle(np.array(self.idxs, dtype=np.uint32), data)
+        else:
+            return 0
+
+    def is_terminal(self):
+        return self.terminal
+
+    def add_idx(self, idx): # assumes idx not in self.idxs
+        if idx == -1:
+            return Coalition(idxs=self.idxs, terminal=True)
+        idxs = self.idxs.copy()
+        idxs.append(idx)
+        return Coalition(idxs=idxs, terminal=len(idxs) == max_size)
+
+    def __repr__(self):
+        return str(self.idxs)
+
+
+def dfs(coal, rewards):
+    #print('Visiting', coal.idxs)
+    if coal.terminal:
+        reward = coal.reward()
+        rewards[coal] = reward
+    else:
+        for child in coal.find_children():
+            dfs(child, rewards)
+
+
+import argparse as ap
+
+if __name__ == '__main__':
+    parser = ap.ArgumentParser(
+        formatter_class=lambda prog: ap.HelpFormatter(prog, max_help_position=29)
+    )
+    parser.add_argument('pool', metavar='POOL', type=str, help='Pool file')
+    parser.add_argument('--max_size', type=int, default=5, help='Maximum coalition size (default = 5)')
+    parser.add_argument('--task', type=str, default='data/task_english', help='Task input file')
+    parser.add_argument('--seed', type=int, default=0, help='Seed (default = 0)')
+    parser.add_argument('--uct', type=float, default=50, help='UCT weight (default = 50)')
+    parser.add_argument('--exploration', type=float, default=0.1, help='Exploration weight (default = 0.1)')
+    parser.add_argument('--complete', help='Force complete coalitions', action="store_true")
+    parser.add_argument('--irace', help='Print value for IRACE optimisation', action="store_true")
+    required = parser.add_mutually_exclusive_group(required=True)
+    required.add_argument('--iterations', type=int, help='Number of iterations')
+    required.add_argument('--budget', type=int, help='Time budget in seconds')
+    args = parser.parse_args()
+
+    # set global variables
+    max_size = args.max_size
+    partial = not args.complete
+    random.seed(args.seed)
+
+    # read input data
+    data = OracleData(args.pool, args.task)
+    all_idxs = list(range(data.pool_size()))
+
+    # initialise MCTS tree
+    tree = MCTS(
+        Coalition(idxs=[], terminal=False),
+        budget=args.budget,
+        iterations=args.iterations,
+        exploration_rate=args.exploration,
+        uct_weight=args.uct
+    )
+
+    # execute MCTS algorithm
+    tree.run()
+
+    # print terminal nodes' values    
+    terminal = sorted(filter(lambda item: item[0].is_terminal(), tree.A.items()), key=lambda item: item[1])
+    for item in terminal:
+        print('{},{}'.format(item[1],','.join(str(idx) for idx in item[0].idxs)))
+
+    # print value for IRACE if necessary
+    if args.irace:
+        if len(terminal) > 0:
+            print(-terminal[-1][1])
+        else:
+            print(10000) # high cost as penalty
