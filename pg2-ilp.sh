@@ -8,7 +8,7 @@ exec_dir=${exec_dir%/*}
 
 candidates=$(mktemp)
 start=`date +%s`
-python3 $exec_dir/mcts.py $* > $candidates
+$exec_dir/pg2/pg2.sh $* > $candidates
 end=`date +%s`
 runtime=$((end-start))
 ilp_tb=$((time_budget-runtime))
