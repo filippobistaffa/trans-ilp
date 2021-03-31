@@ -69,7 +69,7 @@ if __name__ == '__main__':
     parser.add_argument('--max_size', type=int, default=5, help='Maximum coalition size (default = 5)')
     parser.add_argument('--task', type=str, default='data/task_english', help='Task input file')
     parser.add_argument('--seed', type=int, default=0, help='Seed (default = 0)')
-    parser.add_argument('--uct', type=float, default=65, help='UCT weight (default = 65)')
+    parser.add_argument('--uct', type=float, default=50, help='UCT weight (default = 50)')
     parser.add_argument('--exploration', type=float, default=0.1, help='Exploration weight (default = 0.1)')
     parser.add_argument('--complete', help='Force complete coalitions', action="store_true")
     parser.add_argument('--irace', help='Print value for IRACE optimisation', action="store_true")
