@@ -54,7 +54,7 @@ class MCTS:
             unexplored = self.children[node] - self.children.keys()
             if unexplored and random.random() < self.exploration_rate:
                 #print('Visiting a new node')
-                n = unexplored.pop()
+                n = sorted(unexplored).pop()
                 path.append(n)
                 return path
             else:
@@ -115,3 +115,7 @@ class Node(ABC):
     @abstractmethod
     def reward(self):
         return 0
+
+    @abstractmethod
+    def __lt__(self, other):
+        return True

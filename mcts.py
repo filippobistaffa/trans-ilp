@@ -49,6 +49,9 @@ class Coalition(Node):
     def __repr__(self):
         return str(self.idxs)
 
+    def __lt__(self, other):
+        return self.idxs < other.idxs
+
 
 def dfs(coal, rewards):
     #print('Visiting', coal.idxs)
