@@ -4,22 +4,25 @@
 
 ## The maximum number of runs (invocations of targetRunner) that will
 ## performed. It determines the (maximum) budget of experiments for the tuning.
-maxExperiments = 5000
+maxExperiments = 3000
 
 ## Limit number of jobs submitted in parallel
 #parallel = 200
 
 ## Directory where training instances are located, either absolute or relative
 ## to current directory.
-trainInstancesDir = "../"
+trainInstancesDir = "../../data/pools_20161201"
+
+## Directory where testing instances are located, either absolute or relative
+## to current directory.
+trainInstancesDir = "../../data/pools_20161201"
+
+## Directory where the programs will be run.
+execDir = "../.."
 
 ## File with a list of instances and (optionally) parameters.
 ## If empty or NULL, do not use a file.
 trainInstancesFile = "training.txt"
-
-## Directory where testing instances are located, either absolute or relative
-## to current directory.
-trainInstancesDir = "../data"
 
 ## File containing a list of test instances and optionally additional
 ## parameters for them.  If empty or NULL, do not use a file.
@@ -31,10 +34,6 @@ parameterFile = "parameters-mcts.txt"
 ## A file containing a list of initial configurations.
 ## If empty or NULL, do not use a file.
 configurationsFile = "default.txt"
-
-## Directory where the programs will be run.
-execDir = ".."
-
 ## Indicates the number of decimal places to be considered for the
 ## real parameters.
 digits = 2
