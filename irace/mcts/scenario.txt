@@ -1,0 +1,46 @@
+###################################################### -*- mode: r -*- #####
+## Scenario setup for Iterated Race (iRace).
+############################################################################
+
+## The maximum number of runs (invocations of targetRunner) that will
+## performed. It determines the (maximum) budget of experiments for the tuning.
+maxExperiments = 3000
+
+## Limit number of jobs submitted in parallel
+#parallel = 200
+
+## Directory where training instances are located, either absolute or relative
+## to current directory.
+trainInstancesDir = "../../data/pools_20161201"
+
+## Directory where testing instances are located, either absolute or relative
+## to current directory.
+trainInstancesDir = "../../data/pools_20161201"
+
+## Directory where the programs will be run.
+execDir = "../.."
+
+## File with a list of instances and (optionally) parameters.
+## If empty or NULL, do not use a file.
+trainInstancesFile = "training.txt"
+
+## File containing a list of test instances and optionally additional
+## parameters for them.  If empty or NULL, do not use a file.
+testInstancesFile = "test.txt"
+
+## File that contains the description of the parameters.
+parameterFile = "parameters-mcts.txt"
+
+## A file containing a list of initial configurations.
+## If empty or NULL, do not use a file.
+configurationsFile = "default.txt"
+## Indicates the number of decimal places to be considered for the
+## real parameters.
+digits = 2
+
+## Number of elite configurations returned by irace that will be tested
+## if test instances are provided.
+testNbElites = 0
+
+## Enable/disable testing the elite configurations found at each iteration.
+testIterationElites = 0

@@ -28,7 +28,7 @@ TOTALCANDIDATES="$5"
 shift 5 || echo "Not enough parameters to $0"
 ALLIDS=$*
 
-IRACE_LOG="irace/log"
+IRACE_LOG="irace/mcts/log"
 
 STDOUT=${IRACE_LOG}/c${CANDIDATE}-${INSTANCEID}.stdout
 STDERR=${IRACE_LOG}/c${CANDIDATE}-${INSTANCEID}.stderr
@@ -39,7 +39,7 @@ error() {
 }
 
 RW=$(cat ${STDOUT} | tail -n 1)
-echo "-$RW"
+echo $(python3 -c "print(-($RW))")
 
 #rm -f "${STDOUT}" "${STDERR}"
 exit 0
