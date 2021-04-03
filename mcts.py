@@ -10,7 +10,9 @@ class Coalition(Node):
         self.terminal = terminal
 
     def remaining(self):
-        return [i for i in all_idxs if not self.idxs or i > max(self.idxs)]
+        remaining = [i for i in all_idxs if not self.idxs or i > max(self.idxs)]
+        #random.shuffle(remaining)
+        return remaining
 
     def find_children(self):
         if self.terminal:
