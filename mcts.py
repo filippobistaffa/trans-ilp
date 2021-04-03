@@ -1,6 +1,7 @@
 from oracle.oracle import oracle
 from tree import MCTS, Node
 import numpy as np
+import time as tm
 import random
 import os
 
@@ -91,6 +92,8 @@ if __name__ == '__main__':
         formatter_class=lambda prog: ap.HelpFormatter(prog, max_help_position=29)
     )
     parser.add_argument('pool', metavar='POOL', type=str, help='Pool file')
+    parser.add_argument('--iterations', type=int, default=5000, help='Number of iterations (default = 1000)')
+    parser.add_argument('--budget', type=int, default=40, help='Time budget in seconds (default = 40)')
     parser.add_argument('--max_size', type=int, default=5, help='Maximum coalition size (default = 5)')
     parser.add_argument('--distance', type=str, default=os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'gmaps_distance.csv'), help='Distance matrix CSV file')
     parser.add_argument('--time', type=str, default=os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'gmaps_time.csv'), help='Time matrix CSV file')
@@ -99,9 +102,6 @@ if __name__ == '__main__':
     parser.add_argument('--exploration', type=float, default=0.1, help='Exploration weight (default = 0.1)')
     parser.add_argument('--complete', help='Force complete coalitions', action="store_true")
     parser.add_argument('--irace', help='Print value for IRACE optimisation', action="store_true")
-    required = parser.add_mutually_exclusive_group(required=True)
-    required.add_argument('--iterations', type=int, help='Number of iterations')
-    required.add_argument('--budget', type=int, help='Time budget in seconds')
     args = parser.parse_args()
 
     # set global variables
@@ -113,27 +113,23 @@ if __name__ == '__main__':
     reqs, steps, deltas = read_pool(args.pool)
     distance, time = read_data(args.distance, args.time)
     all_idxs = list(range(len(reqs)))
+    start_time = tm.time()
 
-    # initialise MCTS tree
-    tree = MCTS(
-        Coalition(idxs=[], terminal=False),
-        budget=args.budget,
-        iterations=args.iterations,
-        exploration_rate=args.exploration,
-        uct_weight=args.uct
-    )
-
-    # execute MCTS algorithm
-    tree.run()
-
-    # print terminal nodes' values    
-    terminal = sorted(filter(lambda item: item[0].is_terminal(), tree.A.items()), key=lambda item: item[1])
-    for item in terminal:
-        print('{},{}'.format(item[1],','.join(str(idx) for idx in item[0].idxs)))
+    while args.budget > tm.time() - start_time:
+        # initialise MCTS tree
+        tree = MCTS(
+            Coalition(idxs=[], terminal=False),
+            iterations=args.iterations,
+            exploration_rate=args.exploration,
+            uct_weight=args.uct
+        )
+        # execute MCTS algorithm
+        terminal = tree.run()
+        # get best candidate
+        best = terminal[-1]
+        print('{},{}'.format(best[1], ','.join(str(idx) for idx in best[0].idxs)))
+        all_idxs = [idx for idx in all_idxs if idx not in best[0].idxs]
 
     # print value for IRACE if necessary
     if args.irace:
-        if len(terminal) > 0:
-            print(terminal[-1][1])
-        else:
-            print(-10000) # high cost as penalty
+        pass

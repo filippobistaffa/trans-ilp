@@ -1,12 +1,11 @@
 from abc import ABC, abstractmethod
 from collections import defaultdict
-from time import time
 import random
 import math
 
 
 class MCTS:
-    def __init__(self, root, budget, iterations, exploration_rate, uct_weight):
+    def __init__(self, root, iterations, exploration_rate, uct_weight):
         self.Q = defaultdict(float) # total reward of each node
         self.A = defaultdict(float) # average reward for each node
         self.N = defaultdict(int)   # total visit count for each node
@@ -17,7 +16,6 @@ class MCTS:
         self.exploration_rate = exploration_rate
         self.uct_weight = uct_weight
         self.iterations = iterations
-        self.budget = budget
 
         # simulation statistics
         self.simulations = 0
@@ -25,7 +23,6 @@ class MCTS:
 
     def run(self):
         iterations = 0
-        start_time = time()
         while True:
             path = self.select(self.root)
             leaf = path[-1]
@@ -36,13 +33,11 @@ class MCTS:
             if reward is not None:
                 #print('Reward from simulation:', reward)
                 self.backpropagate(path, reward)
-            if self.iterations is not None:
-                if iterations >= self.iterations:
-                    break
-            if self.budget is not None:
-                if time() - start_time > self.budget:
-                    break
+            if iterations >= self.iterations:
+                break
             iterations += 1
+        terminal = sorted(filter(lambda item: item[0].is_terminal(), self.A.items()), key=lambda item: item[1])
+        return terminal
 
     def select(self, node):
         path = []
