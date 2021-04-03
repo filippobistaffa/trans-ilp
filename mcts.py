@@ -131,6 +131,6 @@ if __name__ == '__main__':
     # print value for IRACE if necessary
     if args.irace:
         if len(terminal) > 0:
-            print(-terminal[-1][1])
+            print(terminal[-1][1])
         else:
-            print(10000) # high cost as penalty
+            print(-10000) # high cost as penalty
