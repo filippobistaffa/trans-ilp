@@ -10,10 +10,13 @@ class Coalition(Node):
         self.idxs = idxs
         self.terminal = terminal
 
+    def remaining(self):
+        return [i for i in all_idxs if not self.idxs or i > max(self.idxs)]
+
     def find_children(self):
         if self.terminal:
             return []
-        remaining = [i for i in all_idxs if not self.idxs or i > max(self.idxs)]
+        remaining = self.remaining()
         if partial:
             if len(self.idxs) > 0:
                 remaining.append(-1)
@@ -21,7 +24,7 @@ class Coalition(Node):
         return [child for child in children if child is not None]
 
     def find_random_child(self):
-        remaining = [i for i in all_idxs if not self.idxs or i > max(self.idxs)]
+        remaining = self.remaining()
         if partial:
             if len(self.idxs) > 0:
                 remaining.append(-1)
