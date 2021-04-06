@@ -101,6 +101,7 @@ if __name__ == '__main__':
     parser.add_argument('--exploration', type=float, default=0.1, help='Exploration weight (default = 0.1)')
     parser.add_argument('--complete', help='Force complete coalitions', action="store_true")
     parser.add_argument('--irace', help='Print value for IRACE optimisation', action="store_true")
+    parser.add_argument('--shuffle', help='Shuffle input pool', action="store_true")
     required = parser.add_mutually_exclusive_group(required=True)
     required.add_argument('--iterations', type=int, help='Number of iterations')
     required.add_argument('--budget', type=int, help='Time budget in seconds')
@@ -115,6 +116,16 @@ if __name__ == '__main__':
     reqs, steps, deltas = read_pool(args.pool)
     distance, time = read_data(args.distance, args.time)
     all_idxs = list(range(len(reqs)))
+
+    # shuffle input pool
+    idx_map = reverse_idx_map = all_idxs.copy()
+    if args.shuffle:
+        random.shuffle(idx_map)
+        for idx in range(len(idx_map)):
+            reverse_idx_map[idx_map[idx]] = idx
+        reqs = reqs[idx_map]
+        steps = steps[idx_map]
+        deltas = deltas[idx_map]
 
     # initialise MCTS tree
     tree = MCTS(
@@ -131,7 +142,7 @@ if __name__ == '__main__':
     # print terminal nodes' values    
     terminal = sorted(filter(lambda item: item[0].is_terminal(), tree.A.items()), key=lambda item: item[1])
     for item in terminal:
-        print('{},{}'.format(item[1],','.join(str(idx) for idx in item[0].idxs)))
+        print('{},{}'.format(item[1],','.join(str(reverse_idx_map[idx]) for idx in item[0].idxs)))
 
     # print value for IRACE if necessary
     if args.irace:
