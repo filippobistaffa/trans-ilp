@@ -48,8 +48,8 @@ error() {
 # modify with the SLURM submission template
 sbatch 1> $tmpfile <<EOF
 #!/bin/bash
-#SBATCH --job-name=irace-$PPID-$CANDIDATE-${INSTANCEID}
-#SBATCH --time=1
+#SBATCH --job-name=irace-mcts-$PPID-$CANDIDATE-${INSTANCEID}
+#SBATCH --time=5:30
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH --output=/dev/null
