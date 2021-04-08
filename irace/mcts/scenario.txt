@@ -34,6 +34,7 @@ parameterFile = "parameters-mcts.txt"
 ## A file containing a list of initial configurations.
 ## If empty or NULL, do not use a file.
 configurationsFile = "default.txt"
+
 ## Indicates the number of decimal places to be considered for the
 ## real parameters.
 digits = 2
