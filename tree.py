@@ -64,12 +64,13 @@ class MCTS:
     def uct_select(self, node):
         def uct(n):
             if self.N[n] == 0:
-                return float('-inf')
+                u = float('-inf')
             else:
                 log_N_vertex = math.log(self.N[node])
-                return self.Q[n] / self.N[n] + self.uct_weight * math.sqrt(
+                u = self.Q[n] / self.N[n] + self.uct_weight * math.sqrt(
                     log_N_vertex / self.N[n]
                 )
+            return u
         #print('Children', self.children[node])
         return max(self.children[node], key=uct)
 
