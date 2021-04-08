@@ -55,6 +55,7 @@ class MCTS:
             if unexplored and random.random() < self.exploration_rate:
                 #print('Visiting a new node')
                 n = sorted(unexplored).pop()
+                #n = max(unexplored, key=lambda x: x.reward())
                 path.append(n)
                 return path
             else:
@@ -70,6 +71,7 @@ class MCTS:
                 u = self.Q[n] / self.N[n] + self.uct_weight * math.sqrt(
                     log_N_vertex / self.N[n]
                 )
+            #u = (u, n.reward())
             return u
         #print('Children', self.children[node])
         return max(self.children[node], key=uct)
