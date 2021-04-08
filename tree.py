@@ -59,7 +59,7 @@ class MCTS:
                 return path
             else:
                 node = self.uct_select(node)  # descend a layer deeper
-                #print('UCT select:', node)                
+                #print('UCT select:', node)
 
     def uct_select(self, node):
         def uct(n):
@@ -96,7 +96,7 @@ class MCTS:
         for node in reversed(path):
             self.N[node] += 1
             self.Q[node] += reward
-            self.A[node] = self.Q[node] / self.N[node]       
+            self.A[node] = self.Q[node] / self.N[node]
 
 
 class Node(ABC):
