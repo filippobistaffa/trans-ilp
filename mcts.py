@@ -11,7 +11,7 @@ class Coalition(Node):
 
     def remaining(self):
         remaining = [i for i in all_idxs if not self.idxs or i > max(self.idxs)]
-        #remaining = [i for i in all_idxs if not in self.idxs]
+        #remaining = [i for i in all_idxs if i not in self.idxs]
         #random.shuffle(remaining)
         return remaining
 
