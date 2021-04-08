@@ -118,7 +118,8 @@ if __name__ == '__main__':
     all_idxs = list(range(len(reqs)))
 
     # shuffle input pool
-    idx_map = reverse_idx_map = all_idxs.copy()
+    idx_map = all_idxs.copy()
+    reverse_idx_map = all_idxs.copy()
     if args.shuffle:
         random.shuffle(idx_map)
         for idx in range(len(idx_map)):
