@@ -33,7 +33,7 @@ class MCTS:
             # select new leaf node to add to the tree
             # ---------------------------------------
             path = self.tree_policy(self.root)
-            print('Selected path:', path)
+            #print('Selected path:', path)
             leaf = path[-1]
             self.add_to_tree(leaf)
 
@@ -42,7 +42,7 @@ class MCTS:
             # Compute the reward by simulation
             # ---------------------------------------
             reward = self.default_policy(leaf)
-            print('Reward from simulation:', reward)
+            #print('Reward from simulation:', reward)
 
             # ---------------------------------------
             # Backpropagation
@@ -86,16 +86,16 @@ class MCTS:
                 return path
             unexplored = self.children[node] - self.children.keys()
             explored = [n for n in self.children[node] if n not in unexplored]
-            print('Explored children of {}: {}'.format(node, explored))
-            print('Unexplored children of {}: {}: '.format(node, unexplored))
+            #print('Explored children of {}: {}'.format(node, explored))
+            #print('Unexplored children of {}: {}: '.format(node, unexplored))
             if (unexplored and random.random() < self.exploration_rate) or (not explored):
                 n = select_unexplored(sorted(unexplored)) # sort to ensure determinism
-                print('Visiting an unexplored children of {}: {}'.format(node, n))
+                #print('Visiting an unexplored children of {}: {}'.format(node, n))
                 path.append(n)
                 return path
             else:
                 node = select_uct(explored, node)
-                print('UCT select:', node)
+                #print('UCT select:', node)
 
     def add_to_tree(self, node):
         if node in self.children: # already expanded

@@ -40,7 +40,7 @@ class Coalition(Node):
             value = oracle(np.array(self.idxs, dtype=np.uint32), reqs, steps, deltas, distance, time)
         else:
             value = 0
-        print('v({}) = {}'.format(self, value))
+        #print('v({}) = {}'.format(self, value))
         return value
 
     def is_terminal(self):
