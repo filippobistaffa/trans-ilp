@@ -73,9 +73,8 @@ class MCTS:
         def select_uct(children, parent):
             def uct(x):
                 import sys
-                N_epsilon = self.N[x] + sys.float_info.epsilon
-                return self.Q[x] / N_epsilon + self.uct_weight * math.sqrt(
-                    math.log(self.N[parent]) / N_epsilon
+                return self.A[x] + self.uct_weight * math.sqrt(
+                    math.log(self.N[parent]) / (self.N[x] + sys.float_info.epsilon)
                 )
             return max(children, key=uct)
 
