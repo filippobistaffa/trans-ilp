@@ -27,15 +27,28 @@ class MCTS:
         iterations = 0
         start_time = time()
         while True:
-            path = self.select(self.root)
+
+            # ---------------------------------------
+            # Tree policy:
+            # select new leaf node to add to the tree
+            # ---------------------------------------
+            path = self.tree_policy(self.root)
+            print('Selected path:', path)
             leaf = path[-1]
-            #print('Selected path:', path)
-            #print('Leaf:', leaf)
-            self.expand(leaf)
-            reward = self.simulate(leaf)
-            if reward is not None:
-                #print('Reward from simulation:', reward)
-                self.backpropagate(path, reward)
+            self.add_to_tree(leaf)
+
+            # ---------------------------------------
+            # Default policy
+            # Compute the reward by simulation
+            # ---------------------------------------
+            reward = self.default_policy(leaf)
+            print('Reward from simulation:', reward)
+
+            # ---------------------------------------
+            # Backpropagation
+            # ---------------------------------------
+            self.backpropagate(path, reward)
+
             if self.iterations is not None:
                 if iterations >= self.iterations:
                     break
@@ -44,44 +57,52 @@ class MCTS:
                     break
             iterations += 1
 
-    def select(self, node):
+    def tree_policy(self, node):
+        """
+        - select an unexpanded node if no expanded node is present,
+          or with a probability of self.exploration_rate
+        - select an expanded node with a probability of 1-self.exploration_rate
+        - to select among unexpanded nodes (without Q value), use the reward
+          or any other guiding heuristic
+        - to select among expanded nodes (with a Q value), use UCT
+        """
+
+        def select_unexplored(children):
+            return max(children, key=lambda x: x.reward())
+
+        def select_uct(children, parent):
+            def uct(x):
+                import sys
+                N_epsilon = self.N[x] + sys.float_info.epsilon
+                return self.Q[x] / N_epsilon + self.uct_weight * math.sqrt(
+                    math.log(self.N[parent]) / N_epsilon
+                )
+            return max(children, key=uct)
+
         path = []
         while True:
             path.append(node)
             if node not in self.children or not self.children[node]:
-                # node is either unexplored or terminal
                 return path
             unexplored = self.children[node] - self.children.keys()
-            if unexplored and random.random() < self.exploration_rate:
-                #print('Visiting a new node')
-                n = sorted(unexplored).pop()
-                #n = max(unexplored, key=lambda x: x.reward())
+            explored = [n for n in self.children[node] if n not in unexplored]
+            print('Explored children of {}: {}'.format(node, explored))
+            print('Unexplored children of {}: {}: '.format(node, unexplored))
+            if (unexplored and random.random() < self.exploration_rate) or (not explored):
+                n = select_unexplored(sorted(unexplored)) # sort to ensure determinism
+                print('Visiting an unexplored children of {}: {}'.format(node, n))
                 path.append(n)
                 return path
             else:
-                node = self.uct_select(node)  # descend a layer deeper
-                #print('UCT select:', node)
+                node = select_uct(explored, node)
+                print('UCT select:', node)
 
-    def uct_select(self, node):
-        def uct(n):
-            if self.N[n] == 0:
-                u = float('-inf')
-            else:
-                log_N_vertex = math.log(self.N[node])
-                u = self.Q[n] / self.N[n] + self.uct_weight * math.sqrt(
-                    log_N_vertex / self.N[n]
-                )
-            #u = (u, n.reward())
-            return u
-        #print('Children', self.children[node])
-        return max(self.children[node], key=uct)
-
-    def expand(self, node):
+    def add_to_tree(self, node):
         if node in self.children: # already expanded
             return
         self.children[node] = node.find_children()
 
-    def simulate(self, node):
+    def default_policy(self, node):
         self.simulations += 1
         while True:
             if node is None:
@@ -96,10 +117,11 @@ class MCTS:
             node = node.find_random_child()
 
     def backpropagate(self, path, reward):
-        for node in reversed(path):
-            self.N[node] += 1
-            self.Q[node] += reward
-            self.A[node] = self.Q[node] / self.N[node]
+        if reward is not None:
+            for node in reversed(path):
+                self.N[node] += 1
+                self.Q[node] += reward
+                self.A[node] = self.Q[node] / self.N[node]
 
 
 class Node(ABC):

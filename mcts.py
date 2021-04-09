@@ -12,7 +12,7 @@ class Coalition(Node):
     def remaining(self):
         remaining = [i for i in all_idxs if not self.idxs or i > max(self.idxs)]
         #remaining = [i for i in all_idxs if i not in self.idxs]
-        #random.shuffle(remaining)
+        random.shuffle(remaining)
         return remaining
 
     def find_children(self):
@@ -36,10 +36,12 @@ class Coalition(Node):
             return self.add_idx(random.choice(remaining))
 
     def reward(self):
-        if len(self.idxs) > 0:
-            return oracle(np.array(self.idxs, dtype=np.uint32), reqs, steps, deltas, distance, time)
+        if self.idxs:
+            value = oracle(np.array(self.idxs, dtype=np.uint32), reqs, steps, deltas, distance, time)
         else:
-            return 0
+            value = 0
+        print('v({}) = {}'.format(self, value))
+        return value
 
     def is_terminal(self):
         return self.terminal
