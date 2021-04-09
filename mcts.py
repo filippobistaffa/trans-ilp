@@ -12,6 +12,7 @@ class Coalition(Node):
 
     def remaining(self):
         remaining = [i for i in all_idxs if not self.idxs or i > max(self.idxs)]
+        #remaining = [i for i in all_idxs if i not in self.idxs]
         #random.shuffle(remaining)
         return remaining
 
@@ -108,7 +109,7 @@ if __name__ == '__main__':
     # execute MCTS algorithm
     tree.run()
 
-    # print terminal nodes' values    
+    # print terminal nodes' values
     terminal = sorted(filter(lambda item: item[0].is_terminal(), tree.A.items()), key=lambda item: item[1])
     for item in terminal:
         print('{},{}'.format(item[1],','.join(str(idx) for idx in item[0].idxs)))

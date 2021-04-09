@@ -55,21 +55,24 @@ class MCTS:
             if unexplored and random.random() < self.exploration_rate:
                 #print('Visiting a new node')
                 n = sorted(unexplored).pop()
+                #n = max(unexplored, key=lambda x: x.reward())
                 path.append(n)
                 return path
             else:
                 node = self.uct_select(node)  # descend a layer deeper
-                #print('UCT select:', node)                
+                #print('UCT select:', node)
 
     def uct_select(self, node):
         def uct(n):
             if self.N[n] == 0:
-                return float('-inf')
+                u = float('-inf')
             else:
                 log_N_vertex = math.log(self.N[node])
-                return self.Q[n] / self.N[n] + self.uct_weight * math.sqrt(
+                u = self.Q[n] / self.N[n] + self.uct_weight * math.sqrt(
                     log_N_vertex / self.N[n]
                 )
+            #u = (u, n.reward())
+            return u
         #print('Children', self.children[node])
         return max(self.children[node], key=uct)
 
@@ -96,7 +99,7 @@ class MCTS:
         for node in reversed(path):
             self.N[node] += 1
             self.Q[node] += reward
-            self.A[node] = self.Q[node] / self.N[node]       
+            self.A[node] = self.Q[node] / self.N[node]
 
 
 class Node(ABC):
