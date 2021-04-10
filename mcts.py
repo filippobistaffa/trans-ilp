@@ -172,4 +172,5 @@ if __name__ == '__main__':
 
     # print value for IRACE if necessary
     if args.irace:
-        print(0) # not yet implemented
+        n_best = min(50, len(tuples))
+        print(sum(value for (coal, value) in tuples[-n_best:]))
