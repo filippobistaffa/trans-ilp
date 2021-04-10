@@ -161,9 +161,10 @@ if __name__ == '__main__':
             # execute MCTS algorithm
             terminal = tree.run()
             # get best candidate
-            best = terminal[-1]
-            merge([reverse_idx_map[idx] for idx in best[0].idxs], best[1])
-            all_idxs = [idx for idx in all_idxs if idx not in best[0].idxs]
+            if terminal:
+                best = terminal[-1]
+                merge([reverse_idx_map[idx] for idx in best[0].idxs], best[1])
+                all_idxs = [idx for idx in all_idxs if idx not in best[0].idxs]
         iteration += 1
 
     tuples = sorted(zip(candidates, values), key=lambda item: item[1])
@@ -172,5 +173,8 @@ if __name__ == '__main__':
 
     # print value for IRACE if necessary
     if args.irace:
-        n_best = min(50, len(tuples))
-        print(sum(value for (coal, value) in tuples[-n_best:]))
+        if tuples:
+            n_best = min(50, len(tuples))
+            print(sum(value for (coal, value) in tuples[-n_best:]))
+        else:
+            print(-10000) # high cost as penalty
