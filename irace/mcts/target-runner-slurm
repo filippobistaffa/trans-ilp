@@ -26,7 +26,7 @@ tmpfile=$(mktemp)
 EXECUTABLE="python3 mcts.py"
 IRACE_LOG="irace/mcts/log"
 
-FIXED_PARAMS="--budget 40 --irace"
+FIXED_PARAMS="--budget 40 --irace --shuffle"
 
 CANDIDATE=$1
 INSTANCEID=$2
