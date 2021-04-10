@@ -113,39 +113,62 @@ if __name__ == '__main__':
     # set global variables
     max_size = args.max_size
     partial = not args.complete
-    random.seed(args.seed)
 
     # read input data
     reqs, steps, deltas = read_pool(args.pool)
     distance, time = read_data(args.distance, args.time)
-    all_idxs = list(range(len(reqs)))
-
-    # shuffle input pool
-    idx_map = all_idxs.copy()
-    reverse_idx_map = all_idxs.copy()
-    if args.shuffle:
-        random.shuffle(idx_map)
-        for idx in range(len(idx_map)):
-            reverse_idx_map[idx_map[idx]] = idx
-        reqs = reqs[idx_map]
-        steps = steps[idx_map]
-        deltas = deltas[idx_map]
-
     start_time = tm.time()
+    iteration = 0
+    candidates = []
+    values = []
+
+    def merge(coal, value):
+        import bisect
+        insertion = bisect.bisect_left(candidates, coal) # all(val <= coal for val in candidates)
+        #print('Merged: {}'.format(candidates))
+        #print('{} should be inserted in position {}'.format((coal, value), insertion))
+        if insertion == len(candidates):
+            candidates.append(coal)
+            values.append(value)
+        else:
+            if candidates[insertion] != coal:
+                candidates.insert(insertion, coal)
+                values.insert(insertion, value)
+            #else:
+            #    print('Duplicate:', (coal, value))
+
     while args.budget > tm.time() - start_time:
-        # initialise MCTS tree
-        tree = MCTS(
-            Coalition(idxs=[], terminal=False),
-            iterations=args.iterations,
-            exploration_rate=args.exploration,
-            uct_weight=args.uct
-        )
-        # execute MCTS algorithm
-        terminal = tree.run()
-        # get best candidate
-        best = terminal[-1]
-        print('{},{}'.format(best[1], ','.join(str(reverse_idx_map[idx]) for idx in best[0].idxs)))
-        all_idxs = [idx for idx in all_idxs if idx not in best[0].idxs]
+        # shuffle input pool
+        random.seed(args.seed + iteration)
+        all_idxs = list(range(len(reqs)))
+        idx_map = all_idxs.copy()
+        reverse_idx_map = all_idxs.copy()
+        if args.shuffle:
+            random.shuffle(idx_map)
+            for idx in range(len(idx_map)):
+                reverse_idx_map[idx_map[idx]] = idx
+            reqs = reqs[idx_map]
+            steps = steps[idx_map]
+            deltas = deltas[idx_map]
+        while all_idxs and args.budget > tm.time() - start_time:
+            # initialise MCTS tree
+            tree = MCTS(
+                Coalition(idxs=[], terminal=False),
+                iterations=args.iterations,
+                exploration_rate=args.exploration,
+                uct_weight=args.uct
+            )
+            # execute MCTS algorithm
+            terminal = tree.run()
+            # get best candidate
+            best = terminal[-1]
+            merge([reverse_idx_map[idx] for idx in best[0].idxs], best[1])
+            all_idxs = [idx for idx in all_idxs if idx not in best[0].idxs]
+        iteration += 1
+
+    tuples = sorted(zip(candidates, values), key=lambda item: item[1])
+    for (coal, value) in tuples:
+        print('{},{}'.format(value, ','.join(str(i) for i in coal)))
 
     # print value for IRACE if necessary
     if args.irace:
