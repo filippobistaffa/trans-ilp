@@ -4,7 +4,7 @@
 
 ## The maximum number of runs (invocations of targetRunner) that will
 ## performed. It determines the (maximum) budget of experiments for the tuning.
-maxExperiments = 3000
+maxExperiments = 10000
 
 ## Limit number of jobs submitted in parallel
 #parallel = 200
@@ -34,6 +34,7 @@ parameterFile = "parameters-mcts.txt"
 ## A file containing a list of initial configurations.
 ## If empty or NULL, do not use a file.
 configurationsFile = "default.txt"
+
 ## Indicates the number of decimal places to be considered for the
 ## real parameters.
 digits = 2

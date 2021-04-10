@@ -11,7 +11,10 @@ class Coalition(Node):
         self.terminal = terminal
 
     def remaining(self):
-        return [i for i in all_idxs if not self.idxs or i > max(self.idxs)]
+        remaining = [i for i in all_idxs if not self.idxs or i > max(self.idxs)]
+        #remaining = [i for i in all_idxs if i not in self.idxs]
+        random.shuffle(remaining)
+        return remaining
 
     def find_children(self):
         if self.terminal:
@@ -34,10 +37,12 @@ class Coalition(Node):
             return self.add_idx(random.choice(remaining))
 
     def reward(self):
-        if len(self.idxs) > 0:
-            return oracle(np.array(self.idxs, dtype=np.uint32), reqs, steps, deltas, distance, time)
+        if self.idxs:
+            value = oracle(np.array(self.idxs, dtype=np.uint32), reqs, steps, deltas, distance, time)
         else:
-            return 0
+            value = 0
+        #print('v({}) = {}'.format(self, value))
+        return value
 
     def is_terminal(self):
         return self.terminal
@@ -98,10 +103,11 @@ if __name__ == '__main__':
     parser.add_argument('--distance', type=str, default=os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'gmaps_distance.csv'), help='Distance matrix CSV file')
     parser.add_argument('--time', type=str, default=os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'gmaps_time.csv'), help='Time matrix CSV file')
     parser.add_argument('--seed', type=int, default=0, help='Seed (default = 0)')
-    parser.add_argument('--uct', type=float, default=50, help='UCT weight (default = 50)')
-    parser.add_argument('--exploration', type=float, default=0.1, help='Exploration weight (default = 0.1)')
+    parser.add_argument('--uct', type=float, default=2.14, help='UCT weight (default = 2.14)')
+    parser.add_argument('--exploration', type=float, default=0.02, help='Exploration weight (default = 0.02)')
     parser.add_argument('--complete', help='Force complete coalitions', action="store_true")
     parser.add_argument('--irace', help='Print value for IRACE optimisation', action="store_true")
+    parser.add_argument('--shuffle', help='Shuffle input pool', action="store_true")
     args = parser.parse_args()
 
     # set global variables
@@ -113,8 +119,19 @@ if __name__ == '__main__':
     reqs, steps, deltas = read_pool(args.pool)
     distance, time = read_data(args.distance, args.time)
     all_idxs = list(range(len(reqs)))
-    start_time = tm.time()
 
+    # shuffle input pool
+    idx_map = all_idxs.copy()
+    reverse_idx_map = all_idxs.copy()
+    if args.shuffle:
+        random.shuffle(idx_map)
+        for idx in range(len(idx_map)):
+            reverse_idx_map[idx_map[idx]] = idx
+        reqs = reqs[idx_map]
+        steps = steps[idx_map]
+        deltas = deltas[idx_map]
+
+    start_time = tm.time()
     while args.budget > tm.time() - start_time:
         # initialise MCTS tree
         tree = MCTS(
@@ -127,9 +144,9 @@ if __name__ == '__main__':
         terminal = tree.run()
         # get best candidate
         best = terminal[-1]
-        print('{},{}'.format(best[1], ','.join(str(idx) for idx in best[0].idxs)))
+        print('{},{}'.format(best[1], ','.join(str(reverse_idx_map[idx]) for idx in best[0].idxs)))
         all_idxs = [idx for idx in all_idxs if idx not in best[0].idxs]
 
     # print value for IRACE if necessary
     if args.irace:
-        pass
+        print(0) # not yet implemented

@@ -26,7 +26,7 @@ tmpfile=$(mktemp)
 EXECUTABLE="python3 mcts.py"
 IRACE_LOG="irace/mcts/log"
 
-FIXED_PARAMS="--budget 40 --irace"
+FIXED_PARAMS="--budget 40 --irace --shuffle"
 
 CANDIDATE=$1
 INSTANCEID=$2
@@ -48,8 +48,8 @@ error() {
 # modify with the SLURM submission template
 sbatch 1> $tmpfile <<EOF
 #!/bin/bash
-#SBATCH --job-name=irace-$PPID-$CANDIDATE-${INSTANCEID}
-#SBATCH --time=1
+#SBATCH --job-name=irace-mcts-$PPID-$CANDIDATE-${INSTANCEID}
+#SBATCH --time=5:30
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH --output=/dev/null
