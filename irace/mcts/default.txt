@@ -12,4 +12,4 @@
 ## are not enabled for a given configuration) and, if given, the
 ## constraints that describe forbidden configurations.
 uct_weight	exploration
-50.00		0.1
+2.14        0.02

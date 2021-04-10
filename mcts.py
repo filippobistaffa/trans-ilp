@@ -13,7 +13,7 @@ class Coalition(Node):
     def remaining(self):
         remaining = [i for i in all_idxs if not self.idxs or i > max(self.idxs)]
         #remaining = [i for i in all_idxs if i not in self.idxs]
-        #random.shuffle(remaining)
+        random.shuffle(remaining)
         return remaining
 
     def find_children(self):
@@ -37,10 +37,12 @@ class Coalition(Node):
             return self.add_idx(random.choice(remaining))
 
     def reward(self):
-        if len(self.idxs) > 0:
-            return oracle(np.array(self.idxs, dtype=np.uint32), data)
+        if self.idxs:
+            value = oracle(np.array(self.idxs, dtype=np.uint32), data)
         else:
-            return 0
+            value = 0
+        #print('v({}) = {}'.format(self, value))
+        return value
 
     def is_terminal(self):
         return self.terminal
@@ -79,8 +81,8 @@ if __name__ == '__main__':
     parser.add_argument('--max_size', type=int, default=5, help='Maximum coalition size (default = 5)')
     parser.add_argument('--task', type=str, default=os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'task_english'), help='Task input file')
     parser.add_argument('--seed', type=int, default=0, help='Seed (default = 0)')
-    parser.add_argument('--uct', type=float, default=50, help='UCT weight (default = 50)')
-    parser.add_argument('--exploration', type=float, default=0.1, help='Exploration weight (default = 0.1)')
+    parser.add_argument('--uct', type=float, default=2.14, help='UCT weight (default = 2.14)')
+    parser.add_argument('--exploration', type=float, default=0.02, help='Exploration weight (default = 0.02)')
     parser.add_argument('--complete', help='Force complete coalitions', action="store_true")
     parser.add_argument('--irace', help='Print value for IRACE optimisation', action="store_true")
     required = parser.add_mutually_exclusive_group(required=True)
