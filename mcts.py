@@ -122,11 +122,8 @@ if __name__ == '__main__':
 
     # shuffle input pool
     idx_map = all_idxs.copy()
-    reverse_idx_map = all_idxs.copy()
     if args.shuffle:
         random.shuffle(idx_map)
-        for idx in range(len(idx_map)):
-            reverse_idx_map[idx_map[idx]] = idx
         reqs = reqs[idx_map]
         steps = steps[idx_map]
         deltas = deltas[idx_map]
@@ -146,7 +143,7 @@ if __name__ == '__main__':
     # print terminal nodes' values
     terminal = sorted(filter(lambda item: item[0].is_terminal(), tree.A.items()), key=lambda item: item[1])
     for item in terminal:
-        print('{},{}'.format(item[1],','.join(str(reverse_idx_map[idx]) for idx in item[0].idxs)))
+        print('{},{}'.format(item[1],','.join(str(idx_map[idx]) for idx in item[0].idxs)))
 
     # print value for IRACE if necessary
     if args.irace:
