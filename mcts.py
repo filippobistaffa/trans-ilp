@@ -125,6 +125,7 @@ if __name__ == '__main__':
     if args.shuffle:
         random.shuffle(idx_map)
         reqs = reqs[idx_map]
+        # new_reqs[idx] = old_reqs[idx_map[idx]]
         steps = steps[idx_map]
         deltas = deltas[idx_map]
 
