@@ -115,7 +115,7 @@ if __name__ == '__main__':
     partial = not args.complete
 
     # read input data
-    reqs, steps, deltas = read_pool(args.pool)
+    reqs_orig, steps_orig, deltas_orig = read_pool(args.pool)
     distance, time = read_data(args.distance, args.time)
     start_time = tm.time()
     iteration = 0
@@ -140,16 +140,13 @@ if __name__ == '__main__':
     while args.budget > tm.time() - start_time:
         # shuffle input pool
         random.seed(args.seed + iteration)
-        all_idxs = list(range(len(reqs)))
+        all_idxs = list(range(len(reqs_orig)))
         idx_map = all_idxs.copy()
-        reverse_idx_map = all_idxs.copy()
         if args.shuffle:
             random.shuffle(idx_map)
-            for idx in range(len(idx_map)):
-                reverse_idx_map[idx_map[idx]] = idx
-            reqs = reqs[idx_map]
-            steps = steps[idx_map]
-            deltas = deltas[idx_map]
+        reqs = reqs_orig[idx_map]
+        steps = steps_orig[idx_map]
+        deltas = deltas_orig[idx_map]
         while all_idxs and args.budget > tm.time() - start_time:
             # initialise MCTS tree
             tree = MCTS(
@@ -163,7 +160,7 @@ if __name__ == '__main__':
             # get best candidate
             if terminal:
                 best = terminal[-1]
-                merge([reverse_idx_map[idx] for idx in best[0].idxs], best[1])
+                merge(sorted(idx_map[idx] for idx in best[0].idxs), best[1])
                 all_idxs = [idx for idx in all_idxs if idx not in best[0].idxs]
         iteration += 1
 
