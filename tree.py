@@ -68,7 +68,8 @@ class MCTS:
         """
 
         def select_unexplored(children):
-            return max(children, key=lambda x: x.reward())
+            #return random.choice(children)                # uninformed
+            return max(children, key=lambda x: x.reward()) # informed
 
         def select_uct(children, parent):
             def uct(x):
