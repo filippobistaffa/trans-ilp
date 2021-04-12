@@ -92,15 +92,16 @@ def read_pool(pool_csv):
 
 import argparse as ap
 
-default_uct = 2.14
-default_exploration = 0.02
+default_uct = 75
+default_exploration = 0
+default_iterations = 30
 
 if __name__ == '__main__':
     parser = ap.ArgumentParser(
         formatter_class=lambda prog: ap.HelpFormatter(prog, max_help_position=29)
     )
     parser.add_argument('pool', metavar='POOL', type=str, help='Pool file')
-    parser.add_argument('--iterations', type=int, default=5000, help='Number of iterations (default = 1000)')
+    parser.add_argument('--iterations', type=int, default=default_iterations, help='Number of iterations (default = {})'.format(default_iterations))
     parser.add_argument('--budget', type=int, default=40, help='Time budget in seconds (default = 40)')
     parser.add_argument('--max_size', type=int, default=5, help='Maximum coalition size (default = 5)')
     parser.add_argument('--distance', type=str, default=os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'gmaps_distance.csv'), help='Distance matrix CSV file')
