@@ -92,6 +92,9 @@ def read_pool(pool_csv):
 
 import argparse as ap
 
+default_uct = 2.14
+default_exploration = 0.02
+
 if __name__ == '__main__':
     parser = ap.ArgumentParser(
         formatter_class=lambda prog: ap.HelpFormatter(prog, max_help_position=29)
@@ -103,8 +106,8 @@ if __name__ == '__main__':
     parser.add_argument('--distance', type=str, default=os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'gmaps_distance.csv'), help='Distance matrix CSV file')
     parser.add_argument('--time', type=str, default=os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'gmaps_time.csv'), help='Time matrix CSV file')
     parser.add_argument('--seed', type=int, default=0, help='Seed (default = 0)')
-    parser.add_argument('--uct', type=float, default=2.14, help='UCT weight (default = 2.14)')
-    parser.add_argument('--exploration', type=float, default=0.02, help='Exploration weight (default = 0.02)')
+    parser.add_argument('--uct', type=float, default=default_uct, help='UCT weight (default = {})'.format(default_uct))
+    parser.add_argument('--exploration', type=float, default=default_exploration, help='Exploration weight (default = {})'.format(default_exploration))
     parser.add_argument('--complete', help='Force complete coalitions', action="store_true")
     parser.add_argument('--irace', help='Print value for IRACE optimisation', action="store_true")
     parser.add_argument('--shuffle', help='Shuffle input pool', action="store_true")
