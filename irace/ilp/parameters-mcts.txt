@@ -1,4 +1,5 @@
 # name      switch              type    values
 uct_weight  "--uct "            r       (0.00, 100.00)
 exploration "--exploration "    r       (0.00, 1.00)
+iterations  "--iterations "     i       (1, 1000)
 budget      "--budget "         i       (1, 60)
