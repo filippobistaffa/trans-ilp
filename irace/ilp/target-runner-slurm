@@ -49,9 +49,11 @@ error() {
 sbatch 1> $tmpfile <<EOF
 #!/bin/bash
 #SBATCH --job-name=irace-ilp-$PPID-$CANDIDATE-${INSTANCEID}
+#SBATCH --partition=quick
 #SBATCH --time=1:30
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
+#SBATCH --mem=1G
 #SBATCH --output=/dev/null
 #SBATCH --error=/dev/null
 module load python-3.8.6-gcc-4.8.5-xl42tkm
