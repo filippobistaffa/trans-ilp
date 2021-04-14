@@ -4,6 +4,7 @@ import numpy as np
 import random
 import os
 
+
 class Coalition(Node):
     def __init__(self, idxs, terminal):
         self.idxs = idxs
