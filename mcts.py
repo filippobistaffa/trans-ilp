@@ -87,7 +87,7 @@ if __name__ == '__main__':
     parser.add_argument('--seed', type=int, default=0, help='Seed (default = 0)')
     parser.add_argument('--uct', type=float, default=default_uct, help='UCT weight (default = {})'.format(default_uct))
     parser.add_argument('--exploration', type=float, default=default_exploration, help='Exploration weight (default = {})'.format(default_exploration))
-    parser.add_argument('--complete', help='Force complete coalitions', action="store_true")
+    #parser.add_argument('--complete', help='Force complete coalitions', action="store_true")
     parser.add_argument('--irace', help='Print value for IRACE optimisation', action="store_true")
     required = parser.add_mutually_exclusive_group(required=True)
     required.add_argument('--iterations', type=int, help='Number of iterations')
@@ -96,7 +96,7 @@ if __name__ == '__main__':
 
     # set global variables
     max_size = args.max_size
-    partial = not args.complete
+    partial = False # do not allow partial coalitions
     random.seed(args.seed)
 
     # read input data
