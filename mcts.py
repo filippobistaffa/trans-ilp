@@ -11,7 +11,8 @@ class Coalition(Node):
         self.terminal = terminal
 
     def remaining(self):
-        remaining = [i for i in all_idxs[:len(all_idxs)-(max_size-len(self.idxs)-1)] if not self.idxs or i > max(self.idxs)]
+        feasible = all_idxs[:len(all_idxs) - (max_size - len(self.idxs) - 1)]
+        remaining = [i for i in feasible if not self.idxs or i > max(self.idxs)]
         #remaining = [i for i in all_idxs if i not in self.idxs]
         random.shuffle(remaining)
         return remaining
