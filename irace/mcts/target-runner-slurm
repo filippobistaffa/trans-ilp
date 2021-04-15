@@ -56,8 +56,8 @@ sbatch 1> $tmpfile <<EOF
 #SBATCH --mem=1G
 #SBATCH --output=/dev/null
 #SBATCH --error=/dev/null
-module load python-3.8.6-gcc-4.8.5-xl42tkm
-module load py-numpy-1.19.4-gcc-10.2.0-pmcqalx
+spack load python@3.8.6%gcc@10.2.0
+spack load py-numpy
 echo $EXECUTABLE $INSTANCE $CAND_PARAMS $FIXED_PARAMS --seed $SEED 1> $STDOUT
 srun $EXECUTABLE $INSTANCE $CAND_PARAMS $FIXED_PARAMS --seed $SEED 1>> $STDOUT 2>> $STDERR
 RET=\$?
