@@ -8,6 +8,7 @@ using namespace std;
 #include <string>
 #include <map>
 
+#include <Python.h>
 #include "oracle.h"
 
 vector<struct Agent> cpp_read_agents(const char *filename);
