@@ -1,6 +1,6 @@
 #import scipy.special
-from oracle.oracle import oracle
-from oracle.oracle import OracleData
+#from oracle.oracle import oracle
+#from oracle.oracle import OracleData
 from itertools import combinations
 import argparse as ap
 import numpy as np
@@ -16,7 +16,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # read input data
-    data = OracleData(args.pool, args.task)
+    #data = OracleData(args.pool, args.task)
 
     all_idxs = list(range(data.pool_size()))
     #total_comb = scipy.special.binom(len(all_idxs), args.max_size)
