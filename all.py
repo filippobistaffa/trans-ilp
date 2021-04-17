@@ -1,3 +1,4 @@
+#import scipy.special
 from oracle.oracle import oracle
 from oracle.oracle import OracleData
 from itertools import combinations
@@ -16,8 +17,19 @@ if __name__ == '__main__':
 
     # read input data
     data = OracleData(args.pool, args.task)
-    all_idxs = list(range(data.pool_size()))
-    coals = []
 
-    for coal in combinations(all_idxs, args.max_size):
-        coals.append(coal)
+    all_idxs = list(range(data.pool_size()))
+    #total_comb = scipy.special.binom(len(all_idxs), args.max_size)
+    file_idx = 0
+    #print('coals_{:04d}.csv'.format(file_idx))
+    out_file = open('coals/coals_{:04d}.csv'.format(file_idx), 'w')
+
+    for idx, coal in enumerate(combinations(all_idxs, args.max_size)):
+        out_file.write(','.join([str(i) for i in coal]))
+        out_file.write('\n')
+        if (idx and idx % (500 * 3600) == 0):
+            out_file.close()
+            file_idx += 1
+            #print('coals_{:04d}.csv'.format(file_idx))
+            out_file = open('coals/coals_{:04d}.csv'.format(file_idx), 'w')
+    out_file.close()
