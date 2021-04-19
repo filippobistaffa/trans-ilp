@@ -1,5 +1,7 @@
 #include "ilp.hpp"
 
+#define LOG
+
 auto read_vars(const char *filename) {
 
     std::vector<coal> vars;
@@ -11,7 +13,11 @@ auto read_vars(const char *filename) {
 		char *dup = strdup(str.c_str());
 		char *token = strtok(dup, ",");
 		coal c;
+		#ifdef LOG
+		c.w = log(atof(token));
+		#else
 		c.w = atof(token);
+		#endif
 		token = strtok(NULL, ",");
 		c.c[0] = 0;
 		while (token != NULL) {

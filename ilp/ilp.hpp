@@ -2,6 +2,7 @@
 #define ILP_HPP_
 
 // Headers
+#include <math.h>   // log
 #include <vector>   // vector
 #include <utility>  // pair
 
