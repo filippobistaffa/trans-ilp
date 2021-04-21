@@ -18,6 +18,9 @@
 // Number of zones
 #define Z 63
 
+// Enable solution output
+#define PRINT_SOLUTION
+
 // Types
 typedef unsigned int req;
 typedef float value;
