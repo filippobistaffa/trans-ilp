@@ -14,7 +14,7 @@ start=$(date +%s)
 python3 $exec_dir/mcts.py $* > $candidates
 end=$(date +%s)
 runtime=$((end-start))
-echo "Computed $(wc -l < $candidates) candidates"
+echo "Computed $(wc -l < $candidates) candidates in $runtime seconds"
 echo "Best $best candidates:"
 cat $candidates | LC_ALL=C sort -r -gk1,1 -t, | head -n $best
 ilp_tb=$((time_budget-runtime))
