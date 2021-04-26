@@ -10,6 +10,10 @@ class Coalition(Node):
     def __init__(self, idxs, terminal):
         self.idxs = idxs
         self.terminal = terminal
+        if self.idxs:
+            self.rw = oracle(np.array(self.idxs, dtype=np.uint32), data)
+        else:
+            self.rw = 0
 
     def remaining(self):
         if partial:
@@ -42,12 +46,7 @@ class Coalition(Node):
             return self.add_idx(random.choice(remaining))
 
     def reward(self):
-        if self.idxs:
-            value = oracle(np.array(self.idxs, dtype=np.uint32), data)
-        else:
-            value = 0
-        #print('v({}) = {}'.format(self, value))
-        return value
+        return self.rw
 
     def is_terminal(self):
         return self.terminal
