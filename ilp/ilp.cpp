@@ -156,7 +156,11 @@ int main(int argc, char *argv[]) {
 	std::cout << GREEN("Solution:") << '\n';
 	print_solution(vars[0], xa, cplex);
 	#endif
+	#ifdef LOG
+	std::cout << exp(cplex.getObjValue()) << '\n';
+	#else
 	std::cout << cplex.getObjValue() << '\n';
+	#endif
 
 	return EXIT_SUCCESS;
 }
