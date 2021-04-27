@@ -134,6 +134,7 @@ int main(int argc, char *argv[]) {
 	try {
 		if (!cplex.solve()) {
 			std::cout << RED("Unable to find a solution") << '\n';
+			std::cout << -1e3 << '\n';
 			exit(EXIT_FAILURE);
 		}
 	}
