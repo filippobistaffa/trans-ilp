@@ -28,7 +28,7 @@ TOTALCANDIDATES="$5"
 shift 5 || echo "Not enough parameters to $0"
 ALLIDS=$*
 
-IRACE_LOG="irace/mcts/log"
+IRACE_LOG="/mnt/beegfs/iiia/filippo.bistaffa/irace"
 
 STDOUT=${IRACE_LOG}/c${CANDIDATE}-${INSTANCEID}.stdout
 STDERR=${IRACE_LOG}/c${CANDIDATE}-${INSTANCEID}.stderr
