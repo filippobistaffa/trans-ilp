@@ -24,7 +24,7 @@ tmpfile=$(mktemp)
 #!/bin/bash
 
 EXECUTABLE="python3 mcts.py"
-IRACE_LOG="irace/mcts/log"
+IRACE_LOG="/mnt/beegfs/iiia/filippo.bistaffa/irace"
 
 FIXED_PARAMS="--budget 40 --irace --shuffle"
 

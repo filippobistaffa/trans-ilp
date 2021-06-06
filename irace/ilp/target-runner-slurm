@@ -24,7 +24,7 @@ tmpfile=$(mktemp)
 #!/bin/bash
 
 EXECUTABLE="./mcts-ilp.sh"
-IRACE_LOG="irace/ilp/log"
+IRACE_LOG="/mnt/beegfs/iiia/filippo.bistaffa/irace"
 
 FIXED_PARAMS="--shuffle"
 
