@@ -11,7 +11,7 @@ determinism_rate=0.62
 candidate_list_length=6
 seed=$RANDOM
 env_k=0.5
-threads=4
+threads=1
 
 if [ $# -eq 2 ]
 then
