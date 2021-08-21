@@ -46,7 +46,7 @@ value pickup_time(req a, const req *p, uint n, const std::vector<value> &time) {
 }
 
 // Include To-Be-Assigned (TBA) delay in QoS
-#define QOS_TBA
+//#define QOS_TBA
 
 using namespace std;
 
