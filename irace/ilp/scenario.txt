@@ -11,11 +11,11 @@ maxExperiments = 10000
 
 ## Directory where training instances are located, either absolute or relative
 ## to current directory.
-trainInstancesDir = "../../data/pools_20161201"
+trainInstancesDir = "../../data/pmf_50"
 
 ## Directory where testing instances are located, either absolute or relative
 ## to current directory.
-trainInstancesDir = "../../data/pools_20161201"
+trainInstancesDir = "../../data/pmf_50"
 
 ## Directory where the programs will be run.
 execDir = "../.."
