@@ -96,10 +96,10 @@ def read_pool(pool_csv):
 
 import argparse as ap
 
-default_uct = 50
-default_exploration = 0.01
-default_iterations = 700
-default_budget = 59
+default_uct = 32
+default_exploration = 0.02
+default_iterations = 25
+default_budget = 55
 
 if __name__ == '__main__':
     parser = ap.ArgumentParser(
