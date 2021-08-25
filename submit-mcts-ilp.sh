@@ -3,7 +3,7 @@
 BEEGFS="/mnt/beegfs/iiia/filippo.bistaffa"
 ROOT_DIR="/home/filippo.bistaffa/mcts-ilp-rs"
 EXECUTABLE="$ROOT_DIR/mcts-ilp.sh"
-LOG_DIR="$BEEGFS/pmf/mcts+ir"
+LOG_DIR="$BEEGFS/pmf/mcts-rw"
 DATA_DIR="$ROOT_DIR/data"
 POOL_DIR="$DATA_DIR/pmf_50"
 
