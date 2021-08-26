@@ -41,6 +41,8 @@ for i in range(args.instances):
             print('Relative, instance {}, repetition {}: missing')
             quit()
 
+print('[B] Overall mean:', np.mean(results[0]))
+print('[R] Overall mean:', np.mean(results[1]))
 mean = np.mean(results, axis=2)
 division = np.divide(mean[1], mean[0])
-print(np.mean(division))
+print('Relative quality:', np.mean(division))
