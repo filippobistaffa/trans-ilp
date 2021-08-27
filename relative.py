@@ -11,6 +11,12 @@ parser.add_argument('--repetitions', type=int, help='Number of repetitions', def
 args = parser.parse_args()
 
 results = np.zeros((2, args.instances, args.repetitions))
+candidates = np.zeros((2, args.instances, args.repetitions), dtype=int)
+
+def second_line(filename):
+    with open(filename) as f:
+        f.readline()
+        return f.readline()
 
 def last_line(filename):
     return subprocess.check_output(['tail', '-1', filename]).rstrip()
@@ -26,6 +32,7 @@ for i in range(args.instances):
             value = float(last_line(filename))
             #print(i, r, value)
             results[0, i, r] = value
+            candidates[0, i, r] = int(second_line(filename).split()[1])
         else:
             print('Base, instance {}, repetition {}: missing')
             quit()
@@ -37,6 +44,7 @@ for i in range(args.instances):
             value = float(last_line(filename))
             #print(i, r, value)
             results[1, i, r] = value
+            candidates[1, i, r] = int(second_line(filename).split()[1])
         else:
             print('Relative, instance {}, repetition {}: missing')
             quit()
@@ -46,3 +54,7 @@ print('[R] Overall mean:', np.mean(results[1]))
 mean = np.mean(results, axis=2)
 division = np.divide(mean[1], mean[0])
 print('Relative quality:', np.mean(division))
+
+mean = np.mean(candidates, axis=2)
+division = np.divide(mean[1], mean[0])
+print('Relative variety:', np.mean(division))
