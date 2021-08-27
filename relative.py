@@ -34,7 +34,7 @@ for i in range(args.instances):
             results[0, i, r] = value
             candidates[0, i, r] = int(second_line(filename).split()[1])
         else:
-            print('Base, instance {}, repetition {}: missing')
+            print('Base, instance {}, repetition {}: missing'.format(i, r))
             quit()
 
 for i in range(args.instances):
@@ -46,7 +46,7 @@ for i in range(args.instances):
             results[1, i, r] = value
             candidates[1, i, r] = int(second_line(filename).split()[1])
         else:
-            print('Relative, instance {}, repetition {}: missing')
+            print('Relative, instance {}, repetition {}: missing'.format(i, r))
             quit()
 
 print('[B] Overall mean:', np.mean(results[0]))
