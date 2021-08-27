@@ -28,7 +28,7 @@ def last_line(filename):
 for i in range(args.instances):
     for r in range(args.repetitions):
         filename = os.path.join(args.base, '{}-{}.stdout'.format(i, r))
-        if len(filename):
+        if os.path.isfile(filename):
             value = float(last_line(filename))
             #print(i, r, value)
             results[0, i, r] = value
@@ -40,7 +40,7 @@ for i in range(args.instances):
 for i in range(args.instances):
     for r in range(args.repetitions):
         filename = os.path.join(args.relative, '{}-{}.stdout'.format(i, r))
-        if len(filename):
+        if os.path.isfile(filename):
             value = float(last_line(filename))
             #print(i, r, value)
             results[1, i, r] = value
