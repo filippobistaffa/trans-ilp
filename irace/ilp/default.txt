@@ -12,4 +12,4 @@
 ## are not enabled for a given configuration) and, if given, the
 ## constraints that describe forbidden configurations.
 uct_weight	exploration budget  iterations
-50.00       0.01        59      700
+32.00       0.02        55      25
