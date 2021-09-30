@@ -3,13 +3,13 @@
 BEEGFS="/mnt/beegfs/iiia/filippo.bistaffa"
 ROOT_DIR="/home/filippo.bistaffa/mcts-ilp-rs"
 EXECUTABLE="$ROOT_DIR/pg2-ilp.sh"
-LOG_DIR="$BEEGFS/pmf/pg2"
+LOG_DIR="$BEEGFS/pmf/$1-pg2"
 DATA_DIR="$ROOT_DIR/data"
-POOL_DIR="$DATA_DIR/pmf_50"
+POOL_DIR="$DATA_DIR/pmf_$1"
 
 mkdir -p $LOG_DIR
-STDOUT=$LOG_DIR/$1-$2.stdout
-STDERR=$LOG_DIR/$1-$2.stderr
+STDOUT=$LOG_DIR/$2.stdout
+STDERR=$LOG_DIR/$2.stderr
 
 tmpfile=$(mktemp)
 sbatch 1> $tmpfile <<EOF
@@ -22,8 +22,8 @@ sbatch 1> $tmpfile <<EOF
 #SBATCH --mem=1G
 #SBATCH --output=/dev/null
 #SBATCH --error=/dev/null
-echo $EXECUTABLE $POOL_DIR/$1.csv $2 1> $STDOUT
-srun $EXECUTABLE $POOL_DIR/$1.csv $2 1>> $STDOUT 2>> $STDERR
+echo $EXECUTABLE $POOL_DIR/$2.csv $RANDOM 1> $STDOUT
+srun $EXECUTABLE $POOL_DIR/$2.csv $RANDOM 1>> $STDOUT 2>> $STDERR
 RET=\$?
 exit \$RET
 EOF

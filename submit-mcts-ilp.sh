@@ -3,13 +3,13 @@
 BEEGFS="/mnt/beegfs/iiia/filippo.bistaffa"
 ROOT_DIR="/home/filippo.bistaffa/mcts-ilp-rs"
 EXECUTABLE="$ROOT_DIR/mcts-ilp.sh"
-LOG_DIR="$BEEGFS/pmf/mcts-rw"
+LOG_DIR="$BEEGFS/pmf/$1-mcts-rw"
 DATA_DIR="$ROOT_DIR/data"
-POOL_DIR="$DATA_DIR/pmf_50"
+POOL_DIR="$DATA_DIR/pmf_$1"
 
 mkdir -p $LOG_DIR
-STDOUT=$LOG_DIR/$1-$2.stdout
-STDERR=$LOG_DIR/$1-$2.stderr
+STDOUT=$LOG_DIR/$2.stdout
+STDERR=$LOG_DIR/$2.stderr
 
 tmpfile=$(mktemp)
 sbatch 1> $tmpfile <<EOF
@@ -24,8 +24,8 @@ sbatch 1> $tmpfile <<EOF
 #SBATCH --error=/dev/null
 spack load python@3.8.6%gcc@10.2.0
 spack load py-numpy
-echo $EXECUTABLE --shuffle --seed $2 $POOL_DIR/$1.csv 1> $STDOUT
-srun $EXECUTABLE --shuffle --seed $2 $POOL_DIR/$1.csv 1>> $STDOUT 2>> $STDERR
+echo $EXECUTABLE --shuffle --seed $RANDOM $POOL_DIR/$2.csv 1> $STDOUT
+srun $EXECUTABLE --shuffle --seed $RANDOM $POOL_DIR/$2.csv 1>> $STDOUT 2>> $STDERR
 RET=\$?
 exit \$RET
 EOF

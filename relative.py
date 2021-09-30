@@ -2,59 +2,47 @@ import argparse as ap
 import numpy as np
 import subprocess
 import os
+import re
 
 parser = ap.ArgumentParser()
-parser.add_argument('--base', type=str, help='Base directory', default='pg2')
-parser.add_argument('--relative', type=str, help='Relative directory', default='mcts-rw')
+parser.add_argument('--base', type=str, help='Base directory', default='200-pg2')
+parser.add_argument('--relative', type=str, help='Relative directory', default='200-mcts-rw')
 parser.add_argument('--instances', type=int, help='Number of instances', default=2000)
-parser.add_argument('--repetitions', type=int, help='Number of repetitions', default=10)
+parser.add_argument('--lines', type=int, nargs=2, help='Which line (starting from the bottom) contains the value', default=(1,1))
 args = parser.parse_args()
 
-results = np.zeros((2, args.instances, args.repetitions))
-candidates = np.zeros((2, args.instances, args.repetitions), dtype=int)
+results = np.zeros((2, args.instances))
 
-def second_line(filename):
-    with open(filename) as f:
-        f.readline()
-        return f.readline()
+def extract_float(string):
+    m = re.findall(r"[-+]?\d*\.?\d+|[-+]?\d+", string)
+    return float(m[0])
 
-def last_line(filename):
-    return subprocess.check_output(['tail', '-1', filename]).rstrip()
-    #with open(filename, 'r') as f:
-    #    lines = f.read().splitlines()
-    #    last_line = lines[-1]
-    #return last_line.rstrip()
+def n_to_last_line(filename, n=1):
+    ps = subprocess.run(['tail', '-n', str(n), filename], check=True, capture_output=True)
+    out = subprocess.run(['head', '-n', '1'], input=ps.stdout, capture_output=True).stdout.decode().rstrip()
+    return out
 
 for i in range(args.instances):
-    for r in range(args.repetitions):
-        filename = os.path.join(args.base, '{}-{}.stdout'.format(i, r))
-        if os.path.isfile(filename):
-            value = float(last_line(filename))
-            #print(i, r, value)
-            results[0, i, r] = value
-            candidates[0, i, r] = int(second_line(filename).split()[1])
-        else:
-            print('Base, instance {}, repetition {}: missing'.format(i, r))
-            quit()
+    filename = os.path.join(args.base, '{}.stdout'.format(i))
+    if os.path.isfile(filename):
+        value = extract_float(n_to_last_line(filename, args.lines[0]))
+        #print(i, value)
+        results[0, i] = value
+    else:
+        print('Base, instance {}: missing'.format(i))
+        quit()
 
 for i in range(args.instances):
-    for r in range(args.repetitions):
-        filename = os.path.join(args.relative, '{}-{}.stdout'.format(i, r))
-        if os.path.isfile(filename):
-            value = float(last_line(filename))
-            #print(i, r, value)
-            results[1, i, r] = value
-            candidates[1, i, r] = int(second_line(filename).split()[1])
-        else:
-            print('Relative, instance {}, repetition {}: missing'.format(i, r))
-            quit()
+    filename = os.path.join(args.relative, '{}.stdout'.format(i))
+    if os.path.isfile(filename):
+        value = extract_float(n_to_last_line(filename, args.lines[1]))
+        #print(i, value)
+        results[1, i] = value
+    else:
+        print('Relative, instance {}: missing'.format(i))
+        quit()
 
 print('[B] Overall mean:', np.mean(results[0]))
 print('[R] Overall mean:', np.mean(results[1]))
-mean = np.mean(results, axis=2)
-division = np.divide(mean[1], mean[0])
+division = np.divide(results[1], results[0])
 print('Relative quality:', np.mean(division))
-
-mean = np.mean(candidates, axis=2)
-division = np.divide(mean[1], mean[0])
-print('Relative variety:', np.mean(division))
