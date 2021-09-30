@@ -22,8 +22,8 @@ sbatch 1> $tmpfile <<EOF
 #SBATCH --mem=1G
 #SBATCH --output=/dev/null
 #SBATCH --error=/dev/null
-spack load python@3.8.6%gcc@10.2.0
-spack load py-numpy
+spack load --first python@3.8.6%gcc@10.2.0
+spack load --first py-numpy
 echo $EXECUTABLE --shuffle --seed $RANDOM $POOL_DIR/$2.csv 1> $STDOUT
 srun $EXECUTABLE --shuffle --seed $RANDOM $POOL_DIR/$2.csv 1>> $STDOUT 2>> $STDERR
 RET=\$?
