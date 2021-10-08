@@ -11,14 +11,14 @@ maxExperiments = 10000
 
 ## Directory where training instances are located, either absolute or relative
 ## to current directory.
-trainInstancesDir = "../../data/pools_20161201"
+trainInstancesDir = "../data/pmf_50"
 
 ## Directory where testing instances are located, either absolute or relative
 ## to current directory.
-trainInstancesDir = "../../data/pools_20161201"
+trainInstancesDir = "../data/pmf_50"
 
 ## Directory where the programs will be run.
-execDir = "../.."
+execDir = ".."
 
 ## File with a list of instances and (optionally) parameters.
 ## If empty or NULL, do not use a file.
@@ -29,12 +29,11 @@ trainInstancesFile = "training.txt"
 testInstancesFile = "test.txt"
 
 ## File that contains the description of the parameters.
-parameterFile = "parameters-mcts.txt"
+parameterFile = "parameters.txt"
 
 ## A file containing a list of initial configurations.
 ## If empty or NULL, do not use a file.
 configurationsFile = "default.txt"
-
 ## Indicates the number of decimal places to be considered for the
 ## real parameters.
 digits = 2

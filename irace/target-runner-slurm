@@ -23,10 +23,10 @@ tmpfile=$(mktemp)
 
 #!/bin/bash
 
-EXECUTABLE="./mcts-ilp.sh"
+EXECUTABLE="./trans-ilp.sh"
 IRACE_LOG="/mnt/beegfs/iiia/filippo.bistaffa/irace"
 
-FIXED_PARAMS="--shuffle"
+FIXED_PARAMS=""
 
 CANDIDATE=$1
 INSTANCEID=$2
@@ -48,7 +48,7 @@ error() {
 # modify with the SLURM submission template
 sbatch 1> $tmpfile <<EOF
 #!/bin/bash
-#SBATCH --job-name=irace-ilp-$PPID-$CANDIDATE-${INSTANCEID}
+#SBATCH --job-name=irace-trans-$PPID-$CANDIDATE-${INSTANCEID}
 #SBATCH --partition=quick
 #SBATCH --time=1:30
 #SBATCH --ntasks=1
@@ -56,8 +56,8 @@ sbatch 1> $tmpfile <<EOF
 #SBATCH --mem=1G
 #SBATCH --output=/dev/null
 #SBATCH --error=/dev/null
-spack load python@3.8.6%gcc@10.2.0
-spack load py-numpy
+spack load --first python@3.8.6%gcc@10.2.0
+spack load --first py-numpy
 echo $EXECUTABLE $INSTANCE $CAND_PARAMS $FIXED_PARAMS --seed $SEED 1> $STDOUT
 srun $EXECUTABLE $INSTANCE $CAND_PARAMS $FIXED_PARAMS --seed $SEED 1>> $STDOUT 2>> $STDERR
 RET=\$?
