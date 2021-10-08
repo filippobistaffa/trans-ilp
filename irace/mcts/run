@@ -1,6 +1,0 @@
-#!/bin/bash
-
-module load r-4.0.3-gcc-10.2.0-6ikej77
-rm -rf /mnt/beegfs/iiia/filippo.bistaffa/irace 2> /dev/null
-mkdir -p /mnt/beegfs/iiia/filippo.bistaffa/irace
-irace --batchmode slurm --target-runner target-runner-slurm --target-evaluator target-evaluator
