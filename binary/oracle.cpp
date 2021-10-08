@@ -5,7 +5,7 @@ int main(int argc, char *argv[]) {
 	// Assuming that a request goes from zone i to zone j, the corresponding "req" is an integer = i * Z + j
 	// Z = number of zones (63 in this dataset)
 
-        /* Create data structures */
+    /* Create data structures */
 
 	// Requests (pool)
 	vector<req> reqs;
@@ -27,23 +27,23 @@ int main(int argc, char *argv[]) {
 	read_matrix("/home/filippo/iiia/mcts-ilp-rs/data/gmaps_distance.csv", Z, Z, distance);
 	read_matrix("/home/filippo/iiia/mcts-ilp-rs/data/gmaps_time.csv", Z, Z, time);
 
-        // Data structure necessary for compute_value (see compute_value.hpp for more information)
+    // Data structure necessary for compute_value (see compute_value.hpp for more information)
 	cv_data data = { n, PTR(reqs), PTR(steps), PTR(deltas), PTR(distance), PTR(time), env_k };
 
-        // Example coalition (see coal_type.hpp for more information on the fields)
-        // Just fill the first field "c" with the *indexes* (0-indexed) of the requests in "reqs" (pool)
-        // c[0] is the size of coalition (number of request in the coalition)
-        // The indexes are in c[1] ... c[c[0]]
-        // In this example the coalition contains the first 5 requests in "reqs"
-        coal input_coal;
-        input_coal.c[0] = argc - 2;
+    // Example coalition (see coal_type.hpp for more information on the fields)
+    // Just fill the first field "c" with the *indexes* (0-indexed) of the requests in "reqs" (pool)
+    // c[0] is the size of coalition (number of request in the coalition)
+    // The indexes are in c[1] ... c[c[0]]
+    // In this example the coalition contains the first 5 requests in "reqs"
+    coal input_coal;
+    input_coal.c[0] = argc - 2;
 
-        for (uint i = 2; i < argc; ++i) {
-                input_coal.c[i - 1] = atoi(argv[i]);
-        }
+    for (uint i = 2; i < argc; ++i) {
+            input_coal.c[i - 1] = atoi(argv[i]);
+    }
 
-        // Computes other fields of coal ("p", "w", "dr", "qos")
-        compute_value(input_coal, &data);
+    // Computes other fields of coal ("p", "w", "dr", "qos")
+    compute_value(input_coal, &data);
 
 	return 0;
 }
