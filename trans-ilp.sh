@@ -11,7 +11,7 @@ exec_dir=${exec_dir%/*}
 
 candidates=$(mktemp)
 start=$(date +%s)
-python3 $exec_dir/mcts.py $* > $candidates
+python3 $exec_dir/trans.py $* > $candidates
 end=$(date +%s)
 runtime=$((end-start))
 echo "Computed $(wc -l < $candidates) candidates in $runtime seconds"
