@@ -1,10 +1,11 @@
 #!/bin/bash
 
+ENTROPY="0.05"
 HOME="/home/filippo.bistaffa"
 BEEGFS="$HOME/beegfs"
 ROOT_DIR="$HOME/mcts-ilp-rs"
 EXECUTABLE="$ROOT_DIR/trans-ilp.sh"
-LOG_DIR="$BEEGFS/pmf/$1-trans-ilp"
+LOG_DIR="$BEEGFS/pmf/$1-trans-$ENTROPY-ilp"
 DATA_DIR="$ROOT_DIR/data"
 POOL_DIR="$DATA_DIR/pmf_$1"
 
