@@ -37,7 +37,8 @@ def trans_coal(pool, model):
         idxs.append(action)
     if len(idxs) > 1:
         return idxs, reward(idxs)
-    return None, None
+    else:
+        return None, None
 
 def all_coals(n):
     coals = []
@@ -75,10 +76,12 @@ if __name__ == '__main__':
         steps = steps_orig.copy()
         deltas = deltas_orig.copy()
         idxs = list(range(len(reqs)))
+        restart = False
 
         while len(idxs) > args.threshold:
             coal, rw = trans_coal(reqs, model)
             if coal == None:
+                restart = True
                 break
             if rw > 0:
                 sc = sorted([idxs[idx] for idx in coal])
@@ -92,14 +95,15 @@ if __name__ == '__main__':
 
         #print('Reached threshold')
 
-        coals = all_coals(len(reqs))
-        for coal in coals:
-            if (rw := reward(coal)) > 0:
-                sc = sorted([idxs[idx] for idx in coal])
-                if sc not in candidates:
-                    candidates.append(sc)
-                    values.append(rw)
-                    #print('{} = {}'.format(sc, rw))
+        if not restart:
+            coals = all_coals(len(reqs))
+            for coal in coals:
+                if (rw := reward(coal)) > 0:
+                    sc = sorted([idxs[idx] for idx in coal])
+                    if sc not in candidates:
+                        candidates.append(sc)
+                        values.append(rw)
+                        #print('{} = {}'.format(sc, rw))
 
         #print('Finished iteration')
 
