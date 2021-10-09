@@ -9,8 +9,8 @@ import torch
 import os
 
 default = {
-    'threshold': 20,
-    'budget': 55
+    'threshold': 25,
+    'budget': 53
 }
 
 def reward(idxs):
