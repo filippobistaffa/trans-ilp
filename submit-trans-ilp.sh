@@ -1,9 +1,10 @@
 #!/bin/bash
 
-BEEGFS="/mnt/beegfs/iiia/filippo.bistaffa"
-ROOT_DIR="/home/filippo.bistaffa/mcts-ilp-rs"
-EXECUTABLE="$ROOT_DIR/mcts-ilp.sh"
-LOG_DIR="$BEEGFS/pmf/$1-mcts-rw"
+HOME="/home/filippo.bistaffa"
+BEEGFS="$HOME/beegfs"
+ROOT_DIR="$HOME/mcts-ilp-rs"
+EXECUTABLE="$ROOT_DIR/trans-ilp.sh"
+LOG_DIR="$BEEGFS/pmf/$1-trans-ilp"
 DATA_DIR="$ROOT_DIR/data"
 POOL_DIR="$DATA_DIR/pmf_$1"
 
@@ -14,18 +15,18 @@ STDERR=$LOG_DIR/$2.stderr
 tmpfile=$(mktemp)
 sbatch 1> $tmpfile <<EOF
 #!/bin/bash
-#SBATCH --job-name=mcts-$1-$2
+#SBATCH --job-name=trans-$1-$2
 #SBATCH --partition=quick
 #SBATCH --time=5:00
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=1
+#SBATCH --cpus-per-task=4
 #SBATCH --mem=1G
 #SBATCH --output=/dev/null
 #SBATCH --error=/dev/null
 spack load --first python@3.8.6%gcc@10.2.0
-spack load --first py-numpy
-echo $EXECUTABLE --shuffle --seed $RANDOM $POOL_DIR/$2.csv 1> $STDOUT
-srun $EXECUTABLE --shuffle --seed $RANDOM $POOL_DIR/$2.csv 1>> $STDOUT 2>> $STDERR
+spack load --first py-torch
+echo $EXECUTABLE --seed $RANDOM $POOL_DIR/$2.csv 1> $STDOUT
+srun $EXECUTABLE --seed $RANDOM $POOL_DIR/$2.csv 1>> $STDOUT 2>> $STDERR
 RET=\$?
 exit \$RET
 EOF
