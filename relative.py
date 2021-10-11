@@ -45,4 +45,4 @@ for i in range(args.instances):
 print('[B] Overall mean:', np.mean(results[0]))
 print('[R] Overall mean:', np.mean(results[1]))
 division = np.divide(results[1], results[0])
-print('Relative quality:', np.mean(division))
+print('Relative quality: {}, {}'.format(np.mean(division), np.std(division)))
