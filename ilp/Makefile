@@ -11,7 +11,7 @@ NOOPTIM=-O0 -march=native -fopenmp
 DBG=-g ${NOOPTIM}
 PROF=-g -DWITHGPERFTOOLS ${OPTIM}
 
-CPLEXROOT=/opt/ibm/ILOG/CPLEX_Studio201
+CPLEXROOT=/opt/ibm/ILOG/CPLEX_Studio1271
 ARCH=x86-64_linux
 
 INC=-DIL_STD -I${CPLEXROOT}/cplex/include -I${CPLEXROOT}/concert/include
@@ -21,9 +21,8 @@ LINK=-lconcert -lilocplex -lcplex -ldl
 COBJSUBDIR=cobj
 DEPSUBDIR=dep
 
-ECHOCC=>&2 echo "[\033[01;33m CC \033[0m]"
-ECHOLD=>&2 echo "[\033[01;36m LD \033[0m]"
-ECHOJC=>&2 echo "[\033[01;35m JC \033[0m]"
+ECHOCC=>&2 echo "[ CC ]"
+ECHOLD=>&2 echo "[ LD ]"
 
 ifeq ($(PROFILE),1)
 OPT=${PROF}
