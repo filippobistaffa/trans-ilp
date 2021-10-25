@@ -39,6 +39,9 @@ cdef extern from "cpp_oracle.hpp":
     cpp_vector[Agent] cpp_read_agents(const char *filename)
 
 cdef extern from "cpp_oracle.hpp":
+    cpp_vector[Agent] cpp_sample_agents(size_t n, size_t seed)
+
+cdef extern from "cpp_oracle.hpp":
     cpp_pair[cpp_vector[cpp_string],Task_type] cpp_read_task_competences(const char *filename)
 
 cdef extern from "cpp_oracle.hpp":
@@ -53,6 +56,9 @@ cdef class OracleData:
         pair = cpp_read_task_competences(task_file.encode())
         self.data.competences = pair.first
         self.data.task = pair.second
+
+    def sample_agents(self, n, seed):
+        self.data.agents = cpp_sample_agents(n, seed)
 
     def get_data(self):
         return self.data

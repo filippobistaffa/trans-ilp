@@ -13,6 +13,8 @@ using namespace std;
 
 vector<struct Agent> cpp_read_agents(const char *filename);
 
+vector<struct Agent> cpp_sample_agents(size_t n, size_t seed);
+
 pair<vector<string>, struct Task_type> cpp_read_task_competences(const char *filename);
 
 float cpp_oracle(const unsigned int actual_team_size, const unsigned int *team, const struct Data data);
