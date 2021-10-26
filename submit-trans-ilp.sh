@@ -1,9 +1,10 @@
 #!/bin/bash
 
+ENTROPY="0.05"
+
 if [ $( hostname ) == "mlui01.ific.uv.es" ]
 then
 
-ENTROPY="0.05"
 HOME="/lhome/ext/iiia021/iiia0211"
 ROOT_DIR="$HOME/trans-ilp-rs"
 EXECUTABLE="$ROOT_DIR/trans-ilp.sh"
@@ -33,7 +34,6 @@ EOF
 elif [ $( hostname ) == "vega.iiia.csic.es" ]
 then
 
-ENTROPY="0.05"
 HOME="/home/filippo.bistaffa"
 BEEGFS="$HOME/beegfs"
 ROOT_DIR="$HOME/mcts-ilp-rs"
