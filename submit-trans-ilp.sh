@@ -30,7 +30,8 @@ request_gpus = 1
 queue
 EOF
 
-else
+elif [ $( hostname ) == "vega.iiia.csic.es" ]
+then
 
 ENTROPY="0.05"
 HOME="/home/filippo.bistaffa"
@@ -64,4 +65,6 @@ RET=\$?
 exit \$RET
 EOF
 
+else
+echo "Unknown host"
 fi

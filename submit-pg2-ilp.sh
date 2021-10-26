@@ -28,7 +28,8 @@ error = $STDERR
 queue
 EOF
 
-else
+elif [ $( hostname ) == "vega.iiia.csic.es" ]
+then
 
 BEEGFS="/mnt/beegfs/iiia/filippo.bistaffa"
 ROOT_DIR="/home/filippo.bistaffa/mcts-ilp-rs"
@@ -58,4 +59,6 @@ RET=\$?
 exit \$RET
 EOF
 
+else
+echo "Unknown host"
 fi
