@@ -1,0 +1,73 @@
+#!/bin/bash
+###############################################################################
+# This script is the command that is executed every run.
+# Check the examples in examples/
+#
+# This script is run in the execution directory (execDir, --exec-dir),
+# the same directory where target-evaluator is executed. Hence, you may
+# need to copy extra files needed by the executable to this directory.
+#
+#
+# PARAMETERS:
+# $1 is the candidate number
+# $2 is the instance id
+# $3 is the seed
+# $4 is the instance name
+# The rest ($* after `shift 4') are parameters to the run
+#
+# RETURN VALUE:
+# This script should print nothing.
+# Exit with 0 if no error, with 1 in case of error
+###############################################################################
+tmpfile=$(mktemp)
+
+#!/bin/bash
+
+EXECUTABLE="./trans-ilp.sh"
+IRACE_LOG="/lhome/ext/iiia021/iiia0211/log/irace"
+
+FIXED_PARAMS=""
+
+CANDIDATE=$1
+INSTANCEID=$2
+SEED=$3
+INSTANCE=$4
+shift 4 || error "Not enough parameters to $0"
+CAND_PARAMS=$*
+
+STDOUT=${IRACE_LOG}/c${CANDIDATE}-${INSTANCEID}.stdout
+STDLOG=${IRACE_LOG}/c${CANDIDATE}-${INSTANCEID}.stdlog
+STDERR=${IRACE_LOG}/c${CANDIDATE}-${INSTANCEID}.stderr
+
+error() {
+    echo "`TZ=UTC date`: error: $@"
+    cat $tmpfile
+    rm -f $tmpfile
+    exit 1
+}
+
+condor_submit 1> $tmpfile <<EOF
+universe = vanilla
+stream_output = True
+stream_error = True
+executable = $EXECUTABLE
+arguments = $INSTANCE $CAND_PARAMS $FIXED_PARAMS --seed $SEED
+log = $STDLOG
+output = $STDOUT
+error = $STDERR
+request_gpus = 1
+queue
+EOF
+
+rc=$?
+if [[ $rc == 0 ]]; then
+    JOBID=$(cat $STDLOG | grep "Job submitted" | egrep -o '\([0-9]+.' | egrep -o '[0-9]+')
+    if ! [[ "$JOBID" =~ ^[_-.@0-9A-Za-z]+$ ]] ; then
+        error "$0: cannot parse jobID from the log file!"
+    fi
+    echo "$JOBID"
+    rm -f $tmpfile
+    exit $rc
+else
+    error "$0: condor_submit failed!"
+fi
