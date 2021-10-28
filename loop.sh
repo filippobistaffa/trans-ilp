@@ -1,8 +1,7 @@
 #!/bin/bash
 
-trans=true
-mcts=false
-pg2=false
+trans=false
+pg2=true
 
 n=100
 step=200
@@ -17,10 +16,6 @@ do
         if [[ $i == $total ]]
         then
             exit
-        fi
-        if [ "$mcts" = true ]
-        then
-            ./submit-mcts-ilp.sh $n $i
         fi
         if [ "$trans" = true ]
         then
