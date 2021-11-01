@@ -21,9 +21,8 @@ LINK=-lpthread #-lconcert -lilocplex -lcplex -lboost_timer -lboost_iostreams
 COBJSUBDIR=cobj
 DEPSUBDIR=dep
 
-ECHOCC=>&2 echo "[\033[01;33m CC \033[0m]"
-ECHOLD=>&2 echo "[\033[01;36m LD \033[0m]"
-ECHOJC=>&2 echo "[\033[01;35m JC \033[0m]"
+ECHOCC=>&2 echo "[ CC ]"
+ECHOLD=>&2 echo "[ LD ]"
 
 ifeq ($(PROFILE),1)
 OPT=${PROF}

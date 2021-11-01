@@ -1,6 +1,7 @@
 import argparse as ap
 import numpy as np
 import subprocess
+from subprocess import PIPE
 import os
 import re
 
@@ -18,8 +19,8 @@ def extract_float(string):
     return float(m[0])
 
 def n_to_last_line(filename, n=1):
-    ps = subprocess.run(['tail', '-n', str(n), filename], check=True, capture_output=True)
-    out = subprocess.run(['head', '-n', '1'], input=ps.stdout, capture_output=True).stdout.decode().rstrip()
+    ps = subprocess.run(['tail', '-n', str(n), filename], check=True, stdout=PIPE, stderr=PIPE)
+    out = subprocess.run(['head', '-n', '1'], input=ps.stdout, stdout=PIPE, stderr=PIPE).stdout.decode().rstrip()
     return out
 
 for i in range(args.instances):

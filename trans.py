@@ -98,7 +98,8 @@ if __name__ == '__main__':
         if not restart:
             coals = all_coals(len(reqs))
             for coal in coals:
-                if (rw := reward(coal)) > 0:
+                rw = reward(coal)
+                if (rw) > 0:
                     sc = sorted([idxs[idx] for idx in coal])
                     if sc not in candidates:
                         candidates.append(sc)
