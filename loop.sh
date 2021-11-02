@@ -7,16 +7,16 @@ n=50
 start=0
 total=2000
 
-if [[ $( hostname ) =~ ^mlui0(1|2)\.ific\.uv\.es$ ]]
+if hash condor_submit 2>/dev/null
 then
     step=$total
     delay=0
-elif [ $( hostname ) == "vega.iiia.csic.es" ]
+elif hash sbatch 2>/dev/null
 then
     step=200
     delay=600
 else
-    echo "Unknown host"
+    echo "Unknown cluster"
     exit
 fi
 

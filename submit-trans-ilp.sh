@@ -2,7 +2,7 @@
 
 ENTROPY="0.05"
 
-if [[ $( hostname ) =~ ^mlui0(1|2)\.ific\.uv\.es$ ]]
+if hash condor_submit 2>/dev/null
 then
 
 HOME="/lhome/ext/iiia021/iiia0211"
@@ -31,7 +31,7 @@ request_gpus = 1
 queue
 EOF
 
-elif [ $( hostname ) == "vega.iiia.csic.es" ]
+elif hash sbatch 2>/dev/null
 then
 
 HOME="/home/filippo.bistaffa"
@@ -66,5 +66,5 @@ exit \$RET
 EOF
 
 else
-echo "Unknown host"
+echo "Unknown cluster"
 fi
