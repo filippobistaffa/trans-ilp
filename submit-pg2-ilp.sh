@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ $( hostname ) == "mlui01.ific.uv.es" ]
+if [[ $( hostname ) =~ ^mlui0(1|2)\.ific\.uv\.es$ ]]
 then
 
 HOME="/lhome/ext/iiia021/iiia0211"

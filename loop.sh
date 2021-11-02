@@ -3,12 +3,25 @@
 trans=false
 pg2=true
 
-n=100
-step=200
+n=50
+start=0
 total=2000
-delay=300
 
-i=0
+if [[ $( hostname ) =~ ^mlui0(1|2)\.ific\.uv\.es$ ]]
+then
+    step=$total
+    delay=0
+elif [ $( hostname ) == "vega.iiia.csic.es" ]
+then
+    step=200
+    delay=600
+else
+    echo "Unknown host"
+    exit
+fi
+
+i=$start
+
 while true
 do
     for j in $( seq 1 $step )
