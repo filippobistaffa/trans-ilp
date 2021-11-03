@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ $( hostname ) == "mlui01.ific.uv.es" ]
+if hash condor_submit 2>/dev/null
 then
 
 HOME=/lhome/ext/iiia021/iiia0211
@@ -12,7 +12,7 @@ rm -rf $HOME/log/irace 2> /dev/null
 mkdir -p $HOME/log/irace
 irace --batchmode htcondor --target-runner target-runner-htcondor --target-evaluator target-evaluator-htcondor
 
-elif [ $( hostname ) == "vega.iiia.csic.es" ]
+elif hash sbatch 2>/dev/null
 then
 
 module load r-4.0.3-gcc-10.2.0-6ikej77
@@ -21,5 +21,5 @@ mkdir -p /mnt/beegfs/iiia/filippo.bistaffa/irace
 irace --batchmode slurm --target-runner target-runner-slurm --target-evaluator target-evaluator-slurm
 
 else
-echo "Unknown host"
+echo "Unknown cluster"
 fi
