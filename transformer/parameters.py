@@ -1,5 +1,4 @@
 params = {
-    'path': './transformer/transformer_50_t720_entropy05.pth',
     'num_zones': 63,
     'input_size': 2,
     'd_model': 256,
