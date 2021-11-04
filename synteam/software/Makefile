@@ -5,9 +5,10 @@ CPLOBJS = Timer.o
 
 SYSTEM     = x86-64_linux
 LIBFORMAT  = static_pic
-CPLEXDIR      = /opt/ibm/ILOG/CPLEX_Studio201/cplex
-CONCERTDIR    = /opt/ibm/ILOG/CPLEX_Studio201/concert
-CPOPTIMIZERDIR = /opt/ibm/ILOG/CPLEX_Studio201/cpoptimizer
+CPLEXROOT      = /opt/ibm/ILOG/CPLEX_Studio201
+CPLEXDIR       = $(CPLEXROOT)/cplex
+CONCERTDIR     = $(CPLEXROOT)/concert
+CPOPTIMIZERDIR = $(CPLEXROOT)/cpoptimizer
 GCC = gcc
 CCC = g++
 CCOPT = -m64 -O -fPIC -fexceptions -DNDEBUG -DIL_STD -std=c++17 -fpermissive -w
