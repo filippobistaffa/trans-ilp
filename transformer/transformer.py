@@ -9,7 +9,7 @@ NUM_SIMULATIONS = params['num_simulations']
 TAU = params['tau']
 
 class Transformer(nn.Module):
-    def __init__(self):
+    def __init__(self, pth):
         super(Transformer, self).__init__()
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.actor = Actor(
@@ -20,9 +20,9 @@ class Transformer(nn.Module):
             params['num_layers'],
             params['num_categories'])
         if torch.cuda.is_available():
-            self.actor.load_state_dict(torch.load(params['path']))
+            self.actor.load_state_dict(torch.load(pth))
         else:
-            self.actor.load_state_dict(torch.load(params['path'], map_location=torch.device('cpu')))
+            self.actor.load_state_dict(torch.load(pth, map_location=torch.device('cpu')))
         self.actor.to(self.device)
 
     @torch.no_grad()
@@ -40,7 +40,7 @@ class Transformer(nn.Module):
 from transformer.mcts import MCTS
 
 class Transformer_MCTS(nn.Module):
-    def __init__(self):
+    def __init__(self, pth):
         super(Transformer_MCTS, self).__init__()
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.actor = Actor(
@@ -50,7 +50,7 @@ class Transformer_MCTS(nn.Module):
             params['dim_feedforward'],
             params['num_layers'],
             params['num_categories'])
-        self.actor.load_state_dict(torch.load(params['path']))
+        self.actor.load_state_dict(torch.load(pth))
         self.actor.to(self.device)
         self.mcts = MCTS(self.actor, self.device)
 

@@ -68,7 +68,7 @@ if __name__ == '__main__':
     values = []
 
     # initialize transformer
-    model = Transformer()
+    model = Transformer('./transformer/transformer_50_t720_entropy05.pth')
     torch.manual_seed(args.seed)
 
     while tm.time() - start_time < args.budget:
