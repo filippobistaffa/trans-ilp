@@ -37,30 +37,6 @@ class Transformer(nn.Module):
             action = distribution.sample()
         return action.item() - 1
 
-from transformer.mcts import MCTS
-
-class Transformer_MCTS(nn.Module):
-    def __init__(self, pth):
-        super(Transformer_MCTS, self).__init__()
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.actor = Actor(
-            params['input_size'],
-            params['d_model'],
-            params['nhead'],
-            params['dim_feedforward'],
-            params['num_layers'],
-            params['num_categories'])
-        self.actor.load_state_dict(torch.load(pth))
-        self.actor.to(self.device)
-        self.mcts = MCTS(self.actor, self.device)
-
-    @torch.no_grad()
-    def forward(self, agents, coalition, deterministic=True, return_eos=False):
-        agents = agents2tensor(agents).to(self.device)
-        coalition = coalition2tensor(coalition).to(self.device)
-        action, _ = self.mcts(agents, coalition, deterministic, return_eos, NUM_SIMULATIONS, TAU)
-        return action.item() - 1
-
 def agents2tensor(agents):
     agents = [[idx // NUM_ZONES, idx % NUM_ZONES] for idx in agents]
     return torch.tensor([agents], dtype=torch.long)
