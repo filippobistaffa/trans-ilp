@@ -28,6 +28,11 @@ def read_pool(pool_csv):
     deltas = pool[:,2].copy(order='C')
     return reqs, steps, deltas
 
+def select_key(keys, n):
+    idx = (np.abs(keys - n)).argmin()
+    #print('Closest to {} is {}'.format(n, keys[idx]))
+    return keys[idx]
+
 def trans_coal(pool, model):
     idxs = []
     while len(idxs) < args.max_size:
@@ -67,8 +72,14 @@ if __name__ == '__main__':
     candidates = []
     values = []
 
-    # initialize transformer
-    model = Transformer('./transformer/transformer_50_t720_entropy05.pth')
+    # initialize transformers
+    models = {
+        50: Transformer('./transformer/transformer_50_t720_entropy05.pth'),
+        100: Transformer('./transformer/transformer_50_t720_entropy05.pth')
+    }
+    keys = np.asarray(list(models.keys()))
+
+    # set PyTorch seed
     torch.manual_seed(args.seed)
 
     while tm.time() - start_time < args.budget:
@@ -79,7 +90,7 @@ if __name__ == '__main__':
         restart = False
 
         while len(idxs) > args.threshold:
-            coal, rw = trans_coal(reqs, model)
+            coal, rw = trans_coal(reqs, models[select_key(keys, len(idxs))])
             if coal == None:
                 restart = True
                 break
