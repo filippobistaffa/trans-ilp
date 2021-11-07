@@ -9,7 +9,7 @@ import torch
 import os
 
 default = {
-    'threshold': 16,
+    'threshold': 20,
     'budget': 55
 }
 
