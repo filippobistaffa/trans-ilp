@@ -10,7 +10,7 @@ import os
 
 default = {
     'threshold': 20,
-    'budget': 55
+    'generation': 55
 }
 
 def reward(idxs):
@@ -58,8 +58,8 @@ if __name__ == '__main__':
     parser.add_argument('pool', metavar='POOL', type=str, help='Pool file')
     parser.add_argument('--distance', type=str, default=os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'gmaps_distance.csv'), help='Distance matrix CSV file')
     parser.add_argument('--time', type=str, default=os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'gmaps_time.csv'), help='Time matrix CSV file')
-    parser.add_argument('--threshold', type=int, default=default['threshold'], help='Time budget in seconds (default = {})'.format(default['threshold']))
-    parser.add_argument('--budget', type=int, default=default['budget'], help='Time budget in seconds (default = {})'.format(default['budget']))
+    parser.add_argument('--threshold', type=int, default=default['threshold'], help='Threshold size for complete generation (default = {})'.format(default['threshold']))
+    parser.add_argument('--generation', type=int, default=default['generation'], help='Generation time budget in seconds (default = {})'.format(default['generation']))
     parser.add_argument('--max_size', type=int, default=5, help='Maximum coalition size (default = 5)')
     parser.add_argument('--seed', type=int, default=0, help='Seed (default = 0)')
     args = parser.parse_args()
@@ -82,7 +82,7 @@ if __name__ == '__main__':
     # set PyTorch seed
     torch.manual_seed(args.seed)
 
-    while tm.time() - start_time < args.budget:
+    while tm.time() - start_time < args.generation:
         reqs = reqs_orig.copy()
         steps = steps_orig.copy()
         deltas = deltas_orig.copy()
