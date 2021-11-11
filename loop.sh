@@ -56,7 +56,7 @@ then
     delay=600
 else
     echo "Unknown cluster"
-    exit
+    exit 1
 fi
 
 i=$start
