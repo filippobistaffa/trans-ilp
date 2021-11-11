@@ -32,7 +32,7 @@ python3 $exec_dir/trans.py $args > $candidates
 ret=$?
 if [ $ret -ne 0 ]
 then
-    exit
+    exit 1
 fi
 end=$(date +%s)
 runtime=$((end-start))
