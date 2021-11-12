@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "Arguments: $@"
+
 # default total time budget in seconds
 budget=60
 
