@@ -26,6 +26,7 @@ do
     esac
 done
 
+python3 -c "import torch; print('PyTorch using {}'.format('GPU' if torch.cuda.is_available() else 'CPU'))"
 exec_dir=$(readlink -f $0)
 exec_dir=${exec_dir%/*}
 candidates=$(mktemp)
