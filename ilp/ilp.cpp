@@ -39,11 +39,6 @@ void print_solution(cont &vars, type &xa, IloCplex &cplex) { //, const std::std:
                 std::cout << xa[i].getName() << " = ";
                 coal c = *std::next(vars.begin(), i);
                 std::cout << c.w << '\n';
-                //coal c = *std::next(vars.begin(), i);
-                //print_buf(c.p, 2 * c.c[0], "Path");
-                //printf("Distance reduction = %.2f\n", c.dr);
-                //print_buf(c.qos.icd, c.c[0], "In-car delays");
-                //print_buf(c.qos.qos, c.c[0], "QoS values", "%.2f");
             }
         }
         catch (IloException& e) { e.end(); }
