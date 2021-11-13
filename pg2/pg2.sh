@@ -32,7 +32,7 @@ do
     esac
 done
 
-if test "${instance}" && file ${instance} | grep -q "ASCII text"
+if test "${instance}" && file ${instance} | grep -qE "CSV text|ASCII text"
 then
     ${exec_dir}/pg2 ${instance} ${distance_matrix} ${time_matrix} ${seed} ${generation_time_budget} ${determinism_rate} ${candidate_list_length} ${threads} ${env_k}
 else
