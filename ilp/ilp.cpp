@@ -40,7 +40,9 @@ void print_solution(cont &vars, type &xa, IloCplex &cplex) { //, const std::std:
 	for (auto i = 0; i < xa.getSize(); ++i) {
 		try {
 			if (fabs(cplex.getValue(xa[i])) > EPSILON) {
-				std::cout << xa[i].getName() << '\n';
+				std::cout << xa[i].getName() << " = ";
+				coal c = *std::next(vars.begin(), i);
+				std::cout << c.w << '\n';
 				//coal c = *std::next(vars.begin(), i);
 				//print_buf(c.p, 2 * c.c[0], "Path");
 				//printf("Distance reduction = %.2f\n", c.dr);
@@ -154,7 +156,7 @@ int main(int argc, char *argv[]) {
 	std::cout << '\n';
 	#ifdef PRINT_SOLUTION
 	std::cout << GREEN("Solution:") << '\n';
-	print_solution(vars[0], xa, cplex);
+	print_solution(vars, xa, cplex);
 	#endif
 	#ifdef LOG
 	std::cout << exp(cplex.getObjValue()) << '\n';
