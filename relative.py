@@ -46,4 +46,4 @@ for i in range(args.instances):
 print('[B] Overall mean:', np.mean(results[0]))
 print('[R] Overall mean:', np.mean(results[1]))
 division = np.divide(results[1], results[0])
-print('Relative quality: {}, {}'.format(np.mean(division), np.std(division)))
+print('Relative quality (min, mean ± std, max): {:f}, {:f} ± {:f}, {:f}'.format(np.min(division), np.mean(division), np.std(division), np.max(division)))
