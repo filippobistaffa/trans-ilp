@@ -36,6 +36,6 @@ if test "${instance}" && file ${instance} | grep -qE "CSV text|ASCII text"
 then
     ${exec_dir}/pg2 ${instance} ${distance_matrix} ${time_matrix} ${seed} ${generation_time_budget} ${determinism_rate} ${candidate_list_length} ${threads} ${env_k}
 else
-    echo "Instance CSV file not found!"
+    echo "Instance CSV file not found!" >&2
     exit 1
 fi
