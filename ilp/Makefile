@@ -11,7 +11,7 @@ NOOPTIM=-O0 -march=native -fopenmp
 DBG=-g ${NOOPTIM}
 PROF=-g -DWITHGPERFTOOLS ${OPTIM}
 
-CPLEXROOT=/opt/ibm/ILOG/CPLEX_Studio1271
+CPLEXROOT=/opt/ibm/ILOG/CPLEX_Studio201
 ARCH=x86-64_linux
 
 INC=-DIL_STD -I${CPLEXROOT}/cplex/include -I${CPLEXROOT}/concert/include
