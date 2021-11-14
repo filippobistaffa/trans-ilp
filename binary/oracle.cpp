@@ -24,8 +24,8 @@ int main(int argc, char *argv[]) {
 	
 	read_reqs(argv[1], reqs, steps, deltas);
 	const req n = reqs.size();
-	read_matrix("/home/filippo/iiia/mcts-ilp-rs/data/gmaps_distance.csv", Z, Z, distance);
-	read_matrix("/home/filippo/iiia/mcts-ilp-rs/data/gmaps_time.csv", Z, Z, time);
+	read_matrix("/home/filippo/iiia/trans-ilp-rs/data/gmaps_distance.csv", Z, Z, distance);
+	read_matrix("/home/filippo/iiia/trans-ilp-rs/data/gmaps_time.csv", Z, Z, time);
 
     // Data structure necessary for compute_value (see compute_value.hpp for more information)
 	cv_data data = { n, PTR(reqs), PTR(steps), PTR(deltas), PTR(distance), PTR(time), env_k };
