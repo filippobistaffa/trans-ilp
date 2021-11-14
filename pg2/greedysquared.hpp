@@ -35,6 +35,7 @@ struct gsq_data {
 __attribute__((always_inline)) inline
 void compute_value(coal &c, const gsq_data *data) {
 
+	sort(c.c + 1, c.c + 1 + c.c[0]);
 	req zones[2 * c.c[0]];
 	step min_tpd = UINT_MAX;
 	step max_t = 0;

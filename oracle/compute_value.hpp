@@ -19,9 +19,12 @@ struct cv_data {
 	float k;
 };
 
+#include <algorithm>
+
 __attribute__((always_inline)) inline
 void compute_value(coal &c, const cv_data *data) {
 
+	std::sort(c.c + 1, c.c + 1 + c.c[0]);
 	req zones[2 * c.c[0]];
 	step min_tpd = UINT_MAX;
 	step max_t = 0;
