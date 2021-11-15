@@ -19,4 +19,6 @@ pair<vector<string>, struct Task_type> cpp_read_task_competences(const char *fil
 
 float cpp_oracle(const unsigned int actual_team_size, const unsigned int *team, const struct Data data);
 
+void cpp_remove_idx(vector<struct Agent> &vec, const unsigned int idx);
+
 #endif /* ORACLE_HPP_ */

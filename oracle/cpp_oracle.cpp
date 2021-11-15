@@ -367,3 +367,8 @@ float cpp_oracle(const unsigned int actual_team_size, const unsigned int *_team,
 
     return (lambda*uprof + (1.0-lambda)*ucon);
 }
+
+void cpp_remove_idx(vector<struct Agent> &vec, const unsigned int idx) {
+
+    vec.erase(vec.begin() + idx);
+}
