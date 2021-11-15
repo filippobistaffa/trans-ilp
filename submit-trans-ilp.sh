@@ -58,7 +58,7 @@ universe = vanilla
 stream_output = True
 stream_error = True
 executable = $EXECUTABLE
-arguments = $POOL_DIR/$i.csv --seed $seed --budget $tb $args
+arguments = $POOL_DIR/$i.json --seed $seed --budget $tb $args
 log = $STDLOG
 output = $STDOUT
 error = $STDERR
@@ -94,8 +94,8 @@ sbatch 1> $tmpfile <<EOF
 #SBATCH --error=/dev/null
 spack load --first python@3.8.6%gcc@10.2.0
 spack load --first py-torch
-echo $EXECUTABLE $POOL_DIR/$i.csv --seed $seed --budget $tb $args 1> $STDOUT
-srun $EXECUTABLE $POOL_DIR/$i.csv --seed $seed --budget $tb $args 1>> $STDOUT 2>> $STDERR
+echo $EXECUTABLE $POOL_DIR/$i.json --seed $seed --budget $tb $args 1> $STDOUT
+srun $EXECUTABLE $POOL_DIR/$i.json --seed $seed --budget $tb $args 1>> $STDOUT 2>> $STDERR
 RET=\$?
 exit \$RET
 EOF
