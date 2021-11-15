@@ -31,7 +31,7 @@ def trans_coal(pool, model):
     return idxs, reward(idxs)
 
 def all_coals(n):
-    return list(itertools.combinations(list(range(n)), args.size))
+    return itertools.combinations(list(range(n)), args.size)
 
 if __name__ == '__main__':
     parser = ap.ArgumentParser(
