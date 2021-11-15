@@ -64,7 +64,7 @@ int main(int argc, char *argv[]) {
     // Parse commandline arguments
     auto i = 1;
     auto [ vars, n ] = read_vars(argv[i++]);
-    const float tb = std::max(atof(argv[i++]), 0.0); // Seconds
+    const float tb = std::max(atof(argv[i++]), 1.0); // Seconds
 
     #ifdef PRINT_VARS
     std::cout << CYAN("Variables:") << '\n';
