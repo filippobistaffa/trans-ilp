@@ -110,7 +110,7 @@ int main(int argc, char *argv[]) {
 
     // Finalise creation of constraints for Weighted Set Packing
     for (auto i = 0; i < n; ++i) {
-        model.add(constr[i] <= 1);
+        model.add(constr[i] == 1);
         constr[i].end();
     }
 
