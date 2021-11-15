@@ -48,7 +48,8 @@ def trans_coal(pool, model):
 def all_coals(n):
     coals = []
     for s in range(2, args.max_size + 1):
-        coals.extend(list(itertools.combinations(list(range(n)), s)))
+        if tm.time() - start_time < args.generation:
+            coals.extend(list(itertools.combinations(list(range(n)), s)))
     return coals
 
 if __name__ == '__main__':
@@ -89,7 +90,7 @@ if __name__ == '__main__':
         idxs = list(range(len(reqs)))
         restart = False
 
-        while len(idxs) > args.threshold:
+        while len(idxs) > args.threshold and tm.time() - start_time < args.generation:
             coal, rw = trans_coal(reqs, models[select_key(keys, len(idxs))])
             if coal == None:
                 restart = True
