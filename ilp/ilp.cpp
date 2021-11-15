@@ -42,7 +42,11 @@ void print_solution(cont &vars, type &xa, IloCplex &cplex) { //, const std::std:
             if (fabs(cplex.getValue(xa[i])) > EPSILON) {
                 std::cout << xa[i].getName() << " = ";
                 coal c = *std::next(vars.begin(), i);
+                #ifdef LOG
+                std::cout << exp(c.w) << '\n';
+                #else
                 std::cout << c.w << '\n';
+                #endif
             }
         }
         catch (IloException& e) { e.end(); }
