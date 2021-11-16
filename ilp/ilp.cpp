@@ -120,7 +120,7 @@ int main(int argc, char *argv[]) {
     #else
     cplex.setParam(IloCplex::TiLim, tb);
     #endif
-    //cplex.setParam(IloCplex::Threads, n_threads);
+    cplex.setParam(IloCplex::Threads, 1);
     cplex.setParam(IloCplex::MIPDisplay, 4);
 
     #ifdef EXPORT_ILP
