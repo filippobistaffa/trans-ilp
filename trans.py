@@ -110,10 +110,10 @@ if __name__ == '__main__':
         if not restart:
             coals = all_coals(len(reqs))
             for coal in coals:
-                rw = reward(coal)
-                if (rw) > 0:
-                    sc = sorted([idxs[idx] for idx in coal])
-                    if sc not in candidates:
+                sc = sorted([idxs[idx] for idx in coal])
+                if sc not in candidates:
+                    rw = reward(coal)
+                    if (rw) > 0:
                         candidates.append(sc)
                         values.append(rw)
                         #print('{} = {}'.format(sc, rw))
