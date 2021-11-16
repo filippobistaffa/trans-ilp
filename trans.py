@@ -85,9 +85,9 @@ if __name__ == '__main__':
         if not restart and tm.time() - start_time < args.generation:
             coals = all_coals(len(idxs))
             for coal in coals:
-                rw = reward(coal)
                 sc = sorted([idxs[idx] for idx in coal])
                 if sc not in candidates:
+                    rw = reward(coal)
                     candidates.append(sc)
                     values.append(rw)
                     #print('{} = {}'.format(sc, rw))
