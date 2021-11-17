@@ -75,8 +75,8 @@ if __name__ == '__main__':
 
     # initialize transformers
     models = {
-        50: Transformer('./transformer/transformer_50_t720_entropy05.pth'),
-        100: Transformer('./transformer/transformer_100_t720_entropy05.pth')
+        50: Transformer(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'transformer', 'transformer_50_t720_entropy05.pth')),
+        100: Transformer(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'transformer', 'transformer_100_t720_entropy05.pth'))
     }
     keys = np.asarray(list(models.keys()))
 
