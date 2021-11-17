@@ -387,6 +387,11 @@ int main(int argc, char *argv[]) {
     log_value("Instance", instance_file, "i");
     log_value("Task", task_file, "t");
     log_line();
+    log_value("Alpha", alpha);
+    log_value("Beta", my_beta);
+    log_value("Gamma", gamma);
+    log_value("Lambda", lambda);
+    log_line();
 
     auto agents = read_agents(instance_file);
     auto [ competences, task ] = read_task_competences(task_file);
