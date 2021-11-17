@@ -54,7 +54,7 @@ if __name__ == '__main__':
 
     # initialize transformers
     models = {
-        50: Transformer('./transformer/transformer_50.pth')
+        50: Transformer('./transformer/transformer_50_entropy05.pth')
     }
     keys = np.asarray(list(models.keys()))
 
