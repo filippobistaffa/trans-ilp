@@ -1,6 +1,6 @@
 #!/bin/bash
 
-i=0
+i=1
 n=50
 tb=60
 seed=$RANDOM
