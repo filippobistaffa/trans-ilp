@@ -11,7 +11,7 @@ import copy
 import os
 
 default = {
-    'threshold': 17,
+    'threshold': 15,
     'generation': 55
 }
 
