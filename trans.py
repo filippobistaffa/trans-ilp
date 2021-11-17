@@ -12,11 +12,12 @@ import os
 
 default = {
     'threshold': 15,
-    'generation': 55
+    'generation': 55,
+    'lambda': 0.8
 }
 
 def reward(idxs):
-    return oracle(np.array(idxs, dtype=np.uint32), data)
+    return oracle(np.array(idxs, dtype=np.uint32), args.l, data)
 
 def select_key(keys, n):
     idx = (np.abs(keys - n)).argmin()
@@ -39,6 +40,7 @@ if __name__ == '__main__':
     )
     parser.add_argument('pool', metavar='POOL', type=str, help='Pool file')
     parser.add_argument('--task', type=str, default=os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'task_english'), help='Task file')
+    parser.add_argument('--lambda', dest='l', type=float, default=default['lambda'], help='Lambda parameter (default = {})'.format(default['lambda']))
     parser.add_argument('--threshold', type=int, default=default['threshold'], help='Threshold size for complete generation (default = {})'.format(default['threshold']))
     parser.add_argument('--generation', type=int, default=default['generation'], help='Generation time budget in seconds (default = {})'.format(default['generation']))
     parser.add_argument('--size', type=int, default=5, help='Coalitions\' size (default = 5)')

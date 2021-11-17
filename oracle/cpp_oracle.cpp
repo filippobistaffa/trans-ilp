@@ -215,9 +215,8 @@ constexpr double alpha = 0.19;
 constexpr double my_beta = alpha * 3.0;
 constexpr double synteam_gamma = 0.24;
 constexpr double v = 0.5;
-constexpr double lambda = 0.8;
 
-float cpp_oracle(const unsigned int actual_team_size, const unsigned int *_team, const struct Data data) {
+float cpp_oracle(const unsigned int actual_team_size, const unsigned int *_team, const double lambda, const struct Data &data) {
 
     // convert input parameters
     set<int> team(_team, _team + actual_team_size);

@@ -42,7 +42,7 @@ cdef extern from "cpp_oracle.hpp":
     cpp_pair[cpp_vector[cpp_string],Task_type] cpp_read_task_competences(const char *filename)
 
 cdef extern from "cpp_oracle.hpp":
-    float cpp_oracle(const unsigned int actual_team_size, const unsigned int *team, Data data)
+    float cpp_oracle(const unsigned int actual_team_size, const unsigned int *team, const double l, Data &data)
 
 cdef extern from "cpp_oracle.hpp":
     void cpp_remove_idx(cpp_vector[Agent] &vec, const unsigned int idx)
@@ -83,5 +83,5 @@ cdef class OracleData:
 @cython.boundscheck(False)
 @cython.wraparound(False)
 
-def oracle(np.ndarray[unsigned int, ndim = 1, mode = "c"] c, data):
-    return cpp_oracle(c.shape[0], &c[0], data.get_data())
+def oracle(np.ndarray[unsigned int, ndim = 1, mode = "c"] c, l, data):
+    return cpp_oracle(c.shape[0], &c[0], l, data.get_data())
