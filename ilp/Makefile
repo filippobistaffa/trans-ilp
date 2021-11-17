@@ -12,8 +12,15 @@ DBG=-g ${NOOPTIM}
 PROF=-g -DWITHGPERFTOOLS ${OPTIM}
 
 CPLEXROOT=/opt/ibm/ILOG/CPLEX_Studio201
-ARCH=x86-64_linux
+HOSTNAME=$(shell hostname)
+ifeq ($(HOSTNAME), mlui02.ific.uv.es)
+	CPLEXROOT=/lhome/ext/iiia021/iiia0211/cplex210
+endif
+ifeq ($(HOSTNAME), vega.iiia.csic.es)
+	CPLEXROOT=/home/filippo.bistaffa/cplex201
+endif
 
+ARCH=x86-64_linux
 INC=-DIL_STD -I${CPLEXROOT}/cplex/include -I${CPLEXROOT}/concert/include
 LDIR=-L${CPLEXROOT}/concert/lib/${ARCH}/static_pic -L${CPLEXROOT}/cplex/lib/${ARCH}/static_pic
 LINK=-lconcert -lilocplex -lcplex -ldl
