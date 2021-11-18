@@ -6,8 +6,8 @@ import os
 import re
 
 parser = ap.ArgumentParser()
-parser.add_argument('--base', type=str, help='Base directory', default='200-pg2')
-parser.add_argument('--relative', type=str, help='Relative directory', default='200-mcts-rw')
+parser.add_argument('--base', type=str, help='Base directory')
+parser.add_argument('--relative', type=str, help='Relative directory')
 parser.add_argument('--instances', type=int, nargs=2, help='Instances range (inclusive)', default=(0, 499))
 parser.add_argument('--lines', type=int, nargs=2, help='Which line (starting from the bottom) contains the value', default=(1,1))
 parser.add_argument('--seeds', type=int, nargs=2, help='Number of seeds', default=(0,0))
