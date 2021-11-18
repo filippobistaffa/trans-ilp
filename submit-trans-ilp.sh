@@ -68,6 +68,7 @@ arguments = $POOL_DIR/$i.json --seed $seed --budget $tb --lambda $lambda $args
 log = $STDLOG
 output = $STDOUT
 error = $STDERR
+getenv = true
 request_gpus = 1
 queue
 EOF
