@@ -314,7 +314,7 @@ auto generate_vars(const std::vector<Agent> &agents, const std::vector<std::stri
 
     do {
         coal c = {
-            {5},
+            {K},
             0
         };
         auto k = 1;
