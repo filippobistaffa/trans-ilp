@@ -3,6 +3,7 @@
 i=1
 n=50
 t="../data/task_english"
+lambda=0.8
 
 while [[ $# > 0 ]]
 do
@@ -23,6 +24,11 @@ do
             t="$1"
             shift
         ;;
+        -l|--lambda)
+            shift
+            lambda="$1"
+            shift
+        ;;
     esac
 done
 
@@ -32,7 +38,7 @@ then
 HOME="/lhome/ext/iiia021/iiia0211"
 ROOT_DIR="$HOME/trans-ilp-tf"
 EXECUTABLE="$ROOT_DIR/optimal/optimal"
-LOG_DIR="$HOME/log/tf/$n-optimal"
+LOG_DIR="$HOME/log/tf/$n-$lambda-optimal"
 DATA_DIR="$ROOT_DIR/data"
 POOL_DIR="$DATA_DIR/pools_$n"
 
@@ -47,7 +53,7 @@ universe = vanilla
 stream_output = True
 stream_error = True
 executable = $EXECUTABLE
-arguments = -i $POOL_DIR/$i.json -t $(readlink -f $t)
+arguments = -i $POOL_DIR/$i.json -t $(readlink -f $t) -l $lambda
 log = $STDLOG
 output = $STDOUT
 error = $STDERR
@@ -60,7 +66,7 @@ then
 BEEGFS="/mnt/beegfs/iiia/filippo.bistaffa"
 ROOT_DIR="/home/filippo.bistaffa/trans-ilp-tf"
 EXECUTABLE="$ROOT_DIR/optimal/optimal"
-LOG_DIR="$BEEGFS/tf/$n-optimal"
+LOG_DIR="$BEEGFS/tf/$n-$lambda-optimal"
 DATA_DIR="$ROOT_DIR/data"
 POOL_DIR="$DATA_DIR/pools_$n"
 
@@ -79,8 +85,8 @@ sbatch 1> $tmpfile <<EOF
 #SBATCH --mem=8G
 #SBATCH --output=/dev/null
 #SBATCH --error=/dev/null
-echo $EXECUTABLE -i $POOL_DIR/$i.json -t $(readlink -f $t) 1> $STDOUT
-srun $EXECUTABLE -i $POOL_DIR/$i.json -t $(readlink -f $t) 1>> $STDOUT 2>> $STDERR
+echo $EXECUTABLE -i $POOL_DIR/$i.json -t $(readlink -f $t) -l $lambda 1> $STDOUT
+srun $EXECUTABLE -i $POOL_DIR/$i.json -t $(readlink -f $t) -l $lambda 1>> $STDOUT 2>> $STDERR
 RET=\$?
 exit \$RET
 EOF

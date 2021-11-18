@@ -141,9 +141,8 @@ constexpr double alpha = 0.19;
 constexpr double my_beta = alpha * 3.0;
 constexpr double synteam_gamma = 0.24;
 constexpr double v = 0.5;
-constexpr double lambda = 0.8;
 
-auto compute_value(coal c, const std::vector<Agent> &agents, const std::vector<std::string> &competences, const Task_type &task) {
+auto compute_value(coal c, const std::vector<Agent> &agents, const std::vector<std::string> &competences, const Task_type &task, const double lambda) {
 
     // convert input parameters
     const auto actual_team_size = c.c[0];
@@ -306,7 +305,7 @@ void print_var_array(cont vars, type &xa, IloCplex &cplex) {
     puts("");
 }
 
-auto generate_vars(const std::vector<Agent> &agents, const std::vector<std::string> &competences, const Task_type &task) {
+auto generate_vars(const std::vector<Agent> &agents, const std::vector<std::string> &competences, const Task_type &task, const double lambda) {
 
     const auto n = agents.size();
     std::deque<coal> vars;
@@ -324,7 +323,7 @@ auto generate_vars(const std::vector<Agent> &agents, const std::vector<std::stri
                 c.c[k++] = i;
             }
         }
-        c.w = compute_value(c, agents, competences, task);
+        c.w = compute_value(c, agents, competences, task, lambda);
         vars.push_back(c);
     } while (std::next_permutation(select.begin(), select.end()));
 
@@ -346,9 +345,10 @@ int main(int argc, char *argv[]) {
 
     char *instance_file = nullptr;
     char *task_file = nullptr;
+    double lambda = 0.8;
     int opt;
 
-    while ((opt = getopt(argc, argv, "i:t:")) != -1) {
+    while ((opt = getopt(argc, argv, "i:t:l:")) != -1) {
         switch (opt) {
             case 'i':
                 if (exists(optarg)) {
@@ -364,6 +364,14 @@ int main(int argc, char *argv[]) {
                     task_file = optarg;
                 } else {
                     std::cerr << argv[0] << ": file not found -- '";
+                    std::cerr << optarg << "'" << '\n';
+                    return EXIT_FAILURE;
+                }
+                continue;
+            case 'l': // lambda
+                lambda = atof(optarg);
+                if (lambda < 0 or lambda > 1) {
+                    std::cerr << argv[0] << ": invalid value -- '";
                     std::cerr << optarg << "'" << '\n';
                     return EXIT_FAILURE;
                 }
@@ -401,7 +409,7 @@ int main(int argc, char *argv[]) {
 
     std::cout << "\nGenerating decision variables...\n";
     gettimeofday(&t1, nullptr);
-    auto vars = generate_vars(agents, competences, task);
+    auto vars = generate_vars(agents, competences, task, lambda);
 
     #ifdef PRINT_VARS
     std::cout << "Variables:\n";
