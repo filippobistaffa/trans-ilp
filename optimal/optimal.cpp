@@ -139,7 +139,7 @@ std::pair<std::vector<std::string>, Task_type> read_task_competences(const char 
 // Parameter values. The value of alpha is set to beta/3.0 below. This is the always-used setting. If this changes some day, the code must be changed.
 constexpr double alpha = 0.19;
 constexpr double my_beta = alpha * 3.0;
-constexpr double synteam_gamma = 0.24;
+constexpr double gender_gamma = 0.24;
 constexpr double v = 0.5;
 
 auto compute_value(coal c, const std::vector<Agent> &agents, const std::vector<std::string> &competences, const Task_type &task, const double lambda) {
@@ -286,7 +286,7 @@ auto compute_value(coal c, const std::vector<Agent> &agents, const std::vector<s
         if (bprod > my_beta_max) my_beta_max = bprod;
     }
     ucon += alpha_max + my_beta_max;
-    ucon += synteam_gamma*sin(M_PI * (double(n_of_women)/double(actual_team_size)));
+    ucon += gender_gamma * sin(M_PI * (double(n_of_women)/double(actual_team_size)));
 
     return (lambda*uprof + (1.0-lambda)*ucon);
 }
