@@ -213,7 +213,7 @@ pair<vector<string>,Task_type> cpp_read_task_competences(const char *filename) {
 // Parameter values. The value of alpha is set to beta/3.0 below. This is the always-used setting. If this changes some day, the code must be changed.
 constexpr double alpha = 0.19;
 constexpr double my_beta = alpha * 3.0;
-constexpr double synteam_gamma = 0.24;
+constexpr double gender_gamma = 0.24;
 constexpr double v = 0.5;
 
 float cpp_oracle(const unsigned int actual_team_size, const unsigned int *_team, const double lambda, const struct Data &data) {
@@ -362,7 +362,7 @@ float cpp_oracle(const unsigned int actual_team_size, const unsigned int *_team,
         if (bprod > my_beta_max) my_beta_max = bprod;
     }
     ucon += alpha_max + my_beta_max;
-    ucon += synteam_gamma*sin(M_PI * (double(n_of_women)/double(actual_team_size)));
+    ucon += gender_gamma * sin(M_PI * (double(n_of_women)/double(actual_team_size)));
 
     return (lambda*uprof + (1.0-lambda)*ucon);
 }
