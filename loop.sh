@@ -3,6 +3,7 @@
 n=50
 start=0
 end=2000
+seeds=50
 pg2=false
 trans=false
 
@@ -69,14 +70,17 @@ do
         then
             exit
         fi
-        if [ "$trans" = true ]
-        then
-            ./submit-trans-ilp.sh -n $n -i $i $args
-        fi
-        if [ "$pg2" = true ]
-        then
-            ./submit-pg2-ilp.sh -n $n -i $i $args
-        fi
+        for s in $( seq 0 $(( $seeds - 1 )) )
+        do
+            if [ "$trans" = true ]
+            then
+                ./submit-trans-ilp.sh -n $n -i $i -s $s $args
+            fi
+            if [ "$pg2" = true ]
+            then
+                ./submit-pg2-ilp.sh -n $n -i $i -s $s $args
+            fi
+        done
         i=$((i+1))
     done
     sleep $delay

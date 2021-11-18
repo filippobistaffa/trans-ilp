@@ -48,9 +48,9 @@ DATA_DIR="$ROOT_DIR/data"
 POOL_DIR="$DATA_DIR/pmf_$n"
 
 mkdir -p $LOG_DIR
-STDOUT=$LOG_DIR/$i.stdout
-STDERR=$LOG_DIR/$i.stderr
-STDLOG=$LOG_DIR/$i.stdlog
+STDOUT=$LOG_DIR/$i-$seed.stdout
+STDERR=$LOG_DIR/$i-$seed.stderr
+STDLOG=$LOG_DIR/$i-$seed.stdlog
 
 tmpfile=$(mktemp)
 condor_submit 1> $tmpfile <<EOF
@@ -76,8 +76,8 @@ DATA_DIR="$ROOT_DIR/data"
 POOL_DIR="$DATA_DIR/pmf_$n"
 
 mkdir -p $LOG_DIR
-STDOUT=$LOG_DIR/$i.stdout
-STDERR=$LOG_DIR/$i.stderr
+STDOUT=$LOG_DIR/$i-$seed.stdout
+STDERR=$LOG_DIR/$i-$seed.stderr
 
 tmpfile=$(mktemp)
 sbatch 1> $tmpfile <<EOF
