@@ -62,6 +62,7 @@ arguments = $POOL_DIR/$i.csv --seed $seed --budget $tb $args
 log = $STDLOG
 output = $STDOUT
 error = $STDERR
+getenv = true
 request_gpus = 1
 queue
 EOF
