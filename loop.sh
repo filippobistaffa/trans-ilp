@@ -2,8 +2,8 @@
 
 n=50
 start=1
-end=2
-seeds=5
+end=20
+seeds=50
 
 while [[ $# > 0 ]]
 do
