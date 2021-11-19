@@ -13,7 +13,8 @@ import os
 default = {
     'threshold': 15,
     'generation': 55,
-    'lambda': 0.8
+    'lambda': 0.8,
+    'entropy': 0.05
 }
 
 def reward(idxs):
@@ -45,6 +46,7 @@ if __name__ == '__main__':
     parser.add_argument('--generation', type=int, default=default['generation'], help='Generation time budget in seconds (default = {})'.format(default['generation']))
     parser.add_argument('--size', type=int, default=5, help='Coalitions\' size (default = 5)')
     parser.add_argument('--seed', type=int, default=0, help='Seed (default = 0)')
+    parser.add_argument('--entropy', type=float, default=default['entropy'], help='Transformer\'s entropy value (default = {})'.format(default['entropy']))
     args = parser.parse_args()
 
     # read input data
@@ -56,7 +58,7 @@ if __name__ == '__main__':
 
     # initialize transformers
     models = {
-        50: Transformer(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'transformer', 'transformer_50_entropy05.pth'))
+        50: Transformer(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'transformer', 'transformer_50_entropy{:.2f}.pth'.format(args.entropy)))
     }
     keys = np.asarray(list(models.keys()))
 

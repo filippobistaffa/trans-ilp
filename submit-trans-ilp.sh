@@ -5,6 +5,7 @@ n=50
 tb=60
 seed=$RANDOM
 lambda=0.8
+entropy=0.05
 args=""
 
 while [[ $# > 0 ]]
@@ -36,6 +37,11 @@ do
             lambda="$1"
             shift
         ;;
+        -e|--entropy)
+            shift
+            entropy="$1"
+            shift
+        ;;
         *)
             args="$args$key "
             shift
@@ -49,7 +55,7 @@ then
 HOME="/lhome/ext/iiia021/iiia0211"
 ROOT_DIR="$HOME/trans-ilp-tf"
 EXECUTABLE="$ROOT_DIR/trans-ilp.sh"
-LOG_DIR="$HOME/log/tf/$n-$lambda-trans-$tb"
+LOG_DIR="$HOME/log/tf/$n-$lambda-trans-$tb-$entropy"
 DATA_DIR="$ROOT_DIR/data"
 POOL_DIR="$DATA_DIR/pools_$n"
 
@@ -64,7 +70,7 @@ universe = vanilla
 stream_output = True
 stream_error = True
 executable = $EXECUTABLE
-arguments = $POOL_DIR/$i.json --seed $seed --budget $tb --lambda $lambda $args
+arguments = $POOL_DIR/$i.json --seed $seed --budget $tb --lambda $lambda --entropy $entropy $args
 log = $STDLOG
 output = $STDOUT
 error = $STDERR
@@ -80,7 +86,7 @@ HOME="/home/filippo.bistaffa"
 BEEGFS="$HOME/beegfs"
 ROOT_DIR="$HOME/trans-ilp-tf"
 EXECUTABLE="$ROOT_DIR/trans-ilp.sh"
-LOG_DIR="$BEEGFS/tf/$n-$lambda-trans-$tb"
+LOG_DIR="$BEEGFS/tf/$n-$lambda-trans-$tb-$entropy"
 DATA_DIR="$ROOT_DIR/data"
 POOL_DIR="$DATA_DIR/pools_$n"
 
@@ -101,8 +107,8 @@ sbatch 1> $tmpfile <<EOF
 #SBATCH --error=/dev/null
 spack load --first python@3.8.6%gcc@10.2.0
 spack load --first py-torch
-echo $EXECUTABLE $POOL_DIR/$i.json --seed $seed --budget $tb --lambda $lambda $args 1> $STDOUT
-srun $EXECUTABLE $POOL_DIR/$i.json --seed $seed --budget $tb --lambda $lambda $args 1>> $STDOUT 2>> $STDERR
+echo $EXECUTABLE $POOL_DIR/$i.json --seed $seed --budget $tb --lambda $lambda --entropy $entropy $args 1> $STDOUT
+srun $EXECUTABLE $POOL_DIR/$i.json --seed $seed --budget $tb --lambda $lambda --entropy $entropy $args 1>> $STDOUT 2>> $STDERR
 RET=\$?
 exit \$RET
 EOF
