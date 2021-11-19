@@ -26,7 +26,7 @@ def n_to_last_line(filename, n=1):
     out = subprocess.run(['head', '-n', '1'], input=ps.stdout, stdout=PIPE, stderr=PIPE).stdout.decode().rstrip()
     return out
 
-labels=['[B]', '[R]']
+labels = ['[B]', '[R]']
 paths = [args.base, args.relative]
 
 for j in [0, 1]:
