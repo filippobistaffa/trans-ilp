@@ -49,6 +49,8 @@ do
     esac
 done
 
+entropy=$( python3 -c "print('{:.2f}'.format($entropy))" )
+
 if hash condor_submit 2>/dev/null
 then
 
