@@ -14,9 +14,6 @@ parser.add_argument('--seeds', type=int, nargs=2, help='Number of seeds', defaul
 parser.add_argument('--best', help='Show best seeds', action='store_true')
 args = parser.parse_args()
 
-results = np.zeros((2, args.instances[1] - args.instances[0] + 1))
-seeds = np.zeros((2, args.instances[1] - args.instances[0] + 1), dtype=int)
-
 def extract_float(string):
     m = re.findall(r"[-+]?\d*\.?\d+|[-+]?\d+", string)
     return float(m[0])
@@ -28,6 +25,8 @@ def n_to_last_line(filename, n=1):
 
 labels = ['[B]', '[R]']
 paths = [args.base, args.relative]
+results = np.zeros((2, args.instances[1] - args.instances[0] + 1))
+seeds = np.zeros((2, args.instances[1] - args.instances[0] + 1), dtype=int)
 
 for j in [0, 1]:
     k = 0
