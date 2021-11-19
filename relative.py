@@ -26,47 +26,31 @@ def n_to_last_line(filename, n=1):
     out = subprocess.run(['head', '-n', '1'], input=ps.stdout, stdout=PIPE, stderr=PIPE).stdout.decode().rstrip()
     return out
 
-k = 0
-for i in range(args.instances[0], args.instances[1] + 1):
-    for s in range(max(args.seeds[0], 1)):
-        if args.seeds[0] > 0:
-            filename = os.path.join(args.base, '{}-{}.stdout'.format(i, s))
-        else:
-            filename = os.path.join(args.base, '{}.stdout'.format(i))
-        if os.path.isfile(filename):
-            value = extract_float(n_to_last_line(filename, args.lines[0]))
-            #print(value)
-            if value > results[0, k]:
-                results[0, k] = value
-                seeds[0, k] = s
-        else:
-            print('Base, {}: missing'.format(filename))
-            quit()
-    #print(i, results[0, k])
-    k += 1
-
-k = 0
-for i in range(args.instances[0], args.instances[1] + 1):
-    for s in range(max(args.seeds[1], 1)):
-        if args.seeds[1] > 0:
-            filename = os.path.join(args.relative, '{}-{}.stdout'.format(i, s))
-        else:
-            filename = os.path.join(args.relative, '{}.stdout'.format(i))
-        if os.path.isfile(filename):
-            value = extract_float(n_to_last_line(filename, args.lines[1]))
-            #print(value)
-            if value > results[1, k]:
-                results[1, k] = value
-                seeds[1, k] = s
-        else:
-            print('Relative, {}: missing'.format(filename))
-            quit()
-    #print(i, results[1, k])
-    k += 1
-
 labels=['[B]', '[R]']
+paths = [args.base, args.relative]
+
+for j in [0, 1]:
+    k = 0
+    for i in range(args.instances[0], args.instances[1] + 1):
+        for s in range(max(args.seeds[j], 1)):
+            if args.seeds[j] > 0:
+                filename = os.path.join(paths[j], '{}-{}.stdout'.format(i, s))
+            else:
+                filename = os.path.join(paths[j], '{}.stdout'.format(i))
+            if os.path.isfile(filename):
+                value = extract_float(n_to_last_line(filename, args.lines[j]))
+                #print(value)
+                if value > results[j, k]:
+                    results[j, k] = value
+                    seeds[j, k] = s
+            else:
+                print('{}: {} missing'.format(labels[j], filename))
+                quit()
+        #print(i, results[0, k])
+        k += 1
+
 for i in [0, 1]:
-    print('{} Overall mean: {:.4f}'.format(labels[i], np.mean(results[i])))
+    print('{}: Overall mean = {:.4f}'.format(labels[i], np.mean(results[i])))
 division = np.divide(results[1], results[0])
 print('Relative quality (min, mean ± std, max): {:.4f}, {:.4f} ± {:.4f}, {:.4f}'.format(np.min(division), np.mean(division), np.std(division), np.max(division)))
 if args.best:
