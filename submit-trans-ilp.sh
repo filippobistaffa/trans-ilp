@@ -4,6 +4,7 @@ i=0
 n=50
 tb=60
 seed=$RANDOM
+entropy=0.05
 args=""
 
 while [[ $# > 0 ]]
@@ -30,6 +31,11 @@ do
             seed="$1"
             shift
         ;;
+        -e|--entropy)
+            shift
+            entropy="$1"
+            shift
+        ;;
         *)
             args="$args$key "
             shift
@@ -37,13 +43,15 @@ do
     esac
 done
 
+entropy=$( python3 -c "print('{:.2f}'.format($entropy))" )
+
 if hash condor_submit 2>/dev/null
 then
 
 HOME="/lhome/ext/iiia021/iiia0211"
 ROOT_DIR="$HOME/trans-ilp-rs"
 EXECUTABLE="$ROOT_DIR/trans-ilp.sh"
-LOG_DIR="$HOME/log/pmf/$n-trans-$tb"
+LOG_DIR="$HOME/log/pmf/$n-trans-$tb-$entropy"
 DATA_DIR="$ROOT_DIR/data"
 POOL_DIR="$DATA_DIR/pmf_$n"
 
@@ -58,7 +66,7 @@ universe = vanilla
 stream_output = True
 stream_error = True
 executable = $EXECUTABLE
-arguments = $POOL_DIR/$i.csv --seed $seed --budget $tb $args
+arguments = $POOL_DIR/$i.csv --seed $seed --budget $tb --entropy $entropy $args
 log = $STDLOG
 output = $STDOUT
 error = $STDERR
@@ -74,7 +82,7 @@ HOME="/home/filippo.bistaffa"
 BEEGFS="$HOME/beegfs"
 ROOT_DIR="$HOME/trans-ilp-rs"
 EXECUTABLE="$ROOT_DIR/trans-ilp.sh"
-LOG_DIR="$BEEGFS/pmf/$n-trans-$tb"
+LOG_DIR="$BEEGFS/pmf/$n-trans-$tb-$entropy"
 DATA_DIR="$ROOT_DIR/data"
 POOL_DIR="$DATA_DIR/pmf_$n"
 
@@ -95,8 +103,8 @@ sbatch 1> $tmpfile <<EOF
 #SBATCH --error=/dev/null
 spack load --first python@3.8.6%gcc@10.2.0
 spack load --first py-torch
-echo $EXECUTABLE $POOL_DIR/$i.csv --seed $seed --budget $tb $args 1> $STDOUT
-srun $EXECUTABLE $POOL_DIR/$i.csv --seed $seed --budget $tb $args 1>> $STDOUT 2>> $STDERR
+echo $EXECUTABLE $POOL_DIR/$i.csv --seed $seed --budget $tb --entropy $entropy $args 1> $STDOUT
+srun $EXECUTABLE $POOL_DIR/$i.csv --seed $seed --budget $tb --entropy $entropy $args 1>> $STDOUT 2>> $STDERR
 RET=\$?
 exit \$RET
 EOF
