@@ -46,7 +46,7 @@ for j in [0, 1]:
             else:
                 print('{}: {} missing'.format(labels[j], filename))
                 quit()
-        #print(i, results[0, k])
+        #print(i, results[j, k])
         k += 1
 
 for i in [0, 1]:
