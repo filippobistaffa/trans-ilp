@@ -2,7 +2,7 @@
 
 n=50
 start=0
-end=500
+end=200
 seeds=50
 pg2=false
 trans=false
