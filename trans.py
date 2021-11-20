@@ -7,7 +7,6 @@ import time as tm
 import itertools
 import random
 import torch
-import copy
 import os
 
 default = {
