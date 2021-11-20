@@ -29,6 +29,7 @@ setup(
             extra_compile_args = [
                 '-m64', '-O', '-fPIC', '-fexceptions', '-std=c++17', '-fpermissive', '-w',
                 '-DCPLEX', '-DNDEBUG', '-DIL_STD',
+                '-Ofast', '-funroll-loops', '-falign-functions=16', '-falign-loops=16'
             ],
             include_dirs = [
                 numpy.get_include(),
