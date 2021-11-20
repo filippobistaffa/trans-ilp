@@ -32,7 +32,8 @@ seeds = np.zeros((2, n_instances), dtype=int)
 try:
     from tqdm import tqdm
     has_tqdm = True
-    pbar = tqdm(unit=' instances', total=n_instances * (max(args.seeds[0], 1) + max(args.seeds[1], 1)))
+    total = n_instances * (max(args.seeds[0], 1) + max(args.seeds[1], 1))
+    pbar = tqdm(bar_format='{percentage:3.0f}% |{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}]', total=total)
 except ImportError:
     has_tqdm = False
 
