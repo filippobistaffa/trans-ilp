@@ -12,7 +12,7 @@ import os
 
 default = {
     'threshold': 15,
-    'generation': 55,
+    'generation': 50,
     'lambda': 0.8,
     'entropy': 0.05
 }
