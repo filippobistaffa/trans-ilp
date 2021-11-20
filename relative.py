@@ -25,8 +25,16 @@ def n_to_last_line(filename, n=1):
 
 labels = ['[B]', '[R]']
 paths = [args.base, args.relative]
-results = np.zeros((2, args.instances[1] - args.instances[0] + 1))
-seeds = np.zeros((2, args.instances[1] - args.instances[0] + 1), dtype=int)
+n_instances = args.instances[1] - args.instances[0] + 1
+results = np.zeros((2, n_instances))
+seeds = np.zeros((2, n_instances), dtype=int)
+
+try:
+    from tqdm import tqdm
+    has_tqdm = True
+    pbar = tqdm(unit=' instances', total=n_instances * (max(args.seeds[0], 1) + max(args.seeds[1], 1)))
+except ImportError:
+    has_tqdm = False
 
 for j in [0, 1]:
     k = 0
@@ -42,11 +50,16 @@ for j in [0, 1]:
                 if value > results[j, k]:
                     results[j, k] = value
                     seeds[j, k] = s
+                if has_tqdm:
+                    pbar.update(1)
             else:
                 print('{}: {} missing'.format(labels[j], filename))
                 quit()
         #print(i, results[j, k])
         k += 1
+
+if has_tqdm:
+    pbar.close()
 
 for i in [0, 1]:
     print('{}: Overall mean = {:.4f}'.format(labels[i], np.mean(results[i])))
