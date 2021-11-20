@@ -6,6 +6,7 @@ tb=60
 seed=$RANDOM
 lambda=0.8
 entropy=0.05
+priority=0
 args=""
 
 while [[ $# > 0 ]]
@@ -40,6 +41,11 @@ do
         -e|--entropy)
             shift
             entropy="$1"
+            shift
+        ;;
+        -p|--priority)
+            shift
+            priority="$1"
             shift
         ;;
         *)
@@ -77,6 +83,7 @@ log = $STDLOG
 output = $STDOUT
 error = $STDERR
 getenv = true
+priority = $priority
 request_gpus = 1
 queue
 EOF

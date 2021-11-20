@@ -3,6 +3,7 @@
 k=5
 n=50
 lambda=0.8
+priority=0
 
 while [[ $# > 0 ]]
 do
@@ -16,6 +17,11 @@ do
         -l|--lambda)
             shift
             lambda="$1"
+            shift
+        ;;
+        -p|--priority)
+            shift
+            priority="$1"
             shift
         ;;
     esac
@@ -46,6 +52,8 @@ arguments = $n $k $lambda
 log = $STDLOG
 output = $STDOUT
 error = $STDERR
+getenv = true
+priority = $priority
 queue
 EOF
 
