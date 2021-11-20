@@ -4,6 +4,7 @@ i=0
 n=50
 tb=60
 seed=$RANDOM
+priority=0
 args=""
 
 while [[ $# > 0 ]]
@@ -28,6 +29,11 @@ do
         -s|--seed)
             shift
             seed="$1"
+            shift
+        ;;
+        -p|--priority)
+            shift
+            priority="$1"
             shift
         ;;
         *)
@@ -63,6 +69,7 @@ log = $STDLOG
 output = $STDOUT
 error = $STDERR
 getenv = true
+priority = $priority
 queue
 EOF
 
