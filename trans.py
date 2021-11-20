@@ -90,7 +90,7 @@ if __name__ == '__main__':
             coals = all_coals(len(idxs))
             for coal in coals:
                 sc = sorted([idxs[idx] for idx in coal])
-                if sc not in candidates:
+                if sc not in candidates and tm.time() - start_time < args.generation:
                     rw = reward(coal)
                     candidates.append(sc)
                     values.append(rw)
