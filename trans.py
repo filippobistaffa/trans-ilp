@@ -58,7 +58,7 @@ if __name__ == '__main__':
 
     # initialize transformers
     models = {
-        50: Transformer(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'transformer', 'transformer_50_entropy{:.2f}.pth'.format(args.entropy)))
+        50: Transformer(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'transformer', 'transformer_50_entropy{:.2f}_lambda{:.1f}.pth'.format(args.entropy, args.l)))
     }
     keys = np.asarray(list(models.keys()))
 
