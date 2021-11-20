@@ -33,7 +33,7 @@ try:
     from tqdm import tqdm
     has_tqdm = True
     total = n_instances * (max(args.seeds[0], 1) + max(args.seeds[1], 1))
-    bar_format = '{{percentage:3.0f}}% |{{bar}}| {{n:{}d}}/{{total_fmt}} [{{elapsed}} < {{remaining}}]'.format(len(str(total)))
+    bar_format = '{{percentage:3.0f}}% |{{bar}}| {{n:{}d}}/{{total_fmt}} [{{elapsed}}<{{remaining}}]'.format(len(str(total)))
     pbar = tqdm(bar_format=bar_format, total=total)
 except ImportError:
     has_tqdm = False
