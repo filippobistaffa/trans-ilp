@@ -4,6 +4,7 @@ i=1
 n=50
 t="../data/task_english"
 lambda=0.8
+priority=0
 
 while [[ $# > 0 ]]
 do
@@ -27,6 +28,11 @@ do
         -l|--lambda)
             shift
             lambda="$1"
+            shift
+        ;;
+        -p|--priority)
+            shift
+            priority="$1"
             shift
         ;;
     esac
@@ -57,6 +63,8 @@ arguments = -i $POOL_DIR/$i.json -t $(readlink -f $t) -l $lambda
 log = $STDLOG
 output = $STDOUT
 error = $STDERR
+getenv = true
+priority = $priority
 queue
 EOF
 
