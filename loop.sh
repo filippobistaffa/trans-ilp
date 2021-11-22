@@ -24,6 +24,11 @@ do
             end="$1"
             shift
         ;;
+        --seeds)
+            shift
+            seeds="$1"
+            shift
+        ;;
         *)
             args="$args$key "
             shift
