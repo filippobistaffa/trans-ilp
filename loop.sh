@@ -26,6 +26,11 @@ do
             end="$1"
             shift
         ;;
+        --seeds)
+            shift
+            seeds="$1"
+            shift
+        ;;
         --trans)
             trans=true
             shift
