@@ -66,7 +66,7 @@ if has_tqdm:
 for i in [0, 1]:
     print('{}: Overall mean = {:.4f}'.format(labels[i], np.mean(results[i])))
 division = np.divide(results[1], results[0])
-print('Relative quality (min, mean ± std, max): {:.4f}, {:.4f} ± {:.4f}, {:.4f}'.format(np.min(division), np.mean(division), np.std(division), np.max(division)))
+print('Relative ratio (min, mean ± std, max): {:.4f}, {:.4f} ± {:.4f}, {:.4f}'.format(np.min(division), np.mean(division), np.std(division), np.max(division)))
 if args.best:
     for i in [0, 1]:
         if args.seeds[i] > 0:
