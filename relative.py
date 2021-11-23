@@ -19,8 +19,8 @@ def extract_float(string):
     return float(m[0])
 
 def n_to_last_line(filename, n=1):
-    ps = subprocess.run(['tail', '-n', str(n), filename], check=True, stdout=PIPE, stderr=PIPE)
-    out = subprocess.run(['head', '-n', '1'], input=ps.stdout, stdout=PIPE, stderr=PIPE).stdout.decode().rstrip()
+    ps = subprocess.run(['tail' if n > 0 else 'head', '-n', str(abs(n)), filename], check=True, stdout=PIPE, stderr=PIPE)
+    out = subprocess.run(['head' if n > 0 else 'tail', '-n', '1'], input=ps.stdout, stdout=PIPE, stderr=PIPE).stdout.decode().rstrip()
     return out
 
 labels = ['[B]', '[R]']
