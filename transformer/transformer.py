@@ -26,15 +26,12 @@ class Transformer(nn.Module):
         self.actor.to(self.device)
 
     @torch.no_grad()
-    def forward(self, agents, coalition, deterministic=True, return_eos=False):
+    def forward(self, agents, coalition):
         agents = agents2tensor(agents).to(self.device)
         coalition = coalition2tensor(coalition).to(self.device)
-        probs, _ = self.actor(agents, coalition, return_eos)
-        if deterministic:
-            action = torch.argmax(probs, dim=1)
-        else:
-            distribution = Categorical(probs)
-            action = distribution.sample()
+        probs, _ = self.actor(agents, coalition)
+        distribution = Categorical(probs)
+        action = distribution.sample()
         return action.item() - 1
 
 def agents2tensor(agents):
