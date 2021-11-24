@@ -55,6 +55,7 @@ arguments = $INSTANCE $CAND_PARAMS $FIXED_PARAMS --seed $SEED
 log = $STDLOG
 output = $STDOUT
 error = $STDERR
+getenv = true
 request_gpus = 1
 queue
 EOF
