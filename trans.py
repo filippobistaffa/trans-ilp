@@ -78,8 +78,9 @@ if __name__ == '__main__':
     # initialize transformers
     models = {
         50: Transformer(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'transformer', 'transformer_50_t720_entropy{:.2f}.pth'.format(args.entropy))),
-        100: Transformer(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'transformer', 'transformer_100_t720_entropy{:.2f}.pth'.format(args.entropy)))
     }
+    if len(reqs_orig) >= 100:
+        models[100] = Transformer(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'transformer', 'transformer_100_t720_entropy{:.2f}.pth'.format(args.entropy)))
     keys = np.asarray(list(models.keys()))
 
     # set PyTorch seed
