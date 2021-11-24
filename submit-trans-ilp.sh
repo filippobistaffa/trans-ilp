@@ -57,7 +57,7 @@ then
 HOME="/lhome/ext/iiia021/iiia0211"
 ROOT_DIR="$HOME/trans-ilp-rs"
 EXECUTABLE="$ROOT_DIR/trans-ilp.sh"
-LOG_DIR="$HOME/log/pmf/$n-trans-$tb-$entropy"
+LOG_DIR="$HOME/log/pmf/$n-trans-mixed-$tb-$entropy"
 DATA_DIR="$ROOT_DIR/data"
 POOL_DIR="$DATA_DIR/pmf_$n"
 
@@ -89,7 +89,7 @@ HOME="/home/filippo.bistaffa"
 BEEGFS="$HOME/beegfs"
 ROOT_DIR="$HOME/trans-ilp-rs"
 EXECUTABLE="$ROOT_DIR/trans-ilp.sh"
-LOG_DIR="$BEEGFS/pmf/$n-trans-$tb-$entropy"
+LOG_DIR="$BEEGFS/pmf/$n-trans-mixed-$tb-$entropy"
 DATA_DIR="$ROOT_DIR/data"
 POOL_DIR="$DATA_DIR/pmf_$n"
 
