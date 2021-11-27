@@ -3,6 +3,7 @@
 i=0
 n=50
 tb=60
+range="20-50"
 seed=$RANDOM
 entropy=0.05
 priority=0
@@ -57,7 +58,7 @@ then
 HOME="/lhome/ext/iiia021/iiia0211"
 ROOT_DIR="$HOME/trans-ilp-rs-mixed"
 EXECUTABLE="$ROOT_DIR/trans-ilp.sh"
-LOG_DIR="$HOME/log/pmf/$n-trans-mixed-$tb-$entropy"
+LOG_DIR="$HOME/log/pmf/$n-trans-mixed${range}-$tb-$entropy"
 DATA_DIR="$ROOT_DIR/data"
 POOL_DIR="$DATA_DIR/pmf_$n"
 
@@ -89,7 +90,7 @@ HOME="/home/filippo.bistaffa"
 BEEGFS="$HOME/beegfs"
 ROOT_DIR="$HOME/trans-ilp-rs-mixed"
 EXECUTABLE="$ROOT_DIR/trans-ilp.sh"
-LOG_DIR="$BEEGFS/pmf/$n-trans-mixed-$tb-$entropy"
+LOG_DIR="$BEEGFS/pmf/$n-trans-mixed${range}-$tb-$entropy"
 DATA_DIR="$ROOT_DIR/data"
 POOL_DIR="$DATA_DIR/pmf_$n"
 
