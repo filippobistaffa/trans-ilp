@@ -12,6 +12,7 @@ parser.add_argument('--instances', type=int, nargs=2, help='Instances range (inc
 parser.add_argument('--lines', type=int, nargs=2, help='Which line (starting from the bottom) contains the value', default=(1,1))
 parser.add_argument('--seeds', type=int, nargs=2, help='Number of seeds', default=(0,0))
 parser.add_argument('--best', help='Show best seeds', action='store_true')
+parser.add_argument('--noprogress', help='Hide progress bar', action='store_true')
 args = parser.parse_args()
 
 def extract_float(string):
@@ -28,15 +29,17 @@ paths = [args.base, args.relative]
 n_instances = args.instances[1] - args.instances[0] + 1
 results = np.zeros((2, n_instances))
 seeds = np.zeros((2, n_instances), dtype=int)
+has_tqdm = False
 
-try:
-    from tqdm import tqdm
-    has_tqdm = True
-    total = n_instances * (max(args.seeds[0], 1) + max(args.seeds[1], 1))
-    bar_format = '{{percentage:3.0f}}% |{{bar}}| {{n:{}d}}/{{total_fmt}} [{{elapsed}}<{{remaining}}]'.format(len(str(total)))
-    pbar = tqdm(bar_format=bar_format, total=total)
-except ImportError:
-    has_tqdm = False
+if not args.noprogress:
+    try:
+        from tqdm import tqdm
+        has_tqdm = True
+        total = n_instances * (max(args.seeds[0], 1) + max(args.seeds[1], 1))
+        bar_format = '{{percentage:3.0f}}% |{{bar}}| {{n:{}d}}/{{total_fmt}} [{{elapsed}}<{{remaining}}]'.format(len(str(total)))
+        pbar = tqdm(bar_format=bar_format, total=total)
+    except ImportError:
+        pass
 
 for j in [0, 1]:
     k = 0
