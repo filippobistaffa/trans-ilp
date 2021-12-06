@@ -6,11 +6,13 @@ import math
 class Embedder(nn.Module):
     def __init__(self, input_size, d_model, num_categories=[]):
         super().__init__()
+        self.n = num_categories
+
         self.continuous_size = input_size - len(num_categories)
         self.categorical_size = len(num_categories)
 
         self.categorical_embeddings = nn.ModuleList([
-            nn.Embedding(n, d_model) for n in num_categories])
+            nn.Embedding(n + 1, d_model, padding_idx=n) for n in num_categories])
 
         self.embedding = nn.Linear(d_model + self.continuous_size, d_model)
 
@@ -18,9 +20,9 @@ class Embedder(nn.Module):
         categorical = x[:, :, :self.categorical_size].long()
         continuous = x[:, :, self.categorical_size:].float()
 
-        categorical_embedded = torch.stack(
-            [emb(categorical[:, :, i]) for i, emb in enumerate(self.categorical_embeddings)],
-            dim=-1).sum(dim=-1)
+        categorical_embedded = torch.stack([
+            emb(categorical[:, :, i] % (self.n[i] + 1))
+            for i, emb in enumerate(self.categorical_embeddings)], dim=-1).sum(dim=-1)
 
         return self.embedding(torch.cat(
             [categorical_embedded, continuous],
@@ -73,9 +75,9 @@ class Encoder(nn.Module):
         self.norm2 = nn.ModuleList([
             nn.LayerNorm(d_model) for _ in range(num_layers)])
 
-    def forward(self, x):
+    def forward(self, x, mask=None):
         for attn, ffrd, norm1, norm2 in zip(self.attn, self.ffrd, self.norm1, self.norm2):
-            x = norm1(x + attn(x, x, x))
+            x = norm1(x + attn(x, x, x, mask))
             x = norm2(x + ffrd(x))
         return x
 
@@ -132,13 +134,15 @@ class Actor(nn.Module):
         mask[:, 0] = True
         return mask
 
-    def forward(self, agents, coalition):
-        context = self.embedder(agents)
-        context = self.encoder(context)
+    def forward(self, participants, collective):
+        embedded = self.embedder(participants)
+        padding_mask = torch.all((participants == -1), dim=-1)
+        context = self.encoder(embedded, mask=padding_mask)
         context = self._add_token(context)
 
-        hidden = self._get_hidden_state(context, coalition)
-        mask = self._get_mask(context, coalition)
+        hidden = self._get_hidden_state(context, collective)
+        mask = self._get_mask(context, collective)
+        mask[:, 1:] = torch.logical_or(mask[:, 1:], padding_mask)
 
         probs = self.decoder_pi(context, hidden, mask)
         v = self.decoder_v(context, hidden, mask, C=-1)
