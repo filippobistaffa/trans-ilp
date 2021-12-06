@@ -3,6 +3,7 @@
 i=1
 n=50
 tb=60
+range="20-50"
 seed=$RANDOM
 lambda=0.8
 entropy=0.05
@@ -63,7 +64,7 @@ then
 HOME="/lhome/ext/iiia021/iiia0211"
 ROOT_DIR="$HOME/trans-ilp-tf"
 EXECUTABLE="$ROOT_DIR/trans-ilp.sh"
-LOG_DIR="$HOME/log/tf/$n-$lambda-trans-$tb-$entropy"
+LOG_DIR="$HOME/log/tf/$n-$lambda-trans-mixed${range}-$tb-$entropy"
 DATA_DIR="$ROOT_DIR/data"
 POOL_DIR="$DATA_DIR/pools_$n"
 
@@ -95,7 +96,7 @@ HOME="/home/filippo.bistaffa"
 BEEGFS="$HOME/beegfs"
 ROOT_DIR="$HOME/trans-ilp-tf"
 EXECUTABLE="$ROOT_DIR/trans-ilp.sh"
-LOG_DIR="$BEEGFS/tf/$n-$lambda-trans-$tb-$entropy"
+LOG_DIR="$BEEGFS/tf/$n-$lambda-trans-mixed${range}-$tb-$entropy"
 DATA_DIR="$ROOT_DIR/data"
 POOL_DIR="$DATA_DIR/pools_$n"
 
