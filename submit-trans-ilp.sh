@@ -62,7 +62,7 @@ if hash condor_submit 2>/dev/null
 then
 
 HOME="/lhome/ext/iiia021/iiia0211"
-ROOT_DIR="$HOME/trans-ilp-tf"
+ROOT_DIR="$HOME/trans-ilp-tf-mixed"
 EXECUTABLE="$ROOT_DIR/trans-ilp.sh"
 LOG_DIR="$HOME/log/tf/$n-$lambda-trans-mixed${range}-$tb-$entropy"
 DATA_DIR="$ROOT_DIR/data"
@@ -94,7 +94,7 @@ then
 
 HOME="/home/filippo.bistaffa"
 BEEGFS="$HOME/beegfs"
-ROOT_DIR="$HOME/trans-ilp-tf"
+ROOT_DIR="$HOME/trans-ilp-tf-mixed"
 EXECUTABLE="$ROOT_DIR/trans-ilp.sh"
 LOG_DIR="$BEEGFS/tf/$n-$lambda-trans-mixed${range}-$tb-$entropy"
 DATA_DIR="$ROOT_DIR/data"
