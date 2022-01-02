@@ -3,6 +3,7 @@ from environment import State
 from mcts import MCTS
 import argparse as ap
 import numpy as np
+import random
 import math
 import os
 
@@ -31,6 +32,7 @@ if __name__ == '__main__':
     parser.add_argument('-g', type=float, default=default['g'], help='MCTS gamma parameter (default = {})'.format(default['g']))
     args = parser.parse_args()
 
+    random.seed(args.seed)
     data = OracleData(args.task)
     agents = read_agents(args.pool)
     state = State(agents, value)
