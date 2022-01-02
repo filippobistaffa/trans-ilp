@@ -89,6 +89,8 @@ sbatch 1> $tmpfile <<EOF
 #SBATCH --mem=1G
 #SBATCH --output=/dev/null
 #SBATCH --error=/dev/null
+spack load python@3.8.6%gcc@10.2.0
+spack load --first py-numpy
 echo python3 $ROOT_DIR/main.py $POOL_DIR/$i.csv --budget $tb $args 1> $STDOUT
 srun python3 $ROOT_DIR/main.py $POOL_DIR/$i.csv --budget $tb $args 1>> $STDOUT 2>> $STDERR
 RET=\$?
