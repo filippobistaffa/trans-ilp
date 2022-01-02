@@ -1,3 +1,0 @@
-# name      switch              type    values
-generation  "--generation "     i       (1, 59)
-threshold   "--threshold "      i       (1, 30)
