@@ -43,9 +43,11 @@ class MCTS():
 
     def _rollout(self, state):
         best_state, best_value = state, state.get_value()
-        while (action := self._get_action(state)) is not None:
+        while (self._get_action(state)) is not None:
+            action = self._get_action(state)
             state = state.step(action)
-            if (value := state.get_value()) > best_value:
+            if state.get_value() > best_value:
+                value = state.get_value()
                 best_state, best_value = state, value
         return best_state
 
@@ -62,6 +64,7 @@ class MCTS():
         best_action, best_value = None, float('-inf')
         for action in state.get_actions():
             next_state = state.step(action)
-            if (value := next_state.get_value()) > best_value:
+            if next_state.get_value() > best_value:
+                value = next_state.get_value()
                 best_action, best_value = action, value
         return best_action
