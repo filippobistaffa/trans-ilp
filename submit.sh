@@ -70,7 +70,7 @@ then
 
 BEEGFS="/mnt/beegfs/iiia/filippo.bistaffa"
 ROOT_DIR="$HOME/mcts-rs"
-LOG_DIR="$HOME/log/pmf/$n-mcts-$tb"
+LOG_DIR="$BEEGFS/pmf/$n-mcts-$tb"
 DATA_DIR="$ROOT_DIR/data"
 POOL_DIR="$DATA_DIR/pmf_$n"
 
