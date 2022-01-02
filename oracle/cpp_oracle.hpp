@@ -17,8 +17,6 @@ vector<struct Agent> cpp_sample_agents(size_t n, size_t seed);
 
 pair<vector<string>, struct Task_type> cpp_read_task_competences(const char *filename);
 
-float cpp_oracle(const unsigned int actual_team_size, const unsigned int *team, const double lambda, const struct Data &data);
-
-void cpp_remove_idx(vector<struct Agent> &vec, const unsigned int idx);
+float cpp_oracle(const unsigned int actual_team_size, const unsigned int *team, const struct Data data);
 
 #endif /* ORACLE_HPP_ */

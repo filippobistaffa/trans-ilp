@@ -40,6 +40,6 @@ for i in $( seq $start $end )
 do
     for s in $( seq 0 $(( $seeds - 1 )) )
     do
-        ./submit-trans-ilp.sh -n $n -i $i -s $s $args
+        ./submit.sh -n $n -i $i -s $s $args
     done
 done
