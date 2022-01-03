@@ -18,14 +18,11 @@ class State():
 
     def get_actions(self):
         indices, counts = np.unique(self.solution, return_counts=True)
-        return {((i, j), c_i + c_j) for j, c_j in zip(indices, counts) for i, c_i in zip(indices, counts) if (j > i and (c_i == 1 or c_j == 1))}
+        return {(i, j) for j in indices for i in indices if j > i}
 
     def get_coalitions(self):
         indices = np.unique(self.solution)
         return [((self.solution == idx).nonzero()[0].tolist(), self.values[idx]) for idx in indices]
-
-    def get_coalition(self, idx):
-        return (self.solution == idx).nonzero()[0].tolist()
 
     def step(self, action):
         state = State(self.agents, self.f, self.solution.copy(), self.values.copy())
