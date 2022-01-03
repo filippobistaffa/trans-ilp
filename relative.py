@@ -16,7 +16,7 @@ parser.add_argument('--noprogress', help='Hide progress bar', action='store_true
 args = parser.parse_args()
 
 def extract_float(string):
-    m = re.findall(r"[-+]?\d*\.?\d+|[-+]?\d+", string)
+    m = re.findall(r"([+-]?(?:0|[1-9]\d*)(?:\.\d*)?(?:[eE][+\-]?\d+)?)", string)
     return float(m[0])
 
 def n_to_last_line(filename, n=1):
