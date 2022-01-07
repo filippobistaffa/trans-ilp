@@ -26,7 +26,7 @@ function wait_empty_queue {
 
 n=50
 start=0
-end=199
+end=49
 step=200
 
 while [[ $# > 0 ]]
