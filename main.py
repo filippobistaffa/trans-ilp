@@ -1,3 +1,6 @@
+from environment_improved import State as State_improved
+from mcts_improved import MCTS as MCTS_improved
+
 from environment_greedy import State as State_greedy
 from mcts_greedy import MCTS as MCTS_greedy
 
@@ -46,6 +49,7 @@ if __name__ == '__main__':
     parser.add_argument('-k', type=float, default=default['k'], help='MCTS k parameter (default = {})'.format(default['k']))
     parser.add_argument('-g', type=float, default=default['g'], help='MCTS gamma parameter (default = {})'.format(default['g']))
     parser.add_argument('--greedy', help='Use greedy version (IJCAI)', action='store_true')
+    parser.add_argument('--improved', help='Use improved version', action='store_true')
     args = parser.parse_args()
 
     random.seed(args.seed)
@@ -55,9 +59,12 @@ if __name__ == '__main__':
     if args.greedy:
         state = State_greedy(agents, value)
         mcts = MCTS_greedy(state=state, c=args.c)
+    elif args.improved:
+        state = State_improved(agents, value)
+        mcts = MCTS_improved(state=state, c=args.c, k=args.k, gamma=args.g)
     else:
         state = State(agents, value)
-        mcts = MCTS(state=state, c=args.c, k=args.k, gamma=args.g)
+        mcts = MCTS(state=state, c=args.c)
     iterations = mcts.search(args.budget)
 
     solution = [str((c, v)) for c, v in mcts.root.best_state.get_coalitions()]
