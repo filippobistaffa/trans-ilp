@@ -1,6 +1,10 @@
-from oracle.oracle import *
+from environment_improved import State as State_improved
+from mcts_improved import MCTS as MCTS_improved
+
 from environment import State
 from mcts import MCTS
+
+from oracle.oracle import *
 import argparse as ap
 import numpy as np
 import random
@@ -30,13 +34,19 @@ if __name__ == '__main__':
     parser.add_argument('-c', type=float, default=default['c'], help='MCTS c parameter (default = {})'.format(default['c']))
     parser.add_argument('-k', type=float, default=default['k'], help='MCTS k parameter (default = {})'.format(default['k']))
     parser.add_argument('-g', type=float, default=default['g'], help='MCTS gamma parameter (default = {})'.format(default['g']))
+    parser.add_argument('--improved', help='Use improved version', action='store_true')
     args = parser.parse_args()
 
     random.seed(args.seed)
     data = OracleData(args.task)
     agents = read_agents(args.pool)
-    state = State(agents, value)
-    mcts = MCTS(state=state, c=args.c, k=args.k, gamma=args.g)
+
+    if args.improved:
+        state = State_improved(agents, value)
+        mcts = MCTS_improved(state=state, c=args.c, k=args.k, gamma=args.g)
+    else:
+        state = State(agents, value)
+        mcts = MCTS(state=state, c=args.c)
     iterations = mcts.search(args.budget)
     solution = [str((c, math.exp(v))) for c, v in mcts.root.best_state.get_coalitions()]
     v = mcts.root.best_state.get_value()
