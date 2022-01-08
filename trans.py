@@ -19,11 +19,6 @@ default = {
 def reward(idxs):
     return oracle(np.array(idxs, dtype=np.uint32), args.l, data)
 
-def select_key(keys, n):
-    idx = (np.abs(keys - n)).argmin()
-    #print('Closest to {} is {}'.format(n, keys[idx]))
-    return keys[idx]
-
 def trans_coal(pool, model):
     idxs = []
     while len(idxs) < args.size:
@@ -55,11 +50,8 @@ if __name__ == '__main__':
     candidates = []
     values = []
 
-    # initialize transformers
-    models = {
-        50: Transformer(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'transformer', 'transformer_20-50_entropy{:.2f}_lambda{:.1f}.pth'.format(args.entropy, args.l)))
-    }
-    keys = np.asarray(list(models.keys()))
+    # initialize transformer
+    model = Transformer(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'transformer', 'transformer_20-50_entropy{:.2f}_lambda{:.1f}.pth'.format(args.entropy, args.l)))
 
     # set PyTorch seed
     torch.manual_seed(args.seed)
@@ -70,7 +62,7 @@ if __name__ == '__main__':
         restart = False
 
         while len(idxs) > args.threshold and tm.time() - start_time < args.generation:
-            coal, rw = trans_coal(data.get_pool(), models[select_key(keys, len(idxs))])
+            coal, rw = trans_coal(data.get_pool(), model)
             if coal == None:
                 restart = True
                 break
