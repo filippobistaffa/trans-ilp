@@ -3,7 +3,7 @@
 i=1
 n=50
 tb=60
-range="20-50"
+range="20-100"
 seed=$RANDOM
 lambda=0.8
 entropy=0.05
