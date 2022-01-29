@@ -92,7 +92,7 @@ sbatch 1> $tmpfile <<EOF
 #!/bin/bash
 #SBATCH --job-name=pg2-$n-$i-$tb
 #SBATCH --partition=quick
-#SBATCH --time=5:00
+#SBATCH --time=10:00
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=1G
