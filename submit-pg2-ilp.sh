@@ -90,7 +90,7 @@ STDERR=$LOG_DIR/$i-$seed.stderr
 tmpfile=$(mktemp)
 sbatch 1> $tmpfile <<EOF
 #!/bin/bash
-#SBATCH --job-name=pg2-$n-$i-$tb
+#SBATCH --job-name=pg2-$n-$i-$seed-$tb
 #SBATCH --partition=quick
 #SBATCH --time=10:00
 #SBATCH --ntasks=1
