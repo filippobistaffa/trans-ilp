@@ -14,7 +14,7 @@ while [[ $# > 0 ]]
 do
     key="$1"
     case $key in
-        --budget)
+        -b|--budget)
             shift
             budget="$1"
             shift
