@@ -27,8 +27,7 @@ def n_to_last_line(filename, n=1):
 labels = ['[B]', '[R]']
 paths = [args.base, args.relative]
 n_instances = args.instances[1] - args.instances[0] + 1
-results = np.zeros((2, n_instances))
-seeds = np.zeros((2, n_instances), dtype=int)
+results = [np.zeros((n_instances, max(args.seeds[j], 1))) for j in [0, 1]]
 has_tqdm = False
 
 if not args.noprogress:
@@ -52,19 +51,25 @@ for j in [0, 1]:
             if os.path.isfile(filename):
                 value = extract_float(n_to_last_line(filename, args.lines[j]))
                 #print(value)
-                if value > results[j, k]:
-                    results[j, k] = value
-                    seeds[j, k] = s
+                results[j][k, s] = value
                 if has_tqdm:
                     pbar.update(1)
             else:
                 print('{}: {} missing'.format(labels[j], filename))
                 quit()
-        #print(i, results[j, k])
         k += 1
 
 if has_tqdm:
     pbar.close()
+
+#print(results[0])
+#print(results[1])
+
+seeds = [np.argmax(results[j], axis=1) for j in [0, 1]]
+results = [np.max(results[j], axis=1) for j in [0, 1]]
+
+#print(results[0])
+#print(results[1])
 
 for i in [0, 1]:
     print('{}: Overall mean = {:.4f}'.format(labels[i], np.mean(results[i])))
