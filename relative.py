@@ -13,6 +13,7 @@ parser.add_argument('--lines', type=int, nargs=2, help='Which line (starting fro
 parser.add_argument('--seeds', type=int, nargs=2, help='Number of seeds', default=(0,0))
 parser.add_argument('--best', help='Show best seeds', action='store_true')
 parser.add_argument('--noprogress', help='Hide progress bar', action='store_true')
+parser.add_argument('--mean', help='Mean across seeds', action='store_true')
 args = parser.parse_args()
 
 def extract_float(string):
@@ -66,7 +67,10 @@ if has_tqdm:
 #print(results[1])
 
 seeds = [np.argmax(results[j], axis=1) for j in [0, 1]]
-results = [np.max(results[j], axis=1) for j in [0, 1]]
+if args.mean:
+    results = [np.mean(results[j], axis=1) for j in [0, 1]]
+else:
+    results = [np.max(results[j], axis=1) for j in [0, 1]]
 
 #print(results[0])
 #print(results[1])
