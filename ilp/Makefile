@@ -14,7 +14,7 @@ PROF=-g -DWITHGPERFTOOLS ${OPTIM}
 CPLEXROOT=/opt/ibm/ILOG/CPLEX_Studio221
 HOSTNAME=$(shell hostname)
 ifeq ($(HOSTNAME), mlui02.ific.uv.es)
-	CPLEXROOT=/lhome/ext/iiia021/iiia0211/cplex210
+	CPLEXROOT=/lhome/ext/iiia021/iiia0211/cplex221
 endif
 ifeq ($(HOSTNAME), vega.iiia.csic.es)
 	CPLEXROOT=/home/filippo.bistaffa/cplex221
