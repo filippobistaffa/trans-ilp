@@ -8,7 +8,7 @@ function wait_empty_queue {
             remaining=$( condor_q | tail -n 3 | head -n 1 | cut -f 4 -d\  )
         elif hash sbatch 2>/dev/null
         then
-            remaining=$( squeue -h | wc -l )
+            remaining=$( squeue --me -h | wc -l )
         else
             echo "Unknown cluster"
             exit 1
