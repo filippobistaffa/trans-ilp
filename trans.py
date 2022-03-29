@@ -11,7 +11,7 @@ import os
 default = {
     'threshold': 17,
     'generation': 55,
-    'entropy': 0.05
+    'tau': 8
 }
 
 def reward(idxs):
@@ -57,9 +57,9 @@ if __name__ == '__main__':
     parser.add_argument('--time', type=str, default=os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data', 'gmaps_time.csv'), help='Time matrix CSV file')
     parser.add_argument('--threshold', type=int, default=default['threshold'], help='Threshold size for complete generation (default = {})'.format(default['threshold']))
     parser.add_argument('--generation', type=int, default=default['generation'], help='Generation time budget in seconds (default = {})'.format(default['generation']))
+    parser.add_argument('--tau', type=int, default=default['tau'], help='Tau (default = {})'.format(default['tau']))
     parser.add_argument('--max_size', type=int, default=5, help='Maximum coalition size (default = 5)')
     parser.add_argument('--seed', type=int, default=0, help='Seed (default = 0)')
-    parser.add_argument('--entropy', type=float, default=default['entropy'], help='Transformer\'s entropy value (default = {})'.format(default['entropy']))
     args = parser.parse_args()
 
     # read input data
@@ -71,7 +71,7 @@ if __name__ == '__main__':
     values = []
 
     # initialize transformer
-    model = Transformer(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'transformer', 'transformer_20-50_t720_entropy{:.2f}.pth'.format(args.entropy)))
+    model = Transformer(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'transformer', 'transformer_20-50_t720.pth'), args.tau)
 
     # set PyTorch seed
     torch.manual_seed(args.seed)

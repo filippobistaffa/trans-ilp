@@ -5,11 +5,9 @@ from transformer.parameters import params
 from torch.distributions import Categorical
 
 NUM_ZONES = params['num_zones']
-NUM_SIMULATIONS = params['num_simulations']
-TAU = params['tau']
 
 class Transformer(nn.Module):
-    def __init__(self, pth):
+    def __init__(self, pth, tau):
         super(Transformer, self).__init__()
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.actor = Actor(
@@ -17,8 +15,9 @@ class Transformer(nn.Module):
             params['d_model'],
             params['nhead'],
             params['dim_feedforward'],
-            params['num_layers'],
-            params['num_categories'])
+            params['num_layers']
+        )
+        self.tau = tau
         if torch.cuda.is_available():
             self.actor.load_state_dict(torch.load(pth))
         else:
@@ -29,7 +28,7 @@ class Transformer(nn.Module):
     def forward(self, agents, coalition):
         agents = agents2tensor(agents).to(self.device)
         coalition = coalition2tensor(coalition).to(self.device)
-        probs, _ = self.actor(agents, coalition)
+        probs, _ = self.actor(agents, coalition, self.tau)
         distribution = Categorical(probs)
         action = distribution.sample()
         return action.item() - 1

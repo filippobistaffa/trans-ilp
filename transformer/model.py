@@ -4,43 +4,46 @@ import torch.nn.functional as F
 import math
 
 class Embedder(nn.Module):
-    def __init__(self, input_size, d_model, num_categories=[]):
+    def __init__(self, input_size, d_model):
         super().__init__()
-        self.n = num_categories
+        self.is_continuous = ~torch.tensor([bool(s) for s in input_size], dtype=torch.bool)
 
-        self.continuous_size = input_size - len(num_categories)
-        self.categorical_size = len(num_categories)
+        size = input_size.count(0)
+        self.continuous_embedding = nn.Linear(size, d_model) if size > 0 else None
+        self.categorical_embedding = nn.ModuleList([
+            nn.Embedding(1 + s, d_model, padding_idx=0)
+            for s in input_size if s != 0])
 
-        self.categorical_embeddings = nn.ModuleList([
-            nn.Embedding(n + 1, d_model, padding_idx=n) for n in num_categories])
-
-        self.embedding = nn.Linear(d_model + self.continuous_size, d_model)
+        d_continuous = d_model if size > 0 else 0
+        self.output = nn.Linear(d_continuous + d_model, d_model)
 
     def forward(self, x):
-        categorical = x[:, :, :self.categorical_size]
-        continuous = x[:, :, self.categorical_size:]
+        continuous = x[..., self.is_continuous]
+        categorical = x[..., ~self.is_continuous]
 
         categorical_embedded = torch.stack([
-            emb(categorical[:, :, i] % (self.n[i] + 1))
-            for i, emb in enumerate(self.categorical_embeddings)], dim=-1).sum(dim=-1)
+            emb(1 + categorical[..., i])
+            for i, emb in enumerate(self.categorical_embedding)], dim=-1).sum(dim=-1)
 
-        return self.embedding(torch.cat(
-            [categorical_embedded, continuous],
-            dim=2))
+        if self.continuous_embedding is not None:
+            continuous_embedded = self.continuous_embedding(continuous)
+            return self.output(torch.cat([continuous_embedded, categorical_embedded], dim=-1))
+
+        return self.output(categorical_embedded)
 
 class MultiHeadAttention(nn.Module):
-    def __init__(self, d_model, nhead, d_q=None, d_k=None, d_v=None):
+    def __init__(self, d_model, nhead):
         super().__init__()
         self.d_model = d_model
         self.nhead = nhead
         self.d_head = d_model // nhead
 
-        self.w_q = nn.Linear(d_q if d_q else d_model, d_model, bias=False)
-        self.w_k = nn.Linear(d_k if d_k else d_model, d_model, bias=False)
-        self.w_v = nn.Linear(d_v if d_v else d_model, d_model, bias=False)
+        self.w_q = nn.Linear(d_model, d_model, bias=False)
+        self.w_k = nn.Linear(d_model, d_model, bias=False)
+        self.w_v = nn.Linear(d_model, d_model, bias=False)
         self.w_o = nn.Linear(d_model, d_model, bias=False)
 
-    def forward(self, q, k, v, mask=None):
+    def forward(self, q, k, v, mask=None, output_attention=False):
         batch_size = q.size(0)
 
         q = self.w_q(q).view(batch_size, self.nhead, -1, self.d_head)
@@ -48,12 +51,15 @@ class MultiHeadAttention(nn.Module):
         v = self.w_v(v).view(batch_size, self.nhead, -1, self.d_head)
 
         u = torch.matmul(q, k.transpose(-2, -1)) / math.sqrt(self.d_head)
+
+        if output_attention:
+            return u.mean(dim=1)
+
         if mask is not None:
             u = u.masked_fill(mask.view(batch_size, 1, 1, -1), float("-inf"))
 
         attn = F.softmax(u, dim=-1)
         attn_applied = torch.matmul(attn, v)
-
         return self.w_o(attn_applied.view(batch_size, -1, self.d_model))
 
 class Encoder(nn.Module):
@@ -82,59 +88,58 @@ class Encoder(nn.Module):
         return x
 
 class Decoder(nn.Module):
-    def __init__(self, d_model, nhead):
+    def __init__(self, d_model, nhead, num_layers=1):
         super().__init__()
-        self.attn = MultiHeadAttention(d_model, nhead, d_q = 2 * d_model)
-        self.w_k = nn.Linear(d_model, d_model, bias=False)
+        self.attn = nn.ModuleList([
+            MultiHeadAttention(d_model, nhead) for _ in range(num_layers)])
 
-    def forward(self, x, h, mask, C=10):
-        batch_size, seq_len, d_model = x.size()
+        self.ffrd = nn.ModuleList([
+            nn.Sequential(
+                nn.Linear(d_model, 512),
+                nn.ReLU(),
+                nn.Linear(512, d_model))
+            for _ in range(num_layers)])
 
-        q = self.attn(h, x, x, mask)
-        k = self.w_k(x)
+        self.norm1 = nn.ModuleList([
+            nn.LayerNorm(d_model) for _ in range(num_layers)])
 
-        u = torch.matmul(q, k.transpose(-2, -1)) / math.sqrt(d_model)
+        self.norm2 = nn.ModuleList([
+            nn.LayerNorm(d_model) for _ in range(num_layers)])
 
-        if C == -1:
-            return u
+        self.output = MultiHeadAttention(d_model, 1)
 
-        u = C * torch.tanh(u)
-        u = u.masked_fill(mask.view(batch_size, 1, seq_len), float('-inf'))
+    def forward(self, x, h, mask=None):
+        for attn, ffrd, norm1, norm2 in zip(self.attn, self.ffrd, self.norm1, self.norm2):
+            h = norm1(h + attn(h, x, x, mask))
+            h = norm2(h + ffrd(h))
 
-        return F.softmax(u.view(batch_size, seq_len), dim=-1)
+        return self.output(h, x, x, output_attention=True).squeeze(1)
 
 class Actor(nn.Module):
-    def __init__(self, input_size, d_model, nhead, dim_feedforward, num_layers, num_categories=[]):
+    def __init__(self, input_size, d_model, nhead, dim_feedforward, num_layers):
         super().__init__()
-        self.embedder = Embedder(input_size, d_model, num_categories)
+        self.embedder = Embedder(input_size, d_model)
+
         self.encoder = Encoder(d_model, nhead, dim_feedforward, num_layers)
+
         self.decoder_pi = Decoder(d_model, nhead)
         self.decoder_v = Decoder(d_model, nhead)
 
-        self.v = nn.Parameter(torch.empty(1, 1, d_model).uniform_(
-            -1 / math.sqrt(d_model), 1 / math.sqrt(d_model)))
-
     def _add_token(self, context):
-        batch_size = context.size(0)
-        return torch.cat([
-            self.v.repeat(batch_size, 1, 1),
-            context
-        ], dim=1)
+        return F.pad(context, pad=(0, 0, 1, 0), value=0)
 
     def _get_hidden_state(self, context, coalition):
-        return torch.cat([
-            context.mean(dim=1, keepdim=True),
-            context.gather(1, 1 + coalition.unsqueeze(-1).expand([-1, -1, context.size(2)])
-                ).mean(dim=1, keepdim=True)], dim=2)
+        return context.gather(1, 1 + coalition.unsqueeze(-1).expand([-1, -1, context.size(2)])
+            ).mean(dim=1, keepdim=True)
 
     def _get_mask(self, context, coalition):
         batch_size, seq_len, _ = context.size()
-        mask = torch.zeros(batch_size, seq_len, dtype=torch.bool, device=self.v.device)
+        mask = torch.zeros(batch_size, seq_len, dtype=torch.bool, device=context.device)
         mask.scatter_(1, 1 + coalition, True)
         mask[:, 0] = False
         return mask
 
-    def forward(self, participants, collective):
+    def forward(self, participants, collective, tau=8):
         embedded = self.embedder(participants)
 
         padding_mask = torch.all((participants == -1), dim=-1)
@@ -146,8 +151,9 @@ class Actor(nn.Module):
         mask = self._get_mask(context, collective)
         mask[:, 1:] = torch.logical_or(mask[:, 1:], padding_mask)
 
-        probs = self.decoder_pi(context, hidden, mask)
-        v = self.decoder_v(context, hidden, mask, C=-1)
+        probs = tau * torch.tanh(self.decoder_pi(context, hidden, mask))
+        probs = F.softmax(probs.masked_fill(mask, float("-inf")), dim=-1)
+        v = self.decoder_v(context, hidden, mask).masked_fill(mask, 0)
 
         value = torch.matmul(v, probs.unsqueeze(-1)).squeeze()
 
