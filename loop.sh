@@ -13,12 +13,12 @@ function wait_empty_queue {
             echo "Unknown cluster"
             exit 1
         fi
-        #echo "$remaining jobs remaining" 
+        echo "$remaining jobs remaining"
         if [[ $remaining == 0 ]]
         then
             return
         else
-            #echo "Waiting queue to be empty..." 
+            echo "Waiting queue to be empty..."
             sleep 60
         fi
     done
@@ -90,7 +90,7 @@ do
         fi
         if [ "$trans" = true ]
         then
-            #echo "Submitted Trans ($i $s)"
+            echo "Submitted Trans ($i $s)"
             ./submit-trans-ilp.sh -n $n -i $i -s $s $args
             j=$((j+1))
         fi
@@ -101,7 +101,7 @@ do
         fi
         if [ "$pg2" = true ]
         then
-            #echo "Submitted PG2 ($i $s)"
+            echo "Submitted PG2 ($i $s)"
             ./submit-pg2-ilp.sh -n $n -i $i -s $s $args
             j=$((j+1))
         fi
