@@ -3,9 +3,8 @@
 i=0
 n=50
 tb=60
-range="20-50"
 seed=$RANDOM
-entropy=0.05
+tau=8
 priority=0
 args=""
 
@@ -33,9 +32,9 @@ do
             seed="$1"
             shift
         ;;
-        -e|--entropy)
+        -t|--tau)
             shift
-            entropy="$1"
+            tau="$1"
             shift
         ;;
         -p|--priority)
@@ -50,15 +49,13 @@ do
     esac
 done
 
-entropy=$( python3 -c "print('{:.2f}'.format($entropy))" )
-
 if hash condor_submit 2>/dev/null
 then
 
 HOME="/lhome/ext/iiia021/iiia0211"
-ROOT_DIR="$HOME/trans-ilp-rs-mixed"
+ROOT_DIR="$HOME/trans-ilp-rs"
 EXECUTABLE="$ROOT_DIR/trans-ilp.sh"
-LOG_DIR="$HOME/log/pmf/$n-trans-mixed${range}-$tb-$entropy"
+LOG_DIR="$HOME/log/pmf/$n-trans-actor-$tb-$tau"
 DATA_DIR="$ROOT_DIR/data"
 POOL_DIR="$DATA_DIR/pmf_$n"
 
@@ -73,7 +70,7 @@ universe = vanilla
 stream_output = True
 stream_error = True
 executable = $EXECUTABLE
-arguments = $POOL_DIR/$i.csv --seed $seed --budget $tb --entropy $entropy $args
+arguments = $POOL_DIR/$i.csv --seed $seed --budget $tb --tau $tau $args
 log = $STDLOG
 output = $STDOUT
 error = $STDERR
@@ -88,9 +85,9 @@ then
 
 HOME="/home/filippo.bistaffa"
 BEEGFS="$HOME/beegfs"
-ROOT_DIR="$HOME/trans-ilp-rs-mixed"
+ROOT_DIR="$HOME/trans-ilp-rs"
 EXECUTABLE="$ROOT_DIR/trans-ilp.sh"
-LOG_DIR="$BEEGFS/pmf/$n-trans-mixed${range}-$tb-$entropy"
+LOG_DIR="$BEEGFS/pmf/$n-trans-actor-$tb-$tau"
 DATA_DIR="$ROOT_DIR/data"
 POOL_DIR="$DATA_DIR/pmf_$n"
 
@@ -109,10 +106,9 @@ sbatch 1> $tmpfile <<EOF
 #SBATCH --mem=1G
 #SBATCH --output=/dev/null
 #SBATCH --error=/dev/null
-spack load --first python@3.8.6%gcc@10.2.0
 spack load --first py-torch
-echo $EXECUTABLE $POOL_DIR/$i.csv --seed $seed --budget $tb --entropy $entropy $args 1> $STDOUT
-srun $EXECUTABLE $POOL_DIR/$i.csv --seed $seed --budget $tb --entropy $entropy $args 1>> $STDOUT 2>> $STDERR
+echo $EXECUTABLE $POOL_DIR/$i.csv --seed $seed --budget $tb --tau $tau $args 1> $STDOUT
+srun $EXECUTABLE $POOL_DIR/$i.csv --seed $seed --budget $tb --tau $tau $args 1>> $STDOUT 2>> $STDERR
 RET=\$?
 exit \$RET
 EOF
