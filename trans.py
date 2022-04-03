@@ -71,7 +71,7 @@ if __name__ == '__main__':
     values = []
 
     # initialize transformer
-    model = Transformer(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'transformer', 'transformer_20-50_t720.pth'), args.tau)
+    model = Transformer(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'transformer', 'transformer_20-50_t720_entropy05.pth'), args.tau)
 
     # set PyTorch seed
     torch.manual_seed(args.seed)
