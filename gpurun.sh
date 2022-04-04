@@ -2,7 +2,7 @@
 
 n=50
 start=0
-end=19
+end=199
 seeds=50
 tb=60
 tau=8
