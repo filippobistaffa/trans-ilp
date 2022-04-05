@@ -46,6 +46,11 @@ do
             start="$1"
             shift
         ;;
+        --step)
+            shift
+            step="$1"
+            shift
+        ;;
         --end)
             shift
             end="$1"
