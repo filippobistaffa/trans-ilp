@@ -7,6 +7,7 @@ range="20-50"
 seed=$RANDOM
 entropy=0.05
 priority=0
+gpu=false
 args=""
 
 while [[ $# > 0 ]]
@@ -42,6 +43,10 @@ do
             shift
             priority="$1"
             shift
+        ;;
+        --gpu)
+            shift
+            gpu=true
         ;;
         *)
             args="$args$key "
@@ -94,6 +99,18 @@ LOG_DIR="$BEEGFS/pmf/$n-trans-mixed${range}-$tb-$entropy"
 DATA_DIR="$ROOT_DIR/data"
 POOL_DIR="$DATA_DIR/pmf_$n"
 
+if [ "$gpu" = true ]
+then
+    partition="gpu"
+    spackcuda="spack load --dependencies cuda@11"
+    gres="#SBATCH --gres=gpu:1"
+    LOG_DIR="${LOG_DIR}-gpu"
+else
+    partition="quick"
+    spackcuda=""
+    gres=""
+fi
+
 mkdir -p $LOG_DIR
 STDOUT=$LOG_DIR/$i-$seed.stdout
 STDERR=$LOG_DIR/$i-$seed.stderr
@@ -101,16 +118,17 @@ STDERR=$LOG_DIR/$i-$seed.stderr
 tmpfile=$(mktemp)
 sbatch 1> $tmpfile <<EOF
 #!/bin/bash
-#SBATCH --job-name=trans-$n-$i-$tb
-#SBATCH --partition=quick
+#SBATCH --job-name=trans-$n-$i-$seed-$tb
+#SBATCH --partition=$partition
+$gres
 #SBATCH --time=5:00
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=1G
 #SBATCH --output=/dev/null
 #SBATCH --error=/dev/null
-spack load --first python@3.8.6%gcc@10.2.0
 spack load --first py-torch
+$spackcuda
 echo $EXECUTABLE $POOL_DIR/$i.csv --seed $seed --budget $tb --entropy $entropy $args 1> $STDOUT
 srun $EXECUTABLE $POOL_DIR/$i.csv --seed $seed --budget $tb --entropy $entropy $args 1>> $STDOUT 2>> $STDERR
 RET=\$?
