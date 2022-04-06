@@ -50,7 +50,7 @@ sbatch 1> $tmpfile <<EOF
 #!/bin/bash
 #SBATCH --job-name=irace-trans-$PPID-$CANDIDATE-${INSTANCEID}
 #SBATCH --partition=quick
-#SBATCH --time=1:30
+#SBATCH --time=5:30
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=1G
