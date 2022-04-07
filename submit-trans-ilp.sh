@@ -121,7 +121,7 @@ sbatch 1> $tmpfile <<EOF
 #SBATCH --job-name=trans-$n-$i-$seed-$tb
 #SBATCH --partition=$partition
 $gres
-#SBATCH --time=5:00
+#SBATCH --time=5:30
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=1G
