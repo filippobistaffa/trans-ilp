@@ -102,7 +102,7 @@ POOL_DIR="$DATA_DIR/pmf_$n"
 if [ "$gpu" = true ]
 then
     partition="gpu"
-    spackcuda="spack load --dependencies cuda@11"
+    spackcuda="spack load --first cuda@11"
     gres="#SBATCH --gres=gpu:1"
     LOG_DIR="${LOG_DIR}-gpu"
 else
