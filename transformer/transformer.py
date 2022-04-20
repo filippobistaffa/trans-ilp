@@ -19,10 +19,7 @@ class Transformer(nn.Module):
             params['dim_feedforward'],
             params['num_layers'],
             params['num_categories'])
-        if torch.cuda.is_available():
-            self.actor.load_state_dict(torch.load(pth))
-        else:
-            self.actor.load_state_dict(torch.load(pth, map_location=torch.device('cpu')))
+        elf.actor.load_state_dict(torch.load(pth, map_location=self.device))
         self.actor.to(self.device)
 
     @torch.no_grad()
