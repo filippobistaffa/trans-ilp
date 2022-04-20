@@ -19,7 +19,7 @@ class Transformer(nn.Module):
             params['dim_feedforward'],
             params['num_layers'],
             params['num_categories'])
-        elf.actor.load_state_dict(torch.load(pth, map_location=self.device))
+        self.actor.load_state_dict(torch.load(pth, map_location=self.device))
         self.actor.to(self.device)
 
     @torch.no_grad()
