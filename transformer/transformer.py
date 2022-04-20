@@ -18,10 +18,7 @@ class Transformer(nn.Module):
             params['num_layers']
         )
         self.tau = tau
-        if torch.cuda.is_available():
-            self.actor.load_state_dict(torch.load(pth))
-        else:
-            self.actor.load_state_dict(torch.load(pth, map_location=torch.device('cpu')))
+        self.actor.load_state_dict(torch.load(pth, map_location=self.device))
         self.actor.to(self.device)
 
     @torch.no_grad()
