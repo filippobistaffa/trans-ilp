@@ -102,7 +102,7 @@ POOL_DIR="$DATA_DIR/pmf_$n"
 if [ "$gpu" = true ]
 then
     partition="gpu"
-    spackcuda="spack load --first cuda@11"
+    spackcuda="spack load cuda@11.4.1"
     gres="#SBATCH --gres=gpu:1"
     LOG_DIR="${LOG_DIR}-gpu"
 else
@@ -127,7 +127,8 @@ $gres
 #SBATCH --mem=1G
 #SBATCH --output=/dev/null
 #SBATCH --error=/dev/null
-spack load --first py-torch
+spack load --first gcc@10.2.0
+spack load --first py-numpy@1.21.2
 $spackcuda
 echo $EXECUTABLE $POOL_DIR/$i.csv --seed $seed --budget $tb --entropy $entropy $args 1> $STDOUT
 srun $EXECUTABLE $POOL_DIR/$i.csv --seed $seed --budget $tb --entropy $entropy $args 1>> $STDOUT 2>> $STDERR
