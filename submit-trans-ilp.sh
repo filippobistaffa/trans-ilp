@@ -1,4 +1,4 @@
-    #!/bin/bash
+#!/bin/bash
 
 i=1
 n=50
@@ -60,8 +60,6 @@ do
     esac
 done
 
-entropy=$( python3 -c "print('{:.2f}'.format($entropy))" )
-
 if hash condor_submit 2>/dev/null
 then
 
@@ -71,18 +69,6 @@ EXECUTABLE="$ROOT_DIR/trans-ilp.sh"
 LOG_DIR="$HOME/log/tf/$n-$lambda-trans-actor-$tb-$tau"
 DATA_DIR="$ROOT_DIR/data"
 POOL_DIR="$DATA_DIR/pools_$n"
-
-if [ "$gpu" = true ]
-then
-    partition="gpu"
-    spackcuda="spack load cuda@11.4.1"
-    gres="#SBATCH --gres=gpu:1"
-    LOG_DIR="${LOG_DIR}-gpu"
-else
-    partition="quick"
-    spackcuda=""
-    gres=""
-fi
 
 mkdir -p $LOG_DIR
 STDOUT=$LOG_DIR/$i-$seed.stdout
@@ -115,6 +101,18 @@ EXECUTABLE="$ROOT_DIR/trans-ilp.sh"
 LOG_DIR="$BEEGFS/tf/$n-$lambda-trans-actor-$tb-$tau"
 DATA_DIR="$ROOT_DIR/data"
 POOL_DIR="$DATA_DIR/pools_$n"
+
+if [ "$gpu" = true ]
+then
+    partition="gpu"
+    spackcuda="spack load cuda@11.4.1"
+    gres="#SBATCH --gres=gpu:1"
+    LOG_DIR="${LOG_DIR}-gpu"
+else
+    partition="quick"
+    spackcuda=""
+    gres=""
+fi
 
 mkdir -p $LOG_DIR
 STDOUT=$LOG_DIR/$i-$seed.stdout

@@ -7,11 +7,11 @@ import numpy
 import socket
 print('Host:', socket.gethostname())
 
-ROOTDIR = '/opt/ibm/ILOG/CPLEX_Studio201'
+ROOTDIR = '/opt/ibm/ILOG/CPLEX_Studio221'
 if socket.gethostname() == 'mlui02.ific.uv.es':
     ROOTDIR = '/lhome/ext/iiia021/iiia0211/cplex210'
 if socket.gethostname() == 'vega.iiia.csic.es':
-    ROOTDIR = '/home/filippo.bistaffa/cplex201'
+    ROOTDIR = '/home/filippo.bistaffa/cplex221'
 
 CPLEXDIR        = ROOTDIR + '/cplex'
 CONCERTDIR      = ROOTDIR + '/concert'
