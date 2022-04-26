@@ -66,9 +66,9 @@ if hash condor_submit 2>/dev/null
 then
 
 HOME="/lhome/ext/iiia021/iiia0211"
-ROOT_DIR="$HOME/trans-ilp-tf-mixed"
+ROOT_DIR="$HOME/trans-ilp-tf"
 EXECUTABLE="$ROOT_DIR/trans-ilp.sh"
-LOG_DIR="$HOME/log/tf/$n-$lambda-trans-mixed${range}-$tb-$entropy"
+LOG_DIR="$HOME/log/tf/$n-$lambda-trans-actor-$tb-$tau"
 DATA_DIR="$ROOT_DIR/data"
 POOL_DIR="$DATA_DIR/pools_$n"
 
@@ -126,7 +126,7 @@ sbatch 1> $tmpfile <<EOF
 #SBATCH --job-name=trans-$n-$i-$seed-$tb
 #SBATCH --partition=$partition
 $gres
-#SBATCH --time=5:00
+#SBATCH --time=5:30
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=1G
@@ -135,8 +135,8 @@ $gres
 spack load --first gcc@10.2.0
 spack load --first py-numpy@1.21.2
 $spackcuda
-echo $EXECUTABLE $POOL_DIR/$i.json --seed $seed --budget $tb --lambda $lambda --entropy $entropy $args 1> $STDOUT
-srun $EXECUTABLE $POOL_DIR/$i.json --seed $seed --budget $tb --lambda $lambda --entropy $entropy $args 1>> $STDOUT 2>> $STDERR
+echo $EXECUTABLE $POOL_DIR/$i.json --seed $seed --budget $tb --lambda $lambda --tau $tau $args 1> $STDOUT
+srun $EXECUTABLE $POOL_DIR/$i.json --seed $seed --budget $tb --lambda $lambda --tau $tau $args 1>> $STDOUT 2>> $STDERR
 RET=\$?
 exit \$RET
 EOF
