@@ -1,0 +1,4 @@
+# name      switch              type    values
+#generation "--generation "     i       (1, 59)
+#threshold  "--threshold "      i       (1, 30)
+tau         "--tau "            i       (1, 50)

@@ -1,5 +1,5 @@
 params = {
-    'input_size': 1 + 4 + 7,
+    'input_size': [2] + 4*[0] + 7*[0],
     'd_model': 256,
     'nhead': 8,
     'dim_feedforward': 512,

@@ -1,13 +1,13 @@
-#!/bin/bash
+    #!/bin/bash
 
 i=1
 n=50
 tb=60
-range="20-100"
 seed=$RANDOM
 lambda=0.8
-entropy=0.05
+tau=8
 priority=0
+gpu=false
 args=""
 
 while [[ $# > 0 ]]
@@ -39,15 +39,19 @@ do
             lambda="$1"
             shift
         ;;
-        -e|--entropy)
+        -t|--tau)
             shift
-            entropy="$1"
+            tau="$1"
             shift
         ;;
         -p|--priority)
             shift
             priority="$1"
             shift
+        ;;
+        --gpu)
+            shift
+            gpu=true
         ;;
         *)
             args="$args$key "
@@ -67,6 +71,18 @@ EXECUTABLE="$ROOT_DIR/trans-ilp.sh"
 LOG_DIR="$HOME/log/tf/$n-$lambda-trans-mixed${range}-$tb-$entropy"
 DATA_DIR="$ROOT_DIR/data"
 POOL_DIR="$DATA_DIR/pools_$n"
+
+if [ "$gpu" = true ]
+then
+    partition="gpu"
+    spackcuda="spack load cuda@11.4.1"
+    gres="#SBATCH --gres=gpu:1"
+    LOG_DIR="${LOG_DIR}-gpu"
+else
+    partition="quick"
+    spackcuda=""
+    gres=""
+fi
 
 mkdir -p $LOG_DIR
 STDOUT=$LOG_DIR/$i-$seed.stdout
@@ -94,9 +110,9 @@ then
 
 HOME="/home/filippo.bistaffa"
 BEEGFS="$HOME/beegfs"
-ROOT_DIR="$HOME/trans-ilp-tf-mixed"
+ROOT_DIR="$HOME/trans-ilp-tf"
 EXECUTABLE="$ROOT_DIR/trans-ilp.sh"
-LOG_DIR="$BEEGFS/tf/$n-$lambda-trans-mixed${range}-$tb-$entropy"
+LOG_DIR="$BEEGFS/tf/$n-$lambda-trans-actor-$tb-$tau"
 DATA_DIR="$ROOT_DIR/data"
 POOL_DIR="$DATA_DIR/pools_$n"
 
@@ -107,16 +123,18 @@ STDERR=$LOG_DIR/$i-$seed.stderr
 tmpfile=$(mktemp)
 sbatch 1> $tmpfile <<EOF
 #!/bin/bash
-#SBATCH --job-name=trans-$n-$i-$tb
-#SBATCH --partition=quick
+#SBATCH --job-name=trans-$n-$i-$seed-$tb
+#SBATCH --partition=$partition
+$gres
 #SBATCH --time=5:00
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=1G
 #SBATCH --output=/dev/null
 #SBATCH --error=/dev/null
-spack load --first python@3.8.6%gcc@10.2.0
-spack load --first py-torch
+spack load --first gcc@10.2.0
+spack load --first py-numpy@1.21.2
+$spackcuda
 echo $EXECUTABLE $POOL_DIR/$i.json --seed $seed --budget $tb --lambda $lambda --entropy $entropy $args 1> $STDOUT
 srun $EXECUTABLE $POOL_DIR/$i.json --seed $seed --budget $tb --lambda $lambda --entropy $entropy $args 1>> $STDOUT 2>> $STDERR
 RET=\$?
