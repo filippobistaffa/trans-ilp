@@ -136,7 +136,7 @@ class Actor(nn.Module):
         batch_size, seq_len, _ = context.size()
         mask = torch.zeros(batch_size, seq_len, dtype=torch.bool, device=context.device)
         mask.scatter_(1, 1 + coalition, True)
-        mask[:, 0] = False
+        mask[:, 0] = True
         return mask
 
     def forward(self, participants, collective, tau=8):
