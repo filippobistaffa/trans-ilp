@@ -86,7 +86,7 @@ tmpfile=$(mktemp)
 sbatch 1> $tmpfile <<EOF
 #!/bin/bash
 #SBATCH --job-name=optimal-$n-$i
-#SBATCH --partition=general-new
+#SBATCH --partition=general
 #SBATCH --time=24:00:00
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
