@@ -74,8 +74,8 @@ STDERR=$LOG_DIR/all.stderr
 tmpfile=$(mktemp)
 sbatch 1> $tmpfile <<EOF
 #!/bin/bash
-#SBATCH --job-name=synteam-$1-$2-$lambda
-#SBATCH --partition=general-new
+#SBATCH --job-name=synteam-$n-$lambda
+#SBATCH --partition=general
 #SBATCH --time=6:00:00
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
