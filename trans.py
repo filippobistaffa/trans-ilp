@@ -13,7 +13,7 @@ default = {
     'threshold': 15,
     'generation': 50,
     'lambda': 0.8,
-    'tau': 8
+    'tau': 2
 }
 
 def reward(idxs):
